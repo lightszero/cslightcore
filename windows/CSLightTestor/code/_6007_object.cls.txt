@@ -1,0 +1,11 @@
+﻿//6007 object
+MyJson.JsonNode_Object obj =new MyJson.JsonNode_Object();
+obj["n"] = new MyJson.JsonNode_ValueString("fuck");
+//outicon2.spriteName = view.values[ii] as MyJson.JsonNode_ValueString
+
+Student s =new Student();
+string key ="n";
+s.name = obj[key] as MyJson.JsonNode_ValueString;
+int i=s.vs2[1];
+
+s.ToString2<int>(22);

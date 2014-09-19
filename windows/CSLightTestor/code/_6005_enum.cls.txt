@@ -1,0 +1,10 @@
+﻿//6005 object
+//enum
+
+Country c=Country.Chinese;
+Country c2=Country.English;
+Country c3=Country.Japnese;
+int i =(c3);
+trace(c,c2,c3);
+
+return c3;
