@@ -41,3 +41,13 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+core/CSLightEvil.dll
+core/CSLightEvil.pdb
+/core/CSLightEvil/obj
+/*.suo
+/windows/bin
+/windows/CSEvilTestor/obj
+/windows/CSLightTestor/obj
+core/CSLightEvil35.dll
+core/CSLightEvil35.pdb
