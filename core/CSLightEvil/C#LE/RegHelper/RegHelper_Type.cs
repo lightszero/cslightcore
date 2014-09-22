@@ -24,7 +24,14 @@ namespace CSLE
             CLS_Content.Value value = new CLS_Content.Value();
             value.type = type;
             var con = this.type.GetConstructor(types.ToArray());
-            value.value = con.Invoke(objparams.ToArray());
+            if (con == null)
+            {
+                value.value = Activator.CreateInstance(this.type);
+            }
+            else
+            {
+                value.value = con.Invoke(objparams.ToArray());
+            }
             return value;
         }
         public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params)

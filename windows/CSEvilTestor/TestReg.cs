@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace CSEvilTestor
@@ -20,6 +21,8 @@ namespace CSEvilTestor
             env.RegType(new CSLE.RegHelper_DeleAction<int>(typeof(Action<int>), "Action<int>"));
             env.RegType(new CSLE.RegHelper_DeleAction(typeof(Action),"Action"));
             env.RegType(new CSLE.RegHelper_DeleAction(typeof(TestDele.myup), "TestDele.myup"));
+
+            env.RegType(new CSLE.RegHelper_Type(typeof(Color), "Color"));
 
             env.RegType(new CSLE.RegHelper_Type(typeof(object), "object"));
             //env.RegType(new CSLE.RegHelper_Type(typeof(List<object>), "List<object>"));
