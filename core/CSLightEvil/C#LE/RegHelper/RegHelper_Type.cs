@@ -52,10 +52,10 @@ namespace CSLE
                 }
             }
             var targetop = type.GetMethod(function, types.ToArray());
-            if (targetop == null && type.BaseType != null)//加上父类型静态函数查找,典型的现象是 GameObject.Destory
-            {
-                targetop = type.BaseType.GetMethod(function, types.ToArray());
-            }
+            //if (targetop == null && type.BaseType != null)//加上父类型静态函数查找,典型的现象是 GameObject.Destory
+            //{
+            //    targetop = type.BaseType.GetMethod(function, types.ToArray());
+            //}
             if (targetop == null)
             {
                 if (function[function.Length - 1] == '>')//这是一个临时的模板函数调用
@@ -73,8 +73,19 @@ namespace CSLE
                 }
                 else
                 {
-                    throw new Exception("函数不存在function:" + type.ToString() + "." + function);
+                    Type ptype = type.BaseType;
+                    while(ptype!=null)
+                    {
+                        targetop = ptype.GetMethod(function, types.ToArray());
+                        if (targetop != null) break;
+                        ptype = ptype.BaseType;
+                    }
+                    
                 }
+            }
+            if(targetop==null)
+            {
+                throw new Exception("函数不存在function:" + type.ToString() + "." + function);
             }
             CLS_Content.Value v = new CLS_Content.Value();
             v.value = targetop.Invoke(null, _oparams.ToArray());
@@ -125,8 +136,13 @@ namespace CSLE
                     }
                 }
             }
+            if(type.BaseType!=null)
+            {
+                return environment.environment.GetType(type.BaseType).function.StaticValueGet(environment, valuename);
+            }
 
-            return null;
+
+            throw new NotImplementedException();
         }
 
         public virtual void StaticValueSet(CLS_Content content, string valuename, object value)
@@ -158,7 +174,11 @@ namespace CSLE
                     return;
                 }
             }
-
+            if (type.BaseType != null)
+            {
+                content.environment.GetType(type.BaseType).function.StaticValueSet(content, valuename,value);
+                return;
+            }
 
 
             throw new NotImplementedException();

@@ -4,7 +4,24 @@ using System.Text;
 
 namespace CLScriptExt
 {
-    class Student
+    class P1
+    {
+        public static void t1()
+        {
+
+        }
+        public static int t2;
+        public static int t3
+        {
+            get;
+            set;
+        }
+    }
+    class P2:P1
+    {
+
+    }
+    class Student:P2
     {
         public class StudentAss
         {

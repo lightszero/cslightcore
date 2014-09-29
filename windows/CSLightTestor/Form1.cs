@@ -39,6 +39,8 @@ namespace CLScriptTestor
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Country)));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Vector3)));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Student)));
+            scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.P1)));
+            scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.P2)));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Student.StudentAss), "Student.StudentAss"));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(MyJson), "MyJson"));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_ValueNumber), "MyJson.JsonNode_ValueNumber"));
