@@ -1,5 +1,8 @@
 cslightcore
 ===========
+2014-10-13 0.49.6Beta
+修改了 !表达式 无视运算优先级的bug
+
 2014-10-11 0.49.5Beta【Graphics修改】
 加入了ulong
 
