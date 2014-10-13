@@ -123,10 +123,11 @@ namespace CSLE
             int expend2 = FindCodeAny(tlist, ref expbegin, out bdep);
             if (expend2 != posend)
             {
-                LogError(tlist, "无法识别的取反表达式:", expbegin, posend);
-                return null;
+                expend2 = posend;
+                //LogError(tlist, "无法识别的取反表达式:", expbegin, posend);
+                //return null;
             }
-            else
+            //else
             {
                 ICLS_Expression subvalue;
                 bool succ = Compiler_Expression(tlist, content,expbegin, expend2, out subvalue);
