@@ -123,9 +123,9 @@ namespace CSLE
             int expend2 = FindCodeAny(tlist, ref expbegin, out bdep);
             if (expend2 != posend)
             {
-                expend2 = posend;
-                //LogError(tlist, "无法识别的取反表达式:", expbegin, posend);
-                //return null;
+                //expend2 = posend;
+                LogError(tlist, "无法识别的取反表达式:", expbegin, posend);
+                return null;
             }
             //else
             {
@@ -133,9 +133,20 @@ namespace CSLE
                 bool succ = Compiler_Expression(tlist, content,expbegin, expend2, out subvalue);
                 if (succ && subvalue != null)
                 {
-                    CLS_Expression_NegativeLogic v = new CLS_Expression_NegativeLogic(pos, expend2, tlist[pos].line, tlist[expend2].line);
-                    v.listParam.Add(subvalue);
-                    return v;
+                    if (subvalue is CLS_Expression_Math2Value || subvalue is CLS_Expression_Math2ValueAndOr || subvalue is CLS_Expression_Math2ValueLogic)
+                    {
+                        var pp= subvalue.listParam[0];
+                        CLS_Expression_NegativeLogic v = new CLS_Expression_NegativeLogic(pp.tokenBegin,pp.tokenEnd,pp.lineBegin,pp.lineEnd);
+                        v.listParam.Add(pp);
+                        subvalue.listParam[0] = v;
+                        return subvalue;
+                    }
+                    else
+                    {
+                        CLS_Expression_NegativeLogic v = new CLS_Expression_NegativeLogic(pos, expend2, tlist[pos].line, tlist[expend2].line);
+                        v.listParam.Add(subvalue);
+                        return v;
+                    }
                 }
                 else
                 {
