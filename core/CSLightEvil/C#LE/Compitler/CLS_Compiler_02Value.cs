@@ -25,7 +25,14 @@ namespace CSLE
                 else
                 {
                     CLS_Value_Value<int> number = new CLS_Value_Value<int>();
-                    number.value_value = int.Parse(value.text);
+                    if (value.text.Contains("'"))
+                    {
+                        number.value_value = (int)value.text[1];
+                    }
+                    else
+                    {
+                        number.value_value = int.Parse(value.text);
+                    }
                     return number;
                 }
             }
