@@ -63,6 +63,8 @@ namespace CLScriptTestor
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(string[]), "string[]"));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(object), "object"));
 
+            scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.MyClass2), "MyClass2"));
+
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(Dictionary<string, string>), "Dictionary<string,string>"));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Student.S1), "Student.S1"));
 

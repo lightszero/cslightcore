@@ -215,7 +215,7 @@ namespace CSLE
                     for (int i = 0; i < pp.Length; i++)
                     {
                         if (pp[i].ParameterType.IsGenericParameter) continue;
-                        if (pp[i].ParameterType != (Type)_params[0].type)
+                        if (pp[i].ParameterType != (Type)_params[i].type)
                         {
                             match = false;
                             break;

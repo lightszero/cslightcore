@@ -17,11 +17,22 @@ namespace CLScriptExt
             set;
         }
     }
-    class P2:P1
+    class P2 : P1
     {
 
     }
-    class Student:P2
+    public class MyClass2
+    {
+        public static MyClass2 instance = new MyClass2();
+
+        public T GetComponent<T>(MyClass2 obj, int deep)
+        {
+            return default(T);
+        }
+    }
+
+
+    class Student : P2
     {
         public class StudentAss
         {
