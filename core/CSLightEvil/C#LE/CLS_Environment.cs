@@ -18,7 +18,7 @@ namespace CSLE
         {
             get
             {
-                return "0.49.7Beta";
+                return "0.51Beta";
             }
         }
         public CLS_Environment(ICLS_Logger logger)
@@ -247,6 +247,12 @@ namespace CSLE
                 {
                     if (f.Value[i].type == TokenType.IDENTIFIER && this.tokenParser.types.Contains(f.Value[i].text))
                     {//有可能预处理导致新的类型
+                        if(i>0
+                            &&
+                            (f.Value[i-1].type== TokenType.TYPE||f.Value[i-1].text=="."))
+                        {
+                            continue;
+                        }
                         Token rp = f.Value[i];
                         rp.type = TokenType.TYPE;
                         f.Value[i] = rp;

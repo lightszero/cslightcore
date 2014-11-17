@@ -131,36 +131,103 @@ namespace CSLE
             if (nstart < 0) return -1;
             if (line[nstart] == '\"')
             {
-                //字符串查找
-                int nend = line.IndexOf('\"', nstart + 1);
-                int nsub = line.IndexOf('\\', nstart + 1);
-                while (nsub > 0 && nsub < nend)
+                t.text = "\"";
+                int pos = nstart+1;
+                bool bend = false;
+                while (pos<line.Length)
                 {
-                    nend = line.IndexOf('\"', nsub + 2);
-                    nsub = line.IndexOf('\\', nsub + 2);
-
+                    char c = line[pos];
+                    if (c == '\n')
+                    {
+                        throw new Exception("查找字符串失败");
+                    }
+                    if (c == '\"')
+                    {
+                        t.type = TokenType.STRING;
+                        bend = true;
+                        //break;
+                    }
+                    if (c == '\\')
+                    {
+                        pos++;
+                        c = line[pos];
+                        if(c=='\\')
+                        {
+                            t.text+='\\';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == '"')
+                        {
+                            t.text += '\"';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == '\'')
+                        {
+                            t.text += '\'';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == '0')
+                        {
+                            t.text += '\0';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == 'a')
+                        {
+                            t.text += '\a';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == 'b')
+                        {
+                            t.text += '\b';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == 'f')
+                        {
+                            t.text += '\f';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == 'n')
+                        {
+                            t.text += '\n';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == 'r')
+                        {
+                            t.text += '\r';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == 't')
+                        {
+                            t.text += '\t';
+                            pos++;
+                            continue;
+                        }
+                        else if (c == 'v')
+                        {
+                            t.text += '\v';
+                            pos++;
+                            continue;
+                        }
+                        else
+                        {
+                            throw new Exception("不可识别的转义序列:" + t.text);
+                        }
+                    }
+                    t.text += line[pos];
+                    pos++;
+                    if (bend)
+                        return pos;
                 }
-                if (nend - nstart + 1 < 1) throw new Exception("查找字符串失败");
-                t.type = TokenType.STRING;
-                int pos = nend + 1;
-                t.text = line.Substring(nstart, nend - nstart + 1);
-                t.text = t.text.Replace("\\\"", "\"");
-                t.text = t.text.Replace("\\\'", "\'");
-                t.text = t.text.Replace("\\\\", "\\");
-                t.text = t.text.Replace("\\0", "\0");
-                t.text = t.text.Replace("\\a", "\a");
-                t.text = t.text.Replace("\\b", "\b");
-                t.text = t.text.Replace("\\f", "\f");
-                t.text = t.text.Replace("\\n", "\n");
-                t.text = t.text.Replace("\\r", "\r");
-                t.text = t.text.Replace("\\t", "\t");
-                t.text = t.text.Replace("\\v", "\v");
-                int sp = t.text.IndexOf('\\');
-                if (sp > 0)
-                {
-                    throw new Exception("不可识别的转义序列:" + t.text.Substring(sp));
-                }
-                return pos;
+                throw new Exception("查找字符串失败");
             }
             else if(line[nstart]=='\'')//char
             {
@@ -602,6 +669,8 @@ namespace CSLE
                             ts.RemoveAt(ts.Count - 1);
                             ts.RemoveAt(ts.Count - 1);
 
+                            ts.Add(t);
+                            continue;
                         }
                     }
                     if (ts.Count >= 3 && t.type == TokenType.PUNCTUATION && t.text == ">"
@@ -617,11 +686,22 @@ namespace CSLE
                         ts.RemoveAt(ts.Count - 1);
                         ts.RemoveAt(ts.Count - 1);
                         ts.RemoveAt(ts.Count - 1);
+                        ts.Add(t);
+                        continue;
                     }
-
-
+                    if (ts.Count >= 2 && t.type == TokenType.TYPE && ts[ts.Count - 1].text == "." && (ts[ts.Count - 2].type == TokenType.TYPE || ts[ts.Count - 2].type == TokenType.IDENTIFIER))
+                    {//Type.Type IDENTIFIER.Type 均不可能，为重名
+                        t.type = TokenType.IDENTIFIER;
+                        ts.Add(t);
+                        continue;
+                    }
+                    if (ts.Count >= 1 && t.type == TokenType.TYPE && ts[ts.Count - 1].type == TokenType.TYPE)
+                    {//Type Type 不可能，为重名
+                        t.type = TokenType.IDENTIFIER;
+                        ts.Add(t);
+                        continue;
+                    }
                     ts.Add(t);
-
                 }
             }
             return ts;

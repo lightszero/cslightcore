@@ -18,10 +18,18 @@ class Test04
         t4.Run1();
         objs.Add("t1", impl1);
         objs.Add("t4", t4);
+        Test04.IT4();
+
+    }
+    static void IT4()
+    {
+
     }
     void Run1()
     {
+        
         impl1 = new IT4_Impl();
+
         impl1.Call1();
         this.impl1 = new IT4_Impl2();
         this.impl1.Call1();
