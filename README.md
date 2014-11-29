@@ -1,5 +1,16 @@
 cslightcore
 ===========
+2014-11-29 0.55Beta
+
+加入了表达式缓存，MemberCall调用和StaticCall调用加入了表达式缓存。
+
+多次执行表达式时会极大的提升效率
+
+indexset,indexget，valueget valueset加入了类型缓存
+
+效率都有一定提升
+
+
 2014-11-17 0.51Beta
 
 允许成员函数和类型重名
