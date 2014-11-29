@@ -34,7 +34,7 @@ namespace CSLE
             }
             return value;
         }
-        public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params)
+        public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params, MethodCache cache = null)
         {
 
             List<object> _oparams = new List<object>();
@@ -74,16 +74,24 @@ namespace CSLE
                 else
                 {
                     Type ptype = type.BaseType;
-                    while(ptype!=null)
+                    while (ptype != null)
                     {
                         targetop = ptype.GetMethod(function, types.ToArray());
                         if (targetop != null) break;
                         ptype = ptype.BaseType;
                     }
-                    
+
                 }
             }
-            if(targetop==null)
+            if (cache != null)
+            {
+                if (targetop == null)
+                {//因为有cache的存在，可以更慢更多的查找啦，哈哈哈哈
+
+                }
+                cache.info = targetop;
+            }
+            else if (targetop == null)
             {
                 throw new Exception("函数不存在function:" + type.ToString() + "." + function);
             }
@@ -95,93 +103,122 @@ namespace CSLE
 
         }
 
-        public virtual CLS_Content.Value StaticValueGet(CLS_Content environment, string valuename)
+        public virtual CLS_Content.Value StaticCallCache(CLS_Content environment, IList<CLS_Content.Value> _params, MethodCache cache)
         {
-            var targetf = type.GetField(valuename);
-            if (targetf != null)
+
+            List<object> _oparams = new List<object>();
+            List<Type> types = new List<Type>();
+            foreach (var p in _params)
             {
-                CLS_Content.Value v = new CLS_Content.Value();
-                v.value = targetf.GetValue(null);
-                v.type = targetf.FieldType;
-                return v;
-            }
-            else
-            {
-                var methodf = type.GetMethod("get_" + valuename);
-                if (methodf != null)
+                _oparams.Add(p.value);
+                if ((SType)p.type != null)
                 {
-                    CLS_Content.Value v = new CLS_Content.Value();
-                    v.value = methodf.Invoke(null, null);
-                    v.type = methodf.ReturnType;
-                    return v;
+                    types.Add(typeof(object));
                 }
-                //var targetf = type.GetField(valuename);
-                //if (targetf != null)
-                //{
-                //    CLS_Content.Value v = new CLS_Content.Value();
-                //    v.value = targetf.GetValue(null);
-                //    v.type = targetf.FieldType;
-                //    return v;
-                //}
                 else
                 {
-                    var targete = type.GetEvent(valuename);
-                    if (targete != null)
-                    {
-                        CLS_Content.Value v = new CLS_Content.Value();
-
-                        v.value = new DeleEvent(null, targete);
-                        v.type = targete.EventHandlerType;
-                        return v;
-                    }
+                    types.Add(p.type);
                 }
             }
-            if(type.BaseType!=null)
-            {
-                return environment.environment.GetType(type.BaseType).function.StaticValueGet(environment, valuename);
-            }
+            var targetop = cache.info;
+            CLS_Content.Value v = new CLS_Content.Value();
+            v.value = targetop.Invoke(null, _oparams.ToArray());
+            v.type = targetop.ReturnType;
+            return v;
 
 
-            throw new NotImplementedException();
         }
 
-        public virtual void StaticValueSet(CLS_Content content, string valuename, object value)
+        public virtual CLS_Content.Value StaticValueGet(CLS_Content environment, string valuename)
         {
-
-            var targetf = type.GetField(valuename);
-            if (targetf != null)
+            var v= MemberValueGet(environment, null, valuename);
+            if (v == null)
             {
-                if (value != null && value.GetType() != targetf.FieldType)
+                if (type.BaseType != null)
                 {
-                    value = content.environment.GetType(value.GetType()).ConvertTo(content, value, targetf.FieldType);
+                    return environment.environment.GetType(type.BaseType).function.StaticValueGet(environment, valuename);
                 }
-                targetf.SetValue(null, value);
-                return;
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
             else
             {
-                var methodf = type.GetMethod("set_" + valuename);
-                if (methodf != null)
+                return v;
+            }
+
+            //var targetf = type.GetField(valuename);
+            //if (targetf != null)
+            //{
+            //    CLS_Content.Value v = new CLS_Content.Value();
+            //    v.value = targetf.GetValue(null);
+            //    v.type = targetf.FieldType;
+            //    return v;
+            //}
+            //else
+            //{
+            //    var methodf = type.GetMethod("get_" + valuename);
+            //    if (methodf != null)
+            //    {
+            //        CLS_Content.Value v = new CLS_Content.Value();
+            //        v.value = methodf.Invoke(null, null);
+            //        v.type = methodf.ReturnType;
+            //        return v;
+            //    }
+            //    //var targetf = type.GetField(valuename);
+            //    //if (targetf != null)
+            //    //{
+            //    //    CLS_Content.Value v = new CLS_Content.Value();
+            //    //    v.value = targetf.GetValue(null);
+            //    //    v.type = targetf.FieldType;
+            //    //    return v;
+            //    //}
+            //    else
+            //    {
+            //        var targete = type.GetEvent(valuename);
+            //        if (targete != null)
+            //        {
+            //            CLS_Content.Value v = new CLS_Content.Value();
+
+            //            v.value = new DeleEvent(null, targete);
+            //            v.type = targete.EventHandlerType;
+            //            return v;
+            //        }
+            //    }
+            //}
+            //if (type.BaseType != null)
+            //{
+            //    return environment.environment.GetType(type.BaseType).function.StaticValueGet(environment, valuename);
+            //}
+
+
+            //throw new NotImplementedException();
+        }
+
+        public virtual bool StaticValueSet(CLS_Content content, string valuename, object value)
+        {
+
+            bool b = MemberValueSet(content, null, valuename, value);
+            if (!b)
+            {
+                if (type.BaseType != null)
                 {
-                    var ptype = methodf.GetParameters()[0].ParameterType;
-                    if (value != null && value.GetType() != ptype)
-                    {
+                    content.environment.GetType(type.BaseType).function.StaticValueSet(content, valuename, value);
+                    return true;
+                }
+                else
+                {
 
-                        value = content.environment.GetType(value.GetType()).ConvertTo(content, value, ptype);
-                    }
-                    methodf.Invoke(null, new object[] { value });
-
-                    return;
+                    throw new NotImplementedException();
                 }
             }
-            if (type.BaseType != null)
+            else
             {
-                content.environment.GetType(type.BaseType).function.StaticValueSet(content, valuename,value);
-                return;
+                return b;
             }
 
 
-            throw new NotImplementedException();
         }
         Dictionary<int, System.Reflection.MethodInfo> cacheT;//= new Dictionary<string, System.Reflection.MethodInfo>();
         System.Reflection.MethodInfo FindTMethod(Type type, string func, IList<CLS_Content.Value> _params, Type[] gtypes)
@@ -236,7 +273,7 @@ namespace CSLE
             //targetop = targetop.MakeGenericMethod(gtypes);
             return null;
         }
-        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string func, IList<CLS_Content.Value> _params)
+        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string func, IList<CLS_Content.Value> _params, MethodCache cache = null)
         {
             List<Type> types = new List<Type>();
             List<object> _oparams = new List<object>();
@@ -276,25 +313,136 @@ namespace CSLE
                 }
                 else
                 {
-                    throw new Exception("函数不存在function:" + type.ToString() + "." + func);
+                    foreach (var s in type.GetInterfaces())
+                    {
+                        targetop = s.GetMethod(func, types.ToArray());
+                        if (targetop != null) break;
+                    }
+                    //var ms = type.GetMethods();
+                    if (targetop == null)
+                    {
+                        throw new Exception("函数不存在function:" + type.ToString() + "." + func);
+                    }
                 }
+            }
+            if (cache != null)
+            {
+                if (targetop == null)
+                {//因为有cache的存在，可以更慢更多的查找啦，哈哈哈哈
+
+                }
+                cache.info = targetop;
+            }
+            else if (targetop == null)
+            {
+                throw new Exception("函数不存在function:" + type.ToString() + "." + func);
             }
             v.value = targetop.Invoke(object_this, _oparams.ToArray());
             v.type = targetop.ReturnType;
             return v;
         }
+        public virtual CLS_Content.Value MemberCallCache(CLS_Content environment, object object_this, IList<CLS_Content.Value> _params, MethodCache cache)
+        {
+            List<Type> types = new List<Type>();
+            List<object> _oparams = new List<object>();
+            foreach (var p in _params)
+            {
+                {
+                    _oparams.Add(p.value);
+                }
+                if ((SType)p.type != null)
+                {
+                    types.Add(typeof(object));
+                }
+                else
+                {
+                    types.Add(p.type);
+                }
+            }
 
+            var targetop = cache.info;
+            CLS_Content.Value v = new CLS_Content.Value();
+            v.value = targetop.Invoke(object_this, _oparams.ToArray());
+            v.type = targetop.ReturnType;
+            return v;
+        }
+
+        class MemberValueCache
+        {
+            public int type = 0;
+            public System.Reflection.FieldInfo finfo;
+            public System.Reflection.MethodInfo minfo;
+            public System.Reflection.EventInfo einfo;
+
+        }
+        Dictionary<string, MemberValueCache> memberValuegetCaches = new Dictionary<string, MemberValueCache>();
         public virtual CLS_Content.Value MemberValueGet(CLS_Content environment, object object_this, string valuename)
         {
-            //var m = type.GetMethods();
-            var targetf = type.GetField(valuename);
-            if (targetf != null)
+
+            MemberValueCache c;
+            
+            if (!memberValuegetCaches.TryGetValue(valuename, out c))
             {
-                CLS_Content.Value v = new CLS_Content.Value();
-                v.value = targetf.GetValue(object_this);
-                v.type = targetf.FieldType;
-                return v;
+                c = new MemberValueCache();
+                memberValuegetCaches[valuename] = c;
+                c.finfo = type.GetField(valuename);
+                if (c.finfo == null)
+                {
+                    c.minfo = type.GetMethod("get_" + valuename);
+                    if (c.minfo == null)
+                    {
+                        c.einfo = type.GetEvent(valuename);
+                        if (c.einfo == null)
+                        {
+                            c.type = -1;
+                            return null;
+                        }
+                        else
+                        {
+                            c.type = 3;
+                        }
+                    }
+                    else
+                    {
+                        c.type = 2;
+                    }
+                }
+                else
+                {
+                    c.type = 1;
+                }
             }
+
+            if (c.type < 0) return null;
+            CLS_Content.Value v = new CLS_Content.Value();
+            switch (c.type)
+            {
+                case 1:
+
+                    v.value = c.finfo.GetValue(object_this);
+                    v.type = c.finfo.FieldType;
+                    break;
+                case 2:
+
+                    v.value = c.minfo.Invoke(object_this, null);
+                    v.type = c.minfo.ReturnType;
+                    break;
+                case 3:
+                    v.value = new DeleEvent(object_this, c.einfo);
+                    v.type = c.einfo.EventHandlerType;
+                    break;
+
+            }
+            return v;
+
+            //var targetf = type.GetField(valuename);
+            //if (targetf != null)
+            //{
+            //    CLS_Content.Value v = new CLS_Content.Value();
+            //    v.value = targetf.GetValue(object_this);
+            //    v.type = targetf.FieldType;
+            //    return v;
+            //}
 
             //var targetp = type.GetProperty(valuename);
             //if (targetp != null)
@@ -304,120 +452,219 @@ namespace CSLE
             //    v.type = targetp.PropertyType;
             //    return v;
             //}
-            else
-            {//用get set 方法替代属性操作，AOT环境属性操作有问题
-                var methodf = type.GetMethod("get_" + valuename);
-                if (methodf != null)
+            //else
+            //{//用get set 方法替代属性操作，AOT环境属性操作有问题
+            //    var methodf = type.GetMethod("get_" + valuename);
+            //    if (methodf != null)
+            //    {
+            //        CLS_Content.Value v = new CLS_Content.Value();
+            //        v.value = methodf.Invoke(object_this, null);
+            //        v.type = methodf.ReturnType;
+            //        return v;
+            //    }
+            //var targetf = type.GetField(valuename);
+            //if (targetf != null)
+            //{
+            //    CLS_Content.Value v = new CLS_Content.Value();
+            //    v.value = targetf.GetValue(object_this);
+            //    v.type = targetf.FieldType;
+            //    return v;
+            //}
+            //    else
+            //    {
+            //        System.Reflection.EventInfo targete = type.GetEvent(valuename);
+            //        if (targete != null)
+            //        {
+            //            CLS_Content.Value v = new CLS_Content.Value();
+            //            v.value = new DeleEvent(object_this, targete);
+            //            v.type = targete.EventHandlerType;
+            //            return v;
+            //        }
+            //    }
+            //}
+
+            //return null;
+        }
+
+        Dictionary<string, MemberValueCache> memberValuesetCaches = new Dictionary<string, MemberValueCache>();
+
+        public virtual bool MemberValueSet(CLS_Content content, object object_this, string valuename, object value)
+        {
+            MemberValueCache c;
+            
+            if (!memberValuesetCaches.TryGetValue(valuename, out c))
+            {
+                c = new MemberValueCache();
+                memberValuegetCaches[valuename] = c;
+                c.finfo = type.GetField(valuename);
+                if (c.finfo == null)
                 {
-                    CLS_Content.Value v = new CLS_Content.Value();
-                    v.value = methodf.Invoke(object_this, null);
-                    v.type = methodf.ReturnType;
-                    return v;
+                    c.minfo = type.GetMethod("set_" + valuename);
+                    if (c.minfo == null)
+                    {
+                        c.type = -1;
+                        return false;
+                    }
+                    else
+                    {
+                        c.type = 2;
+                    }
                 }
-                //var targetf = type.GetField(valuename);
-                //if (targetf != null)
-                //{
-                //    CLS_Content.Value v = new CLS_Content.Value();
-                //    v.value = targetf.GetValue(object_this);
-                //    v.type = targetf.FieldType;
-                //    return v;
-                //}
                 else
                 {
-                    System.Reflection.EventInfo targete = type.GetEvent(valuename);
-                    if (targete != null)
-                    {
-                        CLS_Content.Value v = new CLS_Content.Value();
-                        v.value = new DeleEvent(object_this, targete);
-                        v.type = targete.EventHandlerType;
-                        return v;
-                    }
+                    c.type = 1;
                 }
             }
 
-            return null;
-        }
+            if (c.type < 0)
+                return false;
 
-        public virtual void MemberValueSet(CLS_Content content, object object_this, string valuename, object value)
-        {
-            //先操作File
-            var targetf = type.GetField(valuename);
-            if (targetf != null)
+            if(c.type==1)
             {
-                if (value != null && value.GetType() != targetf.FieldType)
+                if (value != null && value.GetType() != c.finfo.FieldType)
                 {
 
-                    value = content.environment.GetType(value.GetType()).ConvertTo(content, value, targetf.FieldType);
+                    value = content.environment.GetType(value.GetType()).ConvertTo(content, value, c.finfo.FieldType);
                 }
-                targetf.SetValue(object_this, value);
-                return;
+                c.finfo.SetValue(object_this, value);
             }
             else
             {
-                var methodf = type.GetMethod("set_" + valuename);
-                if (methodf != null)
+                var ptype = c.minfo.GetParameters()[0].ParameterType;
+                if (value != null && value.GetType() != ptype)
                 {
-                    var ptype = methodf.GetParameters()[0].ParameterType;
-                    if (value != null && value.GetType() != ptype)
-                    {
 
-                        value = content.environment.GetType(value.GetType()).ConvertTo(content, value, ptype);
-                    }
-                    methodf.Invoke(object_this, new object[] { value });
-
-                    return;
+                    value = content.environment.GetType(value.GetType()).ConvertTo(content, value, ptype);
                 }
+                c.minfo.Invoke(object_this, new object[] { value });
             }
+            return true;
+            ////先操作File
+            //var targetf = type.GetField(valuename);
+            //if (targetf != null)
+            //{
+            //    if (value != null && value.GetType() != targetf.FieldType)
+            //    {
+
+            //        value = content.environment.GetType(value.GetType()).ConvertTo(content, value, targetf.FieldType);
+            //    }
+            //    targetf.SetValue(object_this, value);
+            //    return;
+            //}
+            //else
+            //{
+            //    var methodf = type.GetMethod("set_" + valuename);
+            //    if (methodf != null)
+            //    {
+            //        var ptype = methodf.GetParameters()[0].ParameterType;
+            //        if (value != null && value.GetType() != ptype)
+            //        {
+
+            //            value = content.environment.GetType(value.GetType()).ConvertTo(content, value, ptype);
+            //        }
+            //        methodf.Invoke(object_this, new object[] { value });
+
+            //        return;
+            //    }
+            //}
 
 
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
 
 
-
+        System.Reflection.MethodInfo indexGetCache = null;
+        Type indexGetCacheType = null;
         public virtual CLS_Content.Value IndexGet(CLS_Content environment, object object_this, object key)
         {
-            var m = type.GetMembers();
-            var targetop = type.GetMethod("get_Item");
-            if (targetop != null)
+            //var m = type.GetMembers();
+            if (indexGetCache == null)
             {
-                CLS_Content.Value v = new CLS_Content.Value();
-                v.type = targetop.ReturnType;
-                v.value = targetop.Invoke(object_this, new object[] { key });
-                return v;
-            }
-
-            if (targetop == null)
-            {
-                targetop = type.GetMethod("GetValue", new Type[] { typeof(int) });
-                if (targetop != null)
+                indexGetCache = type.GetMethod("get_Item");
+                if (indexGetCache != null)
                 {
-                    //targetop = type.GetMethod("Get");
-
+                    indexGetCacheType = indexGetCache.ReturnType;
+                }
+                //    CLS_Content.Value v = new CLS_Content.Value();
+                //    v.type = targetop.ReturnType;
+                //    v.value = targetop.Invoke(object_this, new object[] { key });
+                //    return v;
+                //}
+                if (indexGetCache == null)
+                {
+                    indexGetCache = type.GetMethod("GetValue", new Type[] { typeof(int) });
+                    if (indexGetCache != null)
+                    {
+                        indexGetCacheType = type.GetElementType();
+                    }
+                }
+                if (indexGetCache != null)
+                {
                     CLS_Content.Value v = new CLS_Content.Value();
-                    v.type = type.GetElementType();
-                    v.value = targetop.Invoke(object_this, new object[] { key });
+                    v.type = indexGetCacheType;
+                    v.value = indexGetCache.Invoke(object_this, new object[] { key });
                     return v;
                 }
+                //{
+                //    targetop = type.GetMethod("GetValue", new Type[] { typeof(int) });
+                //    if (targetop != null)
+                //    {
+                //        //targetop = type.GetMethod("Get");
+
+                //        CLS_Content.Value v = new CLS_Content.Value();
+                //        v.type = type.GetElementType();
+                //        v.value = targetop.Invoke(object_this, new object[] { key });
+                //        return v;
+                //    }
+                //}
+            }
+            else
+            {
+                CLS_Content.Value v = new CLS_Content.Value();
+                v.type = indexGetCacheType;
+                v.value = indexGetCache.Invoke(object_this, new object[] { key });
+                return v;
             }
             throw new NotImplementedException();
 
         }
 
+        System.Reflection.MethodInfo indexSetCache = null;
+        bool indexSetCachekeyfirst = false;
         public virtual void IndexSet(CLS_Content environment, object object_this, object key, object value)
         {
-            //var m = type.GetMethods();
-            var targetop = type.GetMethod("set_Item");
-            if (targetop == null)
+            if (indexSetCache == null)
             {
-                //targetop = type.GetMethod("Set");
-                targetop = type.GetMethod("SetValue", new Type[] { typeof(object), typeof(int) });
-                targetop.Invoke(object_this, new object[] { value, key });
-                return;
+                indexSetCache = type.GetMethod("set_Item");
+                indexSetCachekeyfirst = true;
+                if (indexSetCache == null)
+                {
+                    indexSetCache = type.GetMethod("SetValue", new Type[] { typeof(object), typeof(int) });
+                    indexSetCachekeyfirst = false;
+                }
+
             }
-            targetop.Invoke(object_this, new object[] { key, value });
+            //else
+            if (indexSetCachekeyfirst)
+            {
+                indexSetCache.Invoke(object_this, new object[] { key, value });
+            }
+            else
+            {
+                indexSetCache.Invoke(object_this, new object[] { value, key });
+            }
+            //var m = type.GetMethods();
+            //var targetop = type.GetMethod("set_Item");
+            //if (targetop == null)
+            //{
+            //    //targetop = type.GetMethod("Set");
+            //    targetop = type.GetMethod("SetValue", new Type[] { typeof(object), typeof(int) });
+            //    targetop.Invoke(object_this, new object[] { value, key });
+            //    return;
+            //}
+            //targetop.Invoke(object_this, new object[] { key, value });
         }
     }
 
@@ -496,12 +743,11 @@ namespace CSLE
                     return m.Invoke(null, new object[] { src });
                 }
             }
-            if ((Type)targetType!=null)
-               
+            if ((Type)targetType != null)
             {
-                if(((Type)targetType).IsAssignableFrom(_type))
+                if (((Type)targetType).IsAssignableFrom(_type))
                     return src;
-                if(src!=null&&((Type)targetType).IsInstanceOfType(src))
+                if (src != null && ((Type)targetType).IsInstanceOfType(src))
                     return src;
             }
             else

@@ -40,6 +40,7 @@ namespace CSLE
             get;
             private set;
         }
+        MethodCache cache = null;
         public CLS_Content.Value ComputeValue(CLS_Content content)
         {
             content.InStack(this);
@@ -50,7 +51,16 @@ namespace CSLE
             {
                 _params.Add(listParam[i].ComputeValue(content));
             }
-            var value = type.function.MemberCall(content, parent.value, functionName, _params);
+            CLS_Content.Value value = null;
+            if (cache == null||cache.cachefail)
+            {
+                cache = new MethodCache();
+                value = type.function.MemberCall(content, parent.value, functionName, _params,cache);
+            }
+            else
+            {
+                value = type.function.MemberCallCache(content, parent.value, _params, cache);
+            }
             content.OutStack(this);
             return value;
             //做数学计算
