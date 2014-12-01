@@ -495,7 +495,7 @@ namespace CSLE
             if (!memberValuesetCaches.TryGetValue(valuename, out c))
             {
                 c = new MemberValueCache();
-                memberValuegetCaches[valuename] = c;
+                memberValuesetCaches[valuename] = c;
                 c.finfo = type.GetField(valuename);
                 if (c.finfo == null)
                 {
