@@ -36,7 +36,7 @@ namespace CSLE
         }
         public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params, MethodCache cache = null)
         {
-
+            bool needConvert = false;
             List<object> _oparams = new List<object>();
             List<Type> types = new List<Type>();
             foreach (var p in _params)
@@ -83,18 +83,23 @@ namespace CSLE
 
                 }
             }
-            if (cache != null)
-            {
-                if (targetop == null)
-                {//因为有cache的存在，可以更慢更多的查找啦，哈哈哈哈
-
-                }
-                cache.info = targetop;
+            if (targetop == null)
+            {//因为有cache的存在，可以更慢更多的查找啦，哈哈哈哈
+                targetop = GetMethodSlow(environment, true, function, types, _oparams);
+                needConvert = true;
             }
-            else if (targetop == null)
+
+            if (targetop == null)
             {
                 throw new Exception("函数不存在function:" + type.ToString() + "." + function);
             }
+            if (cache != null)
+            {
+                cache.info = targetop;
+                cache.slow = needConvert;
+            }
+
+
             CLS_Content.Value v = new CLS_Content.Value();
             v.value = targetop.Invoke(null, _oparams.ToArray());
             v.type = targetop.ReturnType;
@@ -103,7 +108,7 @@ namespace CSLE
 
         }
 
-        public virtual CLS_Content.Value StaticCallCache(CLS_Content environment, IList<CLS_Content.Value> _params, MethodCache cache)
+        public virtual CLS_Content.Value StaticCallCache(CLS_Content content, IList<CLS_Content.Value> _params, MethodCache cache)
         {
 
             List<object> _oparams = new List<object>();
@@ -121,6 +126,24 @@ namespace CSLE
                 }
             }
             var targetop = cache.info;
+            if (cache.slow)
+            {
+                var pp = targetop.GetParameters();
+                for (int i = 0; i < pp.Length; i++)
+                {
+                    if (i >= _params.Count)
+                    {
+                        _oparams.Add(pp[i].DefaultValue);
+                    }
+                    else
+                    {
+                        if (pp[i].ParameterType != (Type)_params[i].type)
+                        {
+                            _oparams[i] = content.environment.GetType(_params[i].type).ConvertTo(content, _oparams[i], pp[i].ParameterType);
+                        }
+                    }
+                }
+            }
             CLS_Content.Value v = new CLS_Content.Value();
             v.value = targetop.Invoke(null, _oparams.ToArray());
             v.type = targetop.ReturnType;
@@ -131,7 +154,7 @@ namespace CSLE
 
         public virtual CLS_Content.Value StaticValueGet(CLS_Content environment, string valuename)
         {
-            var v= MemberValueGet(environment, null, valuename);
+            var v = MemberValueGet(environment, null, valuename);
             if (v == null)
             {
                 if (type.BaseType != null)
@@ -275,6 +298,7 @@ namespace CSLE
         }
         public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string func, IList<CLS_Content.Value> _params, MethodCache cache = null)
         {
+            bool needConvert = false;
             List<Type> types = new List<Type>();
             List<object> _oparams = new List<object>();
             foreach (var p in _params)
@@ -318,7 +342,11 @@ namespace CSLE
                         targetop = s.GetMethod(func, types.ToArray());
                         if (targetop != null) break;
                     }
-                    //var ms = type.GetMethods();
+                    if (targetop == null)
+                    {//因为有cache的存在，可以更慢更多的查找啦，哈哈哈哈
+                        targetop = GetMethodSlow(environment, false, func, types, _oparams);
+                        needConvert = true;
+                    }
                     if (targetop == null)
                     {
                         throw new Exception("函数不存在function:" + type.ToString() + "." + func);
@@ -327,13 +355,11 @@ namespace CSLE
             }
             if (cache != null)
             {
-                if (targetop == null)
-                {//因为有cache的存在，可以更慢更多的查找啦，哈哈哈哈
-
-                }
                 cache.info = targetop;
+                cache.slow = needConvert;
             }
-            else if (targetop == null)
+
+            if (targetop == null)
             {
                 throw new Exception("函数不存在function:" + type.ToString() + "." + func);
             }
@@ -341,7 +367,99 @@ namespace CSLE
             v.type = targetop.ReturnType;
             return v;
         }
-        public virtual CLS_Content.Value MemberCallCache(CLS_Content environment, object object_this, IList<CLS_Content.Value> _params, MethodCache cache)
+
+        Dictionary<string, IList<System.Reflection.MethodInfo>> slowCache = null;
+
+        System.Reflection.MethodInfo GetMethodSlow(CSLE.CLS_Content content, bool bStatic, string funcname, IList<Type> types, IList<object> _params)
+        {
+            List<object> myparams = new List<object>(_params);
+            if (slowCache == null)
+            {
+                System.Reflection.MethodInfo[] ms = this.type.GetMethods();
+                slowCache = new Dictionary<string, IList<System.Reflection.MethodInfo>>();
+                foreach (var m in ms)
+                {
+                    string name = m.IsStatic ? "s=" + m.Name : m.Name;
+                    if (slowCache.ContainsKey(name) == false)
+                    {
+                        slowCache[name] = new List<System.Reflection.MethodInfo>();
+                    }
+                    slowCache[name].Add(m);
+                }
+            }
+            IList<System.Reflection.MethodInfo> minfo = null;
+
+            if (slowCache.TryGetValue(bStatic ? "s=" + funcname : funcname, out minfo) == false)
+                return null;
+
+            foreach (var m in minfo)
+            {
+                bool match = true;
+                var pp = m.GetParameters();
+                if (pp.Length < types.Count)//参数多出来，不匹配
+                {
+                    match = false;
+                    continue;
+                }
+                for (int i = 0; i < pp.Length; i++)
+                {
+                    if (i >= types.Count)//参数多出来
+                    {
+                        if (!pp[i].IsOptional)
+                        {
+
+                            match = false;
+                            break;
+                        }
+                        else
+                        {
+                            myparams.Add(pp[i].DefaultValue);
+                        }
+                    }
+                    else
+                    {
+                        if (pp[i].ParameterType == types[i]) continue;
+
+                        try
+                        {
+                            myparams[i] = content.environment.GetType(types[i]).ConvertTo(content, _params[i], pp[i].ParameterType);
+                        }
+                        catch
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+                }
+                if (!match)
+                {
+                    continue;
+                }
+                else
+                {
+                    for (int i = 0; i < myparams.Count; i++)
+                    {
+                        if (i < _params.Count)
+                        {
+                            _params[i] = myparams[i];
+                        }
+                        else
+                        {
+                            _params.Add(myparams[i]);
+                        }
+                    }
+                    break;
+                }
+
+            }
+
+            if (minfo.Count == 1)
+                return minfo[0];
+
+            return null;
+
+        }
+        public virtual CLS_Content.Value MemberCallCache(CLS_Content content, object object_this, IList<CLS_Content.Value> _params, MethodCache cache)
         {
             List<Type> types = new List<Type>();
             List<object> _oparams = new List<object>();
@@ -362,6 +480,24 @@ namespace CSLE
 
             var targetop = cache.info;
             CLS_Content.Value v = new CLS_Content.Value();
+            if (cache.slow)
+            {
+                var pp = targetop.GetParameters();
+                for (int i = 0; i < pp.Length; i++)
+                {
+                    if (i >= _params.Count)
+                    {
+                        _oparams.Add(pp[i].DefaultValue);
+                    }
+                    else
+                    {
+                        if (pp[i].ParameterType != (Type)_params[i].type)
+                        {
+                            _oparams[i] = content.environment.GetType(_params[i].type).ConvertTo(content, _oparams[i], pp[i].ParameterType);
+                        }
+                    }
+                }
+            }
             v.value = targetop.Invoke(object_this, _oparams.ToArray());
             v.type = targetop.ReturnType;
             return v;
@@ -380,7 +516,7 @@ namespace CSLE
         {
 
             MemberValueCache c;
-            
+
             if (!memberValuegetCaches.TryGetValue(valuename, out c))
             {
                 c = new MemberValueCache();
@@ -491,7 +627,7 @@ namespace CSLE
         public virtual bool MemberValueSet(CLS_Content content, object object_this, string valuename, object value)
         {
             MemberValueCache c;
-            
+
             if (!memberValuesetCaches.TryGetValue(valuename, out c))
             {
                 c = new MemberValueCache();
@@ -519,7 +655,7 @@ namespace CSLE
             if (c.type < 0)
                 return false;
 
-            if(c.type==1)
+            if (c.type == 1)
             {
                 if (value != null && value.GetType() != c.finfo.FieldType)
                 {

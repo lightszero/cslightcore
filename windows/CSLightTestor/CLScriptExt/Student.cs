@@ -34,6 +34,10 @@ namespace CLScriptExt
 
     class Student : P2
     {
+        public void Test(string str,int i=0)
+        {
+            Console.WriteLine("str=" + i);
+        }
         public class StudentAss
         {
             public int size = 10;

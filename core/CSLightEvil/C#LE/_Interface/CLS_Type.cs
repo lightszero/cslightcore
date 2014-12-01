@@ -18,6 +18,7 @@ namespace CSLE
     {
         public System.Reflection.MethodInfo info;
         public bool cachefail = false;
+        public bool slow = false;
     }
     public interface ICLS_TypeFunction
     {
