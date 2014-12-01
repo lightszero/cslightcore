@@ -1,6 +1,12 @@
 ﻿//6001 object
+string str="abc,aaa,cccc";
+string[] ss = str.Split(new char[]{','});
+
+
 Student s =new Student();
 s.Test("abc");
+
+
 Vector3 vec= new Vector3(1,2,3);
 Vector3 vec2= new Vector3(1,2,3);
 Vector3 vec3= vec + vec2;

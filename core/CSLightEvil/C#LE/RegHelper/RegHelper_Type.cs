@@ -430,6 +430,7 @@ namespace CSLE
                             break;
                         }
                     }
+                    break;
                 }
                 if (!match)
                 {
