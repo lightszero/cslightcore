@@ -1,5 +1,12 @@
 cslightcore
 ===========
+2014-12-01 0.56Beta
+
+fix一处优化笔误，get set 出了问题
+
+重写了混乱的委托 -= 的处理
+
+
 2014-11-29 0.55Beta
 
 加入了表达式缓存，MemberCall调用和StaticCall调用加入了表达式缓存。

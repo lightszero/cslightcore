@@ -411,6 +411,7 @@ namespace CSLE
 
         public Dictionary<string, Function> functions = new Dictionary<string, Function>();
         public Dictionary<string, Member> members = new Dictionary<string, Member>();
+        public Dictionary<string, Delegate> deles = new Dictionary<string, Delegate>();
         public Dictionary<string, CLS_Content.Value> staticMemberInstance = null;
 
 
@@ -433,6 +434,7 @@ namespace CSLE
     {
         public SType type;
         public Dictionary<string, CLS_Content.Value> member = new Dictionary<string, CLS_Content.Value>();//成员
+        public Dictionary<string, Delegate> dele = new Dictionary<string, Delegate>();
     }
     public class CLS_Type_Class : ICLS_Type_WithBase
     {
