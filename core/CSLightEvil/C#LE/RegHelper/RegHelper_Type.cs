@@ -423,6 +423,11 @@ namespace CSLE
                         try
                         {
                             myparams[i] = content.environment.GetType(types[i]).ConvertTo(content, _params[i], pp[i].ParameterType);
+                            if (myparams[i] == null)
+                            {
+                                match = false;
+                                break;
+                            }
                         }
                         catch
                         {
@@ -430,7 +435,8 @@ namespace CSLE
                             break;
                         }
                     }
-                    break;
+                    if(match)
+                        break;
                 }
                 if (!match)
                 {
@@ -449,7 +455,7 @@ namespace CSLE
                             _params.Add(myparams[i]);
                         }
                     }
-                    break;
+                    return m;
                 }
 
             }
