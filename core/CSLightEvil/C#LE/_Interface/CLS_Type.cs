@@ -50,6 +50,8 @@ namespace CSLE
         }
         public static implicit operator Type(CLType m)
         {
+            if (m == null) return null;
+
             return m.type;
         }
         public static implicit operator SType(CLType m)

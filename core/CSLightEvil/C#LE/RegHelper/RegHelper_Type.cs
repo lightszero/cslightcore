@@ -39,6 +39,7 @@ namespace CSLE
             bool needConvert = false;
             List<object> _oparams = new List<object>();
             List<Type> types = new List<Type>();
+            bool bEm = false;
             foreach (var p in _params)
             {
                 _oparams.Add(p.value);
@@ -48,10 +49,17 @@ namespace CSLE
                 }
                 else
                 {
+                    if (p.type == null)
+                    {
+                        bEm = true;
+
+                    }
                     types.Add(p.type);
                 }
             }
-            var targetop = type.GetMethod(function, types.ToArray());
+            System.Reflection.MethodInfo targetop = null;
+            if (!bEm)
+                targetop = type.GetMethod(function, types.ToArray());
             //if (targetop == null && type.BaseType != null)//加上父类型静态函数查找,典型的现象是 GameObject.Destory
             //{
             //    targetop = type.BaseType.GetMethod(function, types.ToArray());
@@ -73,7 +81,7 @@ namespace CSLE
                     targetop = FindTMethod(type, tfunc, _params, gtypes);
 
                 }
-                if(targetop==null)
+                if (targetop == null)
                 {
                     Type ptype = type.BaseType;
                     while (ptype != null)
@@ -312,6 +320,7 @@ namespace CSLE
             bool needConvert = false;
             List<Type> types = new List<Type>();
             List<object> _oparams = new List<object>();
+            bool bEm = false;
             foreach (var p in _params)
             {
                 {
@@ -323,11 +332,19 @@ namespace CSLE
                 }
                 else
                 {
+                    if (p.type == null)
+                    {
+                        bEm = true;
+                    }
                     types.Add(p.type);
                 }
             }
 
-            var targetop = type.GetMethod(function, types.ToArray());
+            System.Reflection.MethodInfo targetop = null;
+            if (!bEm)
+            {
+                targetop = type.GetMethod(function, types.ToArray());
+            }
             CLS_Content.Value v = new CLS_Content.Value();
             if (targetop == null)
             {
@@ -348,10 +365,13 @@ namespace CSLE
                 }
                 else
                 {
-                    foreach (var s in type.GetInterfaces())
+                    if (!bEm)
                     {
-                        targetop = s.GetMethod(function, types.ToArray());
-                        if (targetop != null) break;
+                        foreach (var s in type.GetInterfaces())
+                        {
+                            targetop = s.GetMethod(function, types.ToArray());
+                            if (targetop != null) break;
+                        }
                     }
                     if (targetop == null)
                     {//因为有cache的存在，可以更慢更多的查找啦，哈哈哈哈
@@ -433,6 +453,10 @@ namespace CSLE
 
                         try
                         {
+                            if (types[i] == null && !pp[i].ParameterType.IsValueType)
+                            {
+                                continue;
+                            }
                             myparams[i] = content.environment.GetType(types[i]).ConvertTo(content, _params[i], pp[i].ParameterType);
                             if (myparams[i] == null)
                             {
@@ -446,7 +470,7 @@ namespace CSLE
                             break;
                         }
                     }
-                    if(match)
+                    if (match)
                         break;
                 }
                 if (!match)
