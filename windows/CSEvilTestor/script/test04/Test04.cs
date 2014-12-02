@@ -10,7 +10,7 @@ class Test04
     public static void Run()
     {
         IT4_Impl impl1 = new IT4_Impl();
-        impl1.contry = Country.ccc;
+        
         impl1.Call1();
         impl2 = new IT4_Impl();
         Test04.impl2 = new IT4_Impl2();
@@ -64,7 +64,7 @@ class IT4_Impl : IT4
 
     public void Call1()
     {
-        Debug.Log("IT4_Impl.Call1" +contry);
+        Debug.Log("IT4_Impl.Call1");
     }
 
     public void Call2(int i, string n)
@@ -83,11 +83,7 @@ class IT4_Impl : IT4
         get;
         private set;
     }
-    public Country contry
-    {
-        get;
-        set;
-    }
+
 }
 
 class IT4_Impl2 : IT4

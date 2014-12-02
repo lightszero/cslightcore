@@ -132,9 +132,9 @@ namespace CSLE
             if (line[nstart] == '\"')
             {
                 t.text = "\"";
-                int pos = nstart+1;
+                int pos = nstart + 1;
                 bool bend = false;
-                while (pos<line.Length)
+                while (pos < line.Length)
                 {
                     char c = line[pos];
                     if (c == '\n')
@@ -151,9 +151,9 @@ namespace CSLE
                     {
                         pos++;
                         c = line[pos];
-                        if(c=='\\')
+                        if (c == '\\')
                         {
-                            t.text+='\\';
+                            t.text += '\\';
                             pos++;
                             continue;
                         }
@@ -229,7 +229,7 @@ namespace CSLE
                 }
                 throw new Exception("查找字符串失败");
             }
-            else if(line[nstart]=='\'')//char
+            else if (line[nstart] == '\'')//char
             {
                 int nend = line.IndexOf('\'', nstart + 1);
                 int nsub = line.IndexOf('\\', nstart + 1);
@@ -259,9 +259,9 @@ namespace CSLE
                 {
                     throw new Exception("不可识别的转义序列:" + t.text.Substring(sp));
                 }
-                if(t.text.Length>3)
+                if (t.text.Length > 3)
                 {
-                    throw new Exception("char 不可超过一个字节("+t.line+")");
+                    throw new Exception("char 不可超过一个字节(" + t.line + ")");
                 }
                 return pos;
             }
@@ -414,7 +414,7 @@ namespace CSLE
                 {
                     //if (t.text == s)
                     {
-                      
+
                         while (line[i] == ' ' && i < line.Length)
                         {
                             i++;
@@ -449,7 +449,7 @@ namespace CSLE
                         }
                         else
                         {
-                              t.type = TokenType.TYPE;
+                            t.type = TokenType.TYPE;
                             return nstart + t.text.Length;
                         }
                     }
@@ -477,7 +477,7 @@ namespace CSLE
                             i++;
                             if (dep == 0)
                             {
-                                t.text = text+'>';
+                                t.text = text + '>';
                                 break;
                             }
                             continue;
@@ -485,7 +485,7 @@ namespace CSLE
                         Token tt;
                         int nnstart = FindStart(line, i);
                         i = GetToken(line, nnstart, out tt);
-                        if(tt.type!= TokenType.IDENTIFIER&&tt.type!= TokenType.TYPE&&tt.text!=",")
+                        if (tt.type != TokenType.IDENTIFIER && tt.type != TokenType.TYPE && tt.text != ",")
                         {
                             break;
                         }
@@ -494,13 +494,15 @@ namespace CSLE
                     if (types.Contains(t.text))
                     {
                         t.type = TokenType.TYPE;
-                        
-                    }else if(dep==0)
+                        return i;
+
+                    }
+                    else if (dep == 0)
                     {
                         t.type = TokenType.IDENTIFIER;
+                        return i;
                     }
 
-                    return i;
                     //foreach (string s in types)
                     //{
                     //    if (s.Length > t.text.Length && line.IndexOf(s, nstart) == nstart)
