@@ -1,7 +1,7 @@
 cslightcore
 ===========
 2014-12-02 0.59Beta
-
+<pre><code>
 修正了 int +String null+string 的问题
 
 修改了一个机制
@@ -13,7 +13,7 @@ List<ScriptType> （ScriptType是脚本类型） 可以使用了，只需要注�
 但是保证脚本看起来像是把脚本放进了模板元
 
 见eviltestor用例08
-
+</code></pre>
 
 2014-12-02 0.58.1Beta
 
