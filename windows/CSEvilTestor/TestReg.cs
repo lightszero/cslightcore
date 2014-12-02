@@ -31,21 +31,20 @@ namespace CSEvilTestor
             //env.RegType(new CSLE.RegHelper_Type(typeof(Dictionary<int, Action<int>>), " Dictionary<int, Action<int>> "));
 
 
-            Type t = Type.GetType("System.Collections.Generic.List`1");
-            env.RegType(new CSLE.RegHelper_Type(t, "List"));
-            Type t2 = Type.GetType("System.Collections.Generic.Dictionary`2");
-            env.RegType(new CSLE.RegHelper_Type(t2, "Dictionary"));
-            Type t3 = Type.GetType("System.Collections.Generic.KeyValuePair`2");
-            env.RegType(new CSLE.RegHelper_Type(t3, "KeyValuePair"));
+            env.RegType(new CSLE.RegHelper_Type(typeof(List<>), "List"));
+            env.RegType(new CSLE.RegHelper_Type(typeof(Dictionary<,>), "Dictionary"));
+
+
+            env.RegType(new CSLE.RegHelper_Type(typeof(KeyValuePair<,>), "KeyValuePair"));
             env.RegType(new CSLE.RegHelper_Type(typeof(HashSet<object>), "HashSet<object>"));
 
-            env.RegType(new CSLE.RegHelper_Type(typeof(List<string>), "List<string>"));
+            //env.RegType(new CSLE.RegHelper_Type(typeof(List<string>), "List<string>"));
             env.RegType(new CSLE.RegHelper_Type(typeof(int[]), "int[]"));
 
-            env.RegType(new CSLE.RegHelper_Type(typeof(List<int>), "List < int>"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(List<List<int>>), "List<List<int>>"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(List<List<List<double>>>), "List<List<List<double>>>"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(List<List<List<int>>>), "List<List<List<int>>>"));
+            //env.RegType(new CSLE.RegHelper_Type(typeof(List<int>), "List < int>"));
+            //env.RegType(new CSLE.RegHelper_Type(typeof(List<List<int>>), "List<List<int>>"));
+            //env.RegType(new CSLE.RegHelper_Type(typeof(List<List<List<double>>>), "List<List<List<double>>>"));
+            //env.RegType(new CSLE.RegHelper_Type(typeof(List<List<List<int>>>), "List<List<List<int>>>"));
 
             env.RegType(new CSLE.RegHelper_Type(typeof(config)));
             env.RegType(new CSLE.RegHelper_Type(typeof(Math)));
