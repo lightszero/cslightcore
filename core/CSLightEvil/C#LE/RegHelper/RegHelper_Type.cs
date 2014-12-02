@@ -942,7 +942,14 @@ namespace CSLE
             System.Reflection.MethodInfo call = null;
             var m = ((Type)type).GetMembers();
             if (code == '+')
+            {
+                if ((Type)right.type == typeof(string))
+                {
+                    returntype = typeof(string);
+                    return left.ToString() + right.value as string;
+                }
                 call = _type.GetMethod("op_Addition", new Type[] { this.type, right.type });
+            }
             else if (code == '-')//base = {CLScriptExt.Vector3 op_Subtraction(CLScriptExt.Vector3, CLScriptExt.Vector3)}
                 call = _type.GetMethod("op_Subtraction", new Type[] { this.type, right.type });
             else if (code == '*')//[2] = {CLScriptExt.Vector3 op_Multiply(CLScriptExt.Vector3, CLScriptExt.Vector3)}
