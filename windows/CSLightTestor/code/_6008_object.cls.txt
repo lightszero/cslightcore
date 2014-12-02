@@ -1,0 +1,3 @@
+﻿//6008 object
+
+Student.TestS2<int, int>();

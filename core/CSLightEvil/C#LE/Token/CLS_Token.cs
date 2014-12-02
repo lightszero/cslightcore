@@ -494,9 +494,13 @@ namespace CSLE
                     if (types.Contains(t.text))
                     {
                         t.type = TokenType.TYPE;
-                        return i;
+                        
+                    }else if(dep==0)
+                    {
+                        t.type = TokenType.IDENTIFIER;
                     }
 
+                    return i;
                     //foreach (string s in types)
                     //{
                     //    if (s.Length > t.text.Length && line.IndexOf(s, nstart) == nstart)

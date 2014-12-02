@@ -71,13 +71,22 @@ namespace CSLE
                     targetop = FindTMethod(type, tfunc, _params, gtypes);
 
                 }
-                else
+                if(targetop==null)
                 {
                     Type ptype = type.BaseType;
                     while (ptype != null)
                     {
                         targetop = ptype.GetMethod(function, types.ToArray());
                         if (targetop != null) break;
+                        var t = environment.environment.GetType(ptype);
+                        try
+                        {
+                            return t.function.StaticCall(environment, function, _params, cache);
+                        }
+                        catch
+                        {
+
+                        }
                         ptype = ptype.BaseType;
                     }
 

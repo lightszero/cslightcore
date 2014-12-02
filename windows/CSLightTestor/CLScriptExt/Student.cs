@@ -19,7 +19,14 @@ namespace CLScriptExt
     }
     class P2 : P1
     {
-
+        public static void TestS<T>()
+        {
+            Console.WriteLine(typeof(T).ToString());
+        }
+        public static void TestS2<T1,T2>()
+        {
+            Console.WriteLine(typeof(T1).ToString() + "," + typeof(T2).ToString());
+        }
     }
     public class MyClass2
     {
