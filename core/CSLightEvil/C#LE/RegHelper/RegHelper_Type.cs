@@ -60,13 +60,15 @@ namespace CSLE
             {
                 if (function[function.Length - 1] == '>')//这是一个临时的模板函数调用
                 {
-
-                    string[] sf = function.Split(new char[] { '<', ',', '>' }, StringSplitOptions.RemoveEmptyEntries);
-                    string tfunc = sf[0];
-                    Type[] gtypes = new Type[sf.Length - 1];
-                    for (int i = 1; i < sf.Length; i++)
+                    int sppos = function.IndexOf('<', 0);
+                    string tfunc = function.Substring(0, sppos);
+                    string strparam = function.Substring(sppos + 1, function.Length - sppos - 2);
+                    string[] sf = strparam.Split(',');
+                    //string tfunc = sf[0];
+                    Type[] gtypes = new Type[sf.Length];
+                    for (int i = 0; i < sf.Length; i++)
                     {
-                        gtypes[i - 1] = environment.environment.GetTypeByKeyword(sf[i]).type;
+                        gtypes[i] = environment.environment.GetTypeByKeyword(sf[i]).type;
                     }
                     targetop = FindTMethod(type, tfunc, _params, gtypes);
 
@@ -305,7 +307,7 @@ namespace CSLE
             //targetop = targetop.MakeGenericMethod(gtypes);
             return null;
         }
-        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string func, IList<CLS_Content.Value> _params, MethodCache cache = null)
+        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string function, IList<CLS_Content.Value> _params, MethodCache cache = null)
         {
             bool needConvert = false;
             List<Type> types = new List<Type>();
@@ -325,21 +327,21 @@ namespace CSLE
                 }
             }
 
-            var targetop = type.GetMethod(func, types.ToArray());
+            var targetop = type.GetMethod(function, types.ToArray());
             CLS_Content.Value v = new CLS_Content.Value();
             if (targetop == null)
             {
-                if (func[func.Length - 1] == '>')//这是一个临时的模板函数调用
+                if (function[function.Length - 1] == '>')//这是一个临时的模板函数调用
                 {
-
-                    string[] sf = func.Split(new char[] { '<', ',', '>' }, StringSplitOptions.RemoveEmptyEntries);
-                    string tfunc = sf[0];
-
-                    Type[] gtypes = new Type[sf.Length - 1];
-
-                    for (int i = 1; i < sf.Length; i++)
+                    int sppos = function.IndexOf('<', 0);
+                    string tfunc = function.Substring(0, sppos);
+                    string strparam = function.Substring(sppos + 1, function.Length - sppos - 2);
+                    string[] sf = strparam.Split(',');
+                    //string tfunc = sf[0];
+                    Type[] gtypes = new Type[sf.Length];
+                    for (int i = 0; i < sf.Length; i++)
                     {
-                        gtypes[i - 1] = environment.environment.GetTypeByKeyword(sf[i]).type;
+                        gtypes[i] = environment.environment.GetTypeByKeyword(sf[i]).type;
                     }
                     targetop = FindTMethod(type, tfunc, _params, gtypes);
 
@@ -348,17 +350,17 @@ namespace CSLE
                 {
                     foreach (var s in type.GetInterfaces())
                     {
-                        targetop = s.GetMethod(func, types.ToArray());
+                        targetop = s.GetMethod(function, types.ToArray());
                         if (targetop != null) break;
                     }
                     if (targetop == null)
                     {//因为有cache的存在，可以更慢更多的查找啦，哈哈哈哈
-                        targetop = GetMethodSlow(environment, false, func, types, _oparams);
+                        targetop = GetMethodSlow(environment, false, function, types, _oparams);
                         needConvert = true;
                     }
                     if (targetop == null)
                     {
-                        throw new Exception("函数不存在function:" + type.ToString() + "." + func);
+                        throw new Exception("函数不存在function:" + type.ToString() + "." + function);
                     }
                 }
             }
@@ -370,7 +372,7 @@ namespace CSLE
 
             if (targetop == null)
             {
-                throw new Exception("函数不存在function:" + type.ToString() + "." + func);
+                throw new Exception("函数不存在function:" + type.ToString() + "." + function);
             }
             v.value = targetop.Invoke(object_this, _oparams.ToArray());
             v.type = targetop.ReturnType;
