@@ -35,6 +35,7 @@ namespace CLScriptTestor
             scriptService.RegFunction(new CSLE.RegHelper_Function((_call)testCallDec));
             scriptService.RegFunction(new CSLE.RegHelper_Function((_call2)testCallAdd4));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(UserData)));
+            scriptService.RegType(new CSLE.RegHelper_Type(typeof(Math)));
 
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Country)));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Vector3)));

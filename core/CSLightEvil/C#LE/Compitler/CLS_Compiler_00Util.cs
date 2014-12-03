@@ -1012,10 +1012,21 @@ namespace CSLE
                         max = 9;
                         break;
                 }
-                if (max <= nmax)
+                if (tokens[i].text == "(")//(int)(xxx) //这种表达式要优先处理前一个
                 {
-                    nmax = max;
-                    npos = i;
+                    if (max < nmax)
+                    {
+                        nmax = max;
+                        npos = i;
+                    }
+                }
+                else
+                {
+                    if (max <= nmax)
+                    {
+                        nmax = max;
+                        npos = i;
+                    }
                 }
             }
 

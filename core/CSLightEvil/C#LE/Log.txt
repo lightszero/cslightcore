@@ -1,4 +1,11 @@
-﻿2014-12-02 0.59Beta
+﻿2014-12-03 0.59.1Beta
+	追加如下三个默认注册，不用再自行注册
+	RegType(new RegHelper_Type(typeof(object),"object"));
+	RegType(new RegHelper_Type(typeof(List<>), "List"));
+	RegType(new RegHelper_Type(typeof(Dictionary<,>), "Dictionary"));
+
+	修改了一处强制转换表达式识别错误
+2014-12-02 0.59Beta
 
 修正了 int +String null+string 的问题
 

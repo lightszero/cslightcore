@@ -48,6 +48,10 @@ namespace CSLE
             RegType(new CLS_Type_Long());
             RegType(new CLS_Type_ULong());
 
+            RegType(new RegHelper_Type(typeof(object),"object"));
+            RegType(new RegHelper_Type(typeof(List<>), "List"));
+            RegType(new RegHelper_Type(typeof(Dictionary<,>), "Dictionary"));
+
             typess["null"] = new CLS_Type_NULL();
             //contentGloabl = CreateContent();
             //if (!useNamespace)//命名空间模式不能直接用函数
