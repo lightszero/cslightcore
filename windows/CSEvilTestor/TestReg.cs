@@ -7,12 +7,15 @@ namespace CSEvilTestor
 {
     class TestReg
     {
+        delegate void ma(int a,string b);
+
         public static void Reg(CSLE.ICLS_Environment env)
         {
             env.RegType(new CSLE.RegHelper_Type(typeof(Debug)));
 
             env.RegType(new CSLE.RegHelper_Type(typeof(TestDele)));
             env.RegType(new CSLE.RegHelper_Type(typeof(Program)));
+
 
             env.RegType(new CSLE.RegHelper_DeleAction<int,string>(typeof(Action<int,string>),"Action<int,string>"));
             env.RegType(new CSLE.RegHelper_Type(typeof(MyClass2)));
@@ -23,17 +26,6 @@ namespace CSEvilTestor
             env.RegType(new CSLE.RegHelper_DeleAction(typeof(TestDele.myup), "TestDele.myup"));
 
             env.RegType(new CSLE.RegHelper_Type(typeof(Color), "Color"));
-
-            env.RegType(new CSLE.RegHelper_Type(typeof(object), "object"));
-            //env.RegType(new CSLE.RegHelper_Type(typeof(List<object>), "List<object>"));
-            //env.RegType(new CSLE.RegHelper_Type(typeof(Dictionary<int,int>), "Dictionary<int,int>"));
-            //env.RegType(new CSLE.RegHelper_Type(typeof(Dictionary<short, Action<int>>), " Dictionary<short, Action<int>> "));
-            //env.RegType(new CSLE.RegHelper_Type(typeof(Dictionary<int, Action<int>>), " Dictionary<int, Action<int>> "));
-
-
-            env.RegType(new CSLE.RegHelper_Type(typeof(List<>), "List"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(Dictionary<,>), "Dictionary"));
-
 
             env.RegType(new CSLE.RegHelper_Type(typeof(KeyValuePair<,>), "KeyValuePair"));
             env.RegType(new CSLE.RegHelper_Type(typeof(HashSet<object>), "HashSet<object>"));

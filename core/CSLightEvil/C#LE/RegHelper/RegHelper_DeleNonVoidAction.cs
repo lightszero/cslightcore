@@ -24,7 +24,7 @@ namespace CSLE
         public delegate ReturnType NonVoidDelegate();
 
         public RegHelper_DeleNonVoidAction(Type type, string setkeyword)
-            : base(type, setkeyword)
+            : base(type, setkeyword, true)
         {
 
         }

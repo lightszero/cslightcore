@@ -848,8 +848,13 @@ namespace CSLE
 
     public class RegHelper_Type : ICLS_Type
     {
+
         public RegHelper_Type(Type type, string setkeyword = null)
         {
+            if(type.IsSubclassOf(typeof(Delegate)))
+            {
+                throw new Exception("你想注册的Type是一个Delegate，需要用特别的注册方法");
+            }
             function = new RegHelper_TypeFunction(type);
             if (setkeyword != null)
             {
@@ -862,7 +867,21 @@ namespace CSLE
             this.type = type;
             this._type = type;
         }
+        protected RegHelper_Type(Type type, string setkeyword,bool dele)
+        {
 
+            function = new RegHelper_TypeFunction(type);
+            if (setkeyword != null)
+            {
+                keyword = setkeyword.Replace(" ", "");
+            }
+            else
+            {
+                keyword = type.Name;
+            }
+            this.type = type;
+            this._type = type;
+        }
         public string keyword
         {
             get;

@@ -10,7 +10,7 @@ namespace CSLE
     {
 
         public RegHelper_DeleAction(Type type, string setkeyword)
-            : base(type, setkeyword)
+            : base(type, setkeyword, true)
         {
 
         }

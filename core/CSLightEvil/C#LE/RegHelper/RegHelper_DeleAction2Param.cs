@@ -8,8 +8,9 @@ namespace CSLE
 
     public class RegHelper_DeleAction<T,T1> : RegHelper_Type, ICLS_Type_Dele
     {
-        public RegHelper_DeleAction(Type type, string setkeyword)
-            : base(type, setkeyword)
+
+        public RegHelper_DeleAction(Type type, string setkeyword):
+            base(type,setkeyword,true)
         {
 
         }
