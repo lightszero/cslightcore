@@ -11,7 +11,10 @@ namespace CSEvilTestor
 
         public static void Reg(CSLE.ICLS_Environment env)
         {
+            CSEvilTestor.testfunc.CSLEConvert.env = env;
+
             env.RegType(new CSLE.RegHelper_Type(typeof(Debug)));
+            env.RegType(new CSLE.RegHelper_Type(typeof(testfunc.CSLEConvert)));
 
             env.RegType(new CSLE.RegHelper_Type(typeof(TestDele)));
             env.RegType(new CSLE.RegHelper_Type(typeof(Program)));

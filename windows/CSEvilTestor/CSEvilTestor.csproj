@@ -74,6 +74,10 @@
     <Compile Include="script\test08\Test08.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="script\test09\Test09.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="testfunc\CSLEConvert.cs" />
     <Compile Include="testfunc\TestClass.cs" />
     <Compile Include="testfunc\TestDele.cs" />
     <Compile Include="TestReg.cs" />
@@ -124,6 +128,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="script\test08\test.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="script\test09\test.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
