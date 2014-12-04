@@ -1,5 +1,10 @@
 cslightcore
 ===========
+2014-12-04 0.60.1Beta
+	
+	修复这种表达式问题Vector3 vec= new Vector3(1,2,3)*0.5f;
+	之前new 之后的不会执行
+
 2014-12-04 0.6Beta
 
     增加了一个C#Light序列化到Json的例子

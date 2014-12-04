@@ -1,4 +1,5 @@
 ﻿//6001 object
+Vector3 vec= new Vector3(1,2,3)*0.5f;
 string str="abc,aaa,cccc";
 string[] ss = str.Split(new char[]{','});
 
@@ -7,7 +8,7 @@ Student s =new Student();
 s.Test("abc");
 
 
-Vector3 vec= new Vector3(1,2,3);
+
 Vector3 vec2= new Vector3(1,2,3);
 Vector3 vec3= vec + vec2;
 trace (vec,vec2,vec3);
