@@ -78,6 +78,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="testfunc\CSLEConvert.cs" />
+    <Compile Include="testfunc\MyJson.cs" />
     <Compile Include="testfunc\TestClass.cs" />
     <Compile Include="testfunc\TestDele.cs" />
     <Compile Include="TestReg.cs" />

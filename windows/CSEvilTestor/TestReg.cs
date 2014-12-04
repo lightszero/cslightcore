@@ -19,6 +19,13 @@ namespace CSEvilTestor
             env.RegType(new CSLE.RegHelper_Type(typeof(TestDele)));
             env.RegType(new CSLE.RegHelper_Type(typeof(Program)));
 
+            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson), "MyJson"));
+            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_ValueNumber), "MyJson.JsonNode_ValueNumber"));
+            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.IJsonNode), "MyJson.IJsonNode"));
+            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_ValueString), "MyJson.JsonNode_ValueString"));
+            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_Object), "MyJson.JsonNode_Object"));
+            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_Array), "MyJson.JsonNode_Array"));
+
 
             env.RegType(new CSLE.RegHelper_DeleAction<int,string>(typeof(Action<int,string>),"Action<int,string>"));
             env.RegType(new CSLE.RegHelper_Type(typeof(MyClass2)));

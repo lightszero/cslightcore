@@ -12,11 +12,17 @@ class Like
     public string name;
     public string desc;
 }
+class Love
+{
+    public int id;
+}
 class TSave
 {
     public string name;
     public int age;
-    public List<Like> like = new List<Like>();
+    public Love love;
+    public List<Like> like;
+    public List<string> strs;
 }
 class Test09
 {
@@ -24,11 +30,18 @@ class Test09
 
     public static void Test()
     {
-        TSave read = CSLEConvert.FromJson("TSave", "{\"name\":\"aaa\",\"age\":123,\"like\":[{\"name\":\"aaa\",\"desc\":\"aaaaaa\"},{\"name\":\"bbb\",\"desc\":\"bbbbbb\"}]}")
-            as TSave;
+        MyJson.JsonNode_Object objst =MyJson.Parse
+            ("{\"love\":{\"id\":12345}\"name\":\"aname\",\"age\":123,\"like\":[{\"name\":\"aaa\",\"desc\":\"aaaaaa\"},{\"name\":\"bbb\",\"desc\":\"bbbbbb\"}],\"strs\":[\"aa\",\"bb\"]}")
+                as MyJson.JsonNode_Object;
 
-        Debug.Log("read" + read.name);
-        Debug.Log("write" + CSLEConvert.ToJson(read));
+        TSave read = CSLEConvert.FromJson("TSave", objst) as TSave;
+            
+        Debug.Log("read.name=" + read.name);
+        Debug.Log("read.like[0].name=" + read.like[0].name);
+        Debug.Log("read.strs[1]=" + read.strs[1]);
+        Debug.Log("read.love.id=" + read.love.id);
+        Debug.Log("write" + CSLEConvert.ToJson(read).ToString());
     }
 
 }
+
