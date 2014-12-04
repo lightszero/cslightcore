@@ -621,7 +621,7 @@ public class MyJson
 
         public bool IsNull()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public string AsString()
@@ -915,7 +915,7 @@ public class MyJson
 
         public bool IsNull()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public string AsString()
@@ -1308,7 +1308,7 @@ public class MyJson
 
         public bool IsNull()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public string AsString()
