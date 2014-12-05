@@ -754,6 +754,7 @@ namespace CSLE
 
 
         System.Reflection.MethodInfo indexGetCache = null;
+        Type indexGetCachetypeindex;
         Type indexGetCacheType = null;
         public virtual CLS_Content.Value IndexGet(CLS_Content environment, object object_this, object key)
         {
@@ -777,14 +778,16 @@ namespace CSLE
                     {
                         indexGetCacheType = type.GetElementType();
                     }
+                  
                 }
-                if (indexGetCache != null)
-                {
-                    CLS_Content.Value v = new CLS_Content.Value();
-                    v.type = indexGetCacheType;
-                    v.value = indexGetCache.Invoke(object_this, new object[] { key });
-                    return v;
-                }
+                indexGetCachetypeindex = indexGetCache.GetParameters()[0].ParameterType;
+                //if (indexGetCache != null)
+                //{
+                //    CLS_Content.Value v = new CLS_Content.Value();
+                //    v.type = indexGetCacheType;
+                //    v.value = indexGetCache.Invoke(object_this, new object[] { key });
+                //    return v;
+                //}
                 //{
                 //    targetop = type.GetMethod("GetValue", new Type[] { typeof(int) });
                 //    if (targetop != null)
@@ -798,10 +801,12 @@ namespace CSLE
                 //    }
                 //}
             }
-            else
+            //else
             {
                 CLS_Content.Value v = new CLS_Content.Value();
                 v.type = indexGetCacheType;
+                if (key != null && key.GetType() != indexGetCachetypeindex)
+                    key = environment.environment.GetType(key.GetType()).ConvertTo(environment, key, (CSLE.CLType)indexGetCachetypeindex);
                 v.value = indexGetCache.Invoke(object_this, new object[] { key });
                 return v;
             }
@@ -810,6 +815,8 @@ namespace CSLE
         }
 
         System.Reflection.MethodInfo indexSetCache = null;
+        Type indexSetCachetype1;
+        Type indexSetCachetype2;
         bool indexSetCachekeyfirst = false;
         public virtual void IndexSet(CLS_Content environment, object object_this, object key, object value)
         {
@@ -822,15 +829,27 @@ namespace CSLE
                     indexSetCache = type.GetMethod("SetValue", new Type[] { typeof(object), typeof(int) });
                     indexSetCachekeyfirst = false;
                 }
-
+                var pp=indexSetCache.GetParameters();
+                indexSetCachetype1=pp[0].ParameterType;
+                indexSetCachetype2=pp[1].ParameterType;
             }
             //else
             if (indexSetCachekeyfirst)
             {
+
+                if (key != null && key.GetType() != indexSetCachetype1)
+                    key = environment.environment.GetType(key.GetType()).ConvertTo(environment, key, (CSLE.CLType)indexSetCachetype1);
+                if (value != null && value.GetType() != indexSetCachetype2)
+                    value = environment.environment.GetType(value.GetType()).ConvertTo(environment, value, (CSLE.CLType)indexSetCachetype2);
                 indexSetCache.Invoke(object_this, new object[] { key, value });
             }
             else
             {
+                if (value != null && value.GetType() != indexSetCachetype1)
+                    value = environment.environment.GetType(value.GetType()).ConvertTo(environment, value, (CSLE.CLType)indexSetCachetype1);
+                if (key != null && key.GetType() != indexSetCachetype2)
+                    key = environment.environment.GetType(key.GetType()).ConvertTo(environment, key, (CSLE.CLType)indexSetCachetype2);
+
                 indexSetCache.Invoke(object_this, new object[] { value, key });
             }
             //var m = type.GetMethods();

@@ -1,5 +1,11 @@
 cslightcore
 ===========
+2014-12-05 0.60.2Beta
+
+    修复一处tokenparser bug，可能导致某些字符串解析时出错
+
+	修复 List[] 索引 不自动转型的问题
+
 2014-12-04 0.60.1Beta
 	
 	修复这种表达式问题Vector3 vec= new Vector3(1,2,3)*0.5f;

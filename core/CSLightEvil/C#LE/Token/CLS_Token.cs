@@ -454,7 +454,7 @@ namespace CSLE
                         }
                     }
                 }
-                while (line[i] == ' ' && i < line.Length)
+                while (i < line.Length && line[i] == ' ')
                 {
                     i++;
                 }
