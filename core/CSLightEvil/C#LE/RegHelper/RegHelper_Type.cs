@@ -778,7 +778,7 @@ namespace CSLE
                     {
                         indexGetCacheType = type.GetElementType();
                     }
-                  
+
                 }
                 indexGetCachetypeindex = indexGetCache.GetParameters()[0].ParameterType;
                 //if (indexGetCache != null)
@@ -829,9 +829,9 @@ namespace CSLE
                     indexSetCache = type.GetMethod("SetValue", new Type[] { typeof(object), typeof(int) });
                     indexSetCachekeyfirst = false;
                 }
-                var pp=indexSetCache.GetParameters();
-                indexSetCachetype1=pp[0].ParameterType;
-                indexSetCachetype2=pp[1].ParameterType;
+                var pp = indexSetCache.GetParameters();
+                indexSetCachetype1 = pp[0].ParameterType;
+                indexSetCachetype2 = pp[1].ParameterType;
             }
             //else
             if (indexSetCachekeyfirst)
@@ -870,7 +870,7 @@ namespace CSLE
 
         public RegHelper_Type(Type type, string setkeyword = null)
         {
-            if(type.IsSubclassOf(typeof(Delegate)))
+            if (type.IsSubclassOf(typeof(Delegate)))
             {
                 throw new Exception("你想注册的Type是一个Delegate，需要用特别的注册方法");
             }
@@ -886,7 +886,7 @@ namespace CSLE
             this.type = type;
             this._type = type;
         }
-        protected RegHelper_Type(Type type, string setkeyword,bool dele)
+        protected RegHelper_Type(Type type, string setkeyword, bool dele)
         {
 
             function = new RegHelper_TypeFunction(type);
@@ -950,6 +950,11 @@ namespace CSLE
                 {
                     return System.Convert.ToInt32(src);
                 }
+            }
+            else if (((Type)targetType).IsEnum)
+            {
+                return Enum.ToObject((Type)targetType, src);
+
             }
             var ms = _type.GetMethods();
             foreach (var m in ms)

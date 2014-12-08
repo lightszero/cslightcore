@@ -1,5 +1,10 @@
 cslightcore
 ===========
+2014-12-08 0.60.3Beta
+
+    修复一处int to enum 的问题
+	
+	
 2014-12-05 0.60.2Beta
 
     修复一处tokenparser bug，可能导致某些字符串解析时出错
