@@ -41,6 +41,7 @@ namespace CLScriptTestor
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Vector3)));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Student)));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.P1)));
+            scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Color32)));
             //scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.P2)));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Student.StudentAss), "Student.StudentAss"));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(MyJson), "MyJson"));
@@ -76,6 +77,8 @@ namespace CLScriptTestor
 
 
             scriptService.RegType(new CSLE.RegHelper_DeleAction<int>(typeof(Action<int>), "Action<int>"));
+            scriptService.RegType(new CSLE.RegHelper_DeleAction<object,EventArgs>(typeof(EventHandler), "EventHandler"));
+
             //CLScriptExt.Type_Vector3());
             InitCodeFile();
             ScriptNET.Runtime.RuntimeHost.Initialize();

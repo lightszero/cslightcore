@@ -930,7 +930,8 @@ namespace CSLE
 
         public virtual object ConvertTo(CLS_Content env, object src, CLType targetType)
         {
-            if (this._type == (Type)targetType) return src;
+            Type targettype = (Type)targetType;
+            if (this._type == targettype) return src;
 
             //type.get
 
@@ -951,24 +952,24 @@ namespace CSLE
                     return System.Convert.ToInt32(src);
                 }
             }
-            else if (((Type)targetType).IsEnum)
+            else if (targettype != null && targettype.IsEnum)
             {
-                return Enum.ToObject((Type)targetType, src);
+                return Enum.ToObject(targettype, src);
 
             }
             var ms = _type.GetMethods();
             foreach (var m in ms)
             {
-                if ((m.Name == "op_Implicit" || m.Name == "op_Explicit") && m.ReturnType == (Type)targetType)
+                if ((m.Name == "op_Implicit" || m.Name == "op_Explicit") && m.ReturnType == targettype)
                 {
                     return m.Invoke(null, new object[] { src });
                 }
             }
-            if ((Type)targetType != null)
+            if (targettype != null)
             {
-                if (((Type)targetType).IsAssignableFrom(_type))
+                if (targettype.IsAssignableFrom(_type))
                     return src;
-                if (src != null && ((Type)targetType).IsInstanceOfType(src))
+                if (src != null && targettype.IsInstanceOfType(src))
                     return src;
             }
             else
