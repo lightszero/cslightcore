@@ -100,13 +100,14 @@ namespace CSLE
             if (type == null)
                 return typess["null"];
 
-			ICLS_Type ret = null;
-			if( types.TryGetValue(type, out ret ) == false )	{
-				logger.Log_Warn("(CLScript)类型未注册,将自动注册一份匿名:" + type.ToString());
-				ret = new RegHelper_Type(type, "");
-				RegType( ret );
-			}
-			return ret;
+            ICLS_Type ret = null;
+            if (types.TryGetValue(type, out ret) == false)
+            {
+                logger.Log_Warn("(CLScript)类型未注册,将自动注册一份匿名:" + type.ToString());
+                ret = new RegHelper_Type(type, "");
+                RegType(ret);
+            }
+            return ret;
         }
         //public ICLS_Type_Dele GetDeleTypeBySign(string sign)
         //{
@@ -121,14 +122,16 @@ namespace CSLE
         //}
         public ICLS_Type GetTypeByKeyword(string keyword)
         {
-			ICLS_Type ret = null;
-			if( string.IsNullOrEmpty( keyword ) )	{
-				return null;
-			}
-			if( typess.TryGetValue( keyword, out ret ) == false )	{
-				if (keyword[keyword.Length - 1] == '>')
-				{
-					int iis = keyword.IndexOf('<');
+            ICLS_Type ret = null;
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return null;
+            }
+            if (typess.TryGetValue(keyword, out ret) == false)
+            {
+                if (keyword[keyword.Length - 1] == '>')
+                {
+                    int iis = keyword.IndexOf('<');
                     string func = keyword.Substring(0, iis);
                     List<string> _types = new List<string>();
                     int istart = iis + 1;
@@ -150,7 +153,7 @@ namespace CSLE
                             }
                         }
 
-                        if (keyword[inow] == ','&&dep==0)
+                        if (keyword[inow] == ',' && dep == 0)
                         {
                             _types.Add(keyword.Substring(istart, inow - istart));
                             istart = inow + 1;
@@ -172,7 +175,7 @@ namespace CSLE
                             {
                                 CLType t = GetTypeByKeyword(_types[i]).type;
                                 Type rt = t;
-                                if(rt==null&&t!=null)
+                                if (rt == null && t != null)
                                 {
                                     rt = typeof(object);
                                 }
@@ -189,15 +192,16 @@ namespace CSLE
 
             }
 
-			return ret;
+            return ret;
         }
         public ICLS_Type GetTypeByKeywordQuiet(string keyword)
         {
-			ICLS_Type ret = null;
-			if( typess.TryGetValue( keyword, out ret ) == false )	{
-				return null;
-			}
-			return ret;
+            ICLS_Type ret = null;
+            if (typess.TryGetValue(keyword, out ret) == false)
+            {
+                return null;
+            }
+            return ret;
         }
         public void RegFunction(ICLS_Function func)
         {
@@ -209,12 +213,13 @@ namespace CSLE
         }
         public ICLS_Function GetFunction(string name)
         {
-			ICLS_Function func = null;
-			bool bFind = calls.TryGetValue( name, out func );
-			if( func == null )	{
-				throw new Exception( "找不到函数:" + name );
-			}
-			return func;
+            ICLS_Function func = null;
+            bool bFind = calls.TryGetValue(name, out func);
+            if (func == null)
+            {
+                throw new Exception("找不到函数:" + name);
+            }
+            return func;
         }
         public ICLS_Logger logger
         {
@@ -265,9 +270,9 @@ namespace CSLE
                 {
                     if (f.Value[i].type == TokenType.IDENTIFIER && this.tokenParser.types.Contains(f.Value[i].text))
                     {//有可能预处理导致新的类型
-                        if(i>0
+                        if (i > 0
                             &&
-                            (f.Value[i-1].type== TokenType.TYPE||f.Value[i-1].text=="."))
+                            (f.Value[i - 1].type == TokenType.TYPE || f.Value[i - 1].text == "."))
                         {
                             continue;
                         }

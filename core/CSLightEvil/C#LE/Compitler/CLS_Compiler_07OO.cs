@@ -85,7 +85,7 @@ namespace CSLE
                         }
                     }
                     int iend = FindBlock(env, tokens, ibegin);
-                    if(iend==-1)
+                    if (iend == -1)
                     {
                         env.logger.Log_Error("查找文件尾失败。");
                         return null;
@@ -250,7 +250,7 @@ namespace CSLE
                             bctor = true;
                             i--;
                         }
-                            else if(tokens[i + 1].text == "["&&tokens[i+2].text=="]")
+                        else if (tokens[i + 1].text == "[" && tokens[i + 2].text == "]")
                         {
                             idtype = env.GetTypeByKeyword(tokens[i].text + "[]");
                             i += 2;
@@ -270,7 +270,7 @@ namespace CSLE
                         string idname = tokens[i + 1].text;
                         if (tokens[i + 2].type == CSLE.TokenType.PUNCTUATION && tokens[i + 2].text == "(")//参数开始,这是函数
                         {
-							logger.Log_Internal("发现函数:" + idname);
+                            logger.Log_Internal("发现函数:" + idname);
                             SType.Function func = new SType.Function();
                             func.bStatic = bStatic;
                             func.bPublic = bPublic;
@@ -283,21 +283,22 @@ namespace CSLE
 
                                 int start = funcparambegin + 1;
                                 //Dictionary<string, ICLS_Type> _params = new Dictionary<string, ICLS_Type>();
-                                for (int j = funcparambegin +1; j <= funcparamend; j++)
+                                for (int j = funcparambegin + 1; j <= funcparamend; j++)
                                 {
                                     if (tokens[j].text == "," || tokens[j].text == ")")
                                     {
                                         string ptype = "";
-                                        for(int k=start;k<=j-2;k++)
-                                            ptype+=tokens[k].text;
+                                        for (int k = start; k <= j - 2; k++)
+                                            ptype += tokens[k].text;
                                         var pid = tokens[j - 1].text;
                                         var type = env.GetTypeByKeyword(ptype);
                                         // _params[pid] = type;
                                         //func._params.Add(pid, type);
-										if( type == null )	{
-											throw new Exception( filename + ":不可识别的函数头参数:" + tokens[funcparambegin].ToString() + tokens[funcparambegin].SourcePos()  );
-											break;
-										}
+                                        if (type == null)
+                                        {
+                                            throw new Exception(filename + ":不可识别的函数头参数:" + tokens[funcparambegin].ToString() + tokens[funcparambegin].SourcePos());
+                                            break;
+                                        }
                                         func._paramnames.Add(pid);
                                         func._paramtypes.Add(type);
                                         start = j + 1;
@@ -310,7 +311,7 @@ namespace CSLE
                             {
                                 int funcend = FindBlock(env, tokens, funcbegin);
                                 this.Compiler_Expression_Block(tokens, env, funcbegin, funcend, out func.expr_runtime);
-                                if(func.expr_runtime==null)
+                                if (func.expr_runtime == null)
                                 {
                                     logger.Log_Warn("警告，该函数编译为null，请检查");
                                 }
@@ -327,7 +328,7 @@ namespace CSLE
                             }
                             else
                             {
-								throw new Exception( filename + ":不可识别的函数表达式:" + tokens[funcbegin].ToString() + tokens[funcbegin].SourcePos()  );
+                                throw new Exception(filename + ":不可识别的函数表达式:" + tokens[funcbegin].ToString() + tokens[funcbegin].SourcePos());
                             }
                         }
                         else if (tokens[i + 2].type == CSLE.TokenType.PUNCTUATION && tokens[i + 2].text == "{")//语句块开始，这是 getset属性
@@ -362,7 +363,7 @@ namespace CSLE
                             member.bPublic = bPublic;
                             member.bReadOnly = !(haveset && setpublic);
                             member.type = idtype;
-							logger.Log_Internal("发现Get/Set:" + idname);
+                            logger.Log_Internal("发现Get/Set:" + idname);
                             //ICLS_Expression expr = null;
 
                             if (tokens[i + 2].text == "=")
@@ -378,7 +379,7 @@ namespace CSLE
                         }
                         else if (tokens[i + 2].type == CSLE.TokenType.PUNCTUATION && (tokens[i + 2].text == "=" || tokens[i + 2].text == ";"))//这是成员定义
                         {
-							logger.Log_Internal("发现成员定义:" + idname);
+                            logger.Log_Internal("发现成员定义:" + idname);
 
                             var member = new SType.Member();
                             member.bStatic = bStatic;
@@ -407,7 +408,7 @@ namespace CSLE
                     }
                     else
                     {
-						throw new Exception( filename + ":不可识别的表达式:" + tokens[i].ToString() + tokens[i].SourcePos() );
+                        throw new Exception(filename + ":不可识别的表达式:" + tokens[i].ToString() + tokens[i].SourcePos());
                     }
                 }
             }

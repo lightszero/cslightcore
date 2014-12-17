@@ -8,11 +8,11 @@ namespace CSLE
     {
         public CLS_Expression_MemberSetValue(int tbegin, int tend, int lbegin, int lend)
         {
-           listParam= new List<ICLS_Expression>();
-           this.tokenBegin = tbegin;
-           this.tokenEnd = tend;
-           lineBegin = lbegin;
-           lineEnd = lend;
+            listParam = new List<ICLS_Expression>();
+            this.tokenBegin = tbegin;
+            this.tokenEnd = tend;
+            lineBegin = lbegin;
+            lineEnd = lend;
         }
         public int lineBegin
         {
@@ -44,22 +44,22 @@ namespace CSLE
         {
             content.InStack(this);
             var parent = listParam[0].ComputeValue(content);
-			if (parent == null)
-			{
-				throw new Exception("调用空对象的方法:" + listParam[0].ToString() + ":" + ToString() );
-			}
+            if (parent == null)
+            {
+                throw new Exception("调用空对象的方法:" + listParam[0].ToString() + ":" + ToString());
+            }
             var value = listParam[1].ComputeValue(content);
-            object setv=value.value;
+            object setv = value.value;
             //if(value.type!=parent.type)
             //{
             //    var vtype = content.environment.GetType(value.type);
             //    setv = vtype.ConvertTo(content.environment, setv, parent.type);
             //}
             var typefunction = content.environment.GetType(parent.type).function;
-            if(parent.type is object)
+            if (parent.type is object)
             {
                 SInstance s = parent.value as SInstance;
-                if(s!=null)
+                if (s != null)
                 {
                     typefunction = s.type;
                 }
@@ -73,10 +73,10 @@ namespace CSLE
         }
 
         public string membername;
-     
+
         public override string ToString()
         {
-            return "MemberSetvalue|a." + membername ;
+            return "MemberSetvalue|a." + membername;
         }
     }
 }

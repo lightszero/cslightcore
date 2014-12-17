@@ -44,10 +44,10 @@ namespace CSLE
         {
             content.InStack(this);
             var parent = listParam[0].ComputeValue(content);
-			if (parent == null)
-			{
-				throw new Exception("调用空对象的方法:" + listParam[0].ToString() + ":" + ToString() );
-			}
+            if (parent == null)
+            {
+                throw new Exception("调用空对象的方法:" + listParam[0].ToString() + ":" + ToString());
+            }
             var type = content.environment.GetType(parent.type);
             //string membername=null;
 
@@ -59,7 +59,7 @@ namespace CSLE
             {
                 vright = listParam[1].ComputeValue(content);
             }
-            CLS_Content.Value vout =new CLS_Content.Value();
+            CLS_Content.Value vout = new CLS_Content.Value();
             var mtype = content.environment.GetType(getvalue.type);
             vout.value = mtype.Math2Value(content, mathop, getvalue.value, vright, out vout.type);
 

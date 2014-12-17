@@ -98,13 +98,13 @@ namespace CSLE
 
                     else
                     {
-						throw new Exception("不可识别的表达式:" + tkCur.ToString() + tkCur.SourcePos());
+                        throw new Exception("不可识别的表达式:" + tkCur.ToString() + tkCur.SourcePos());
                     }
 
                 }
                 else
                 {
-					throw new Exception("不可识别的表达式:" + tkCur.ToString() + tkCur.SourcePos());
+                    throw new Exception("不可识别的表达式:" + tkCur.ToString() + tkCur.SourcePos());
                 }
             }
             else
@@ -324,7 +324,7 @@ namespace CSLE
 
                             CLS_Expression_Math2Value vvright = valueright as CLS_Expression_Math2Value;
                             if (vvright.mathop != ':')
-								throw new Exception("三元表达式异常" + tkCur.ToString() + tkCur.SourcePos() );
+                                throw new Exception("三元表达式异常" + tkCur.ToString() + tkCur.SourcePos());
                             value.listParam.Add(vvright.listParam[0]);
                             value.listParam.Add(vvright.listParam[1]);
                             return value;

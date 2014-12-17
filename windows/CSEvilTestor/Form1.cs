@@ -32,7 +32,7 @@ namespace CSEvilTestor
             //bool useNamespace = false;
             env = new CSLE.CLS_Environment(this);//如果要启用命名空间，第二个参数要打开
             TestReg.Reg(env);
-         
+
             //查找所有脚本文件
             string[] dirs = System.IO.Directory.GetDirectories("script");
 
@@ -71,10 +71,10 @@ namespace CSEvilTestor
         {
             this.listDebug.Items.Add("<E>" + str);
         }
-		public void Log_Internal(string str)
-		{
-			this.listDebug.Items.Add(str);
-		}
+        public void Log_Internal(string str)
+        {
+            this.listDebug.Items.Add(str);
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -243,7 +243,7 @@ namespace CSEvilTestor
             TestReg.Reg(env);
 
             int succ = 0;
-            for(int i=0;i<listItem.Items.Count;i++)
+            for (int i = 0; i < listItem.Items.Count; i++)
             {
                 Item item = listItem.Items[i] as Item;
                 try
@@ -251,10 +251,10 @@ namespace CSEvilTestor
                     builded = false;
                     Build(item.path, false);
                     Run(item.test, false);
-                    Log("Build Succ("+i+"/"+ listItem.Items.Count+")"+ item.path);
+                    Log("Build Succ(" + i + "/" + listItem.Items.Count + ")" + item.path);
                     succ++;
                 }
-                catch(Exception err)
+                catch (Exception err)
                 {
                     Log("Build Fail(" + i + "/" + listItem.Items.Count + ")" + item.path);
 

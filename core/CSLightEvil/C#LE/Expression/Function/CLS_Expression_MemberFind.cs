@@ -8,11 +8,11 @@ namespace CSLE
     {
         public CLS_Expression_MemberFind(int tbegin, int tend, int lbegin, int lend)
         {
-           listParam= new List<ICLS_Expression>();
-           this.tokenBegin = tbegin;
-           this.tokenEnd = tend;
-           lineBegin = lbegin;
-           lineEnd = lend;
+            listParam = new List<ICLS_Expression>();
+            this.tokenBegin = tbegin;
+            this.tokenEnd = tend;
+            lineBegin = lbegin;
+            lineEnd = lend;
         }
         public int lineBegin
         {
@@ -44,21 +44,21 @@ namespace CSLE
         {
             content.InStack(this);
             var parent = listParam[0].ComputeValue(content);
-			if (parent == null)
-			{
-				throw new Exception("调用空对象的方法:" + listParam[0].ToString() + ":" + ToString() );
-			}
-            ICLS_TypeFunction typefunction = content.environment.GetType(parent.type).function;
-            if(parent.type is object)
+            if (parent == null)
             {
-                SInstance s =parent.value as SInstance;
-                if(s!=null)
+                throw new Exception("调用空对象的方法:" + listParam[0].ToString() + ":" + ToString());
+            }
+            ICLS_TypeFunction typefunction = content.environment.GetType(parent.type).function;
+            if (parent.type is object)
+            {
+                SInstance s = parent.value as SInstance;
+                if (s != null)
                 {
                     typefunction = s.type;
                 }
             }
             //var type = content.environment.GetType(parent.type);
-            var value=typefunction.MemberValueGet(content, parent.value, membername);
+            var value = typefunction.MemberValueGet(content, parent.value, membername);
             content.OutStack(this);
             return value;
             //做数学计算
@@ -68,9 +68,9 @@ namespace CSLE
 
         }
 
-   
+
         public string membername;
-   
+
         public override string ToString()
         {
             return "MemberFind|a." + membername;

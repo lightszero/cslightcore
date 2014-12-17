@@ -32,9 +32,10 @@ namespace CSLE
         {
             return type.ToString() + "|" + text + "|" + pos.ToString();
         }
-		public string SourcePos( )	{
-			return string.Format( "@line{0},pos{1}", line, pos );
-		}
+        public string SourcePos()
+        {
+            return string.Format("@line{0},pos{1}", line, pos);
+        }
     }
     public interface ICLS_TokenParser
     {

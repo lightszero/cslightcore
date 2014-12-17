@@ -57,7 +57,7 @@ namespace CSLE
                 left.value = value;
 
                 Type t = right.type;
-                if(t.IsSubclassOf(typeof(MulticastDelegate))||t.IsSubclassOf(typeof(Delegate)))
+                if (t.IsSubclassOf(typeof(MulticastDelegate)) || t.IsSubclassOf(typeof(Delegate)))
                 {
 
                 }
@@ -73,10 +73,10 @@ namespace CSLE
                         CLS_Expression_MemberFind f = listParam[0] as CLS_Expression_MemberFind;
 
                         var parent = f.listParam[0].ComputeValue(content);
-						if (parent == null)
-						{
-							throw new Exception("调用空对象的方法:" + f.listParam[0].ToString() + ":" + ToString() );
-						}
+                        if (parent == null)
+                        {
+                            throw new Exception("调用空对象的方法:" + f.listParam[0].ToString() + ":" + ToString());
+                        }
                         var ptype = content.environment.GetType(parent.type);
                         ptype.function.MemberValueSet(content, parent.value, f.membername, value);
                     }

@@ -45,15 +45,15 @@ namespace CSLE
         {
             content.InStack(this);
             var parent = listParam[0].ComputeValue(content);
-			if (parent == null)
-			{
-				throw new Exception("调用空对象的方法:" + listParam[0].ToString() + ":" + ToString() );
-			}
+            if (parent == null)
+            {
+                throw new Exception("调用空对象的方法:" + listParam[0].ToString() + ":" + ToString());
+            }
             var typefunction = content.environment.GetType(parent.type).function;
-            if(parent.type is object)
+            if (parent.type is object)
             {
                 SInstance s = parent.value as SInstance;
-                if(s!=null)
+                if (s != null)
                 {
                     typefunction = s.type;
                 }
@@ -64,10 +64,10 @@ namespace CSLE
                 _params.Add(listParam[i].ComputeValue(content));
             }
             CLS_Content.Value value = null;
-            if (cache == null||cache.cachefail)
+            if (cache == null || cache.cachefail)
             {
                 cache = new MethodCache();
-                value = typefunction.MemberCall(content, parent.value, functionName, _params,cache);
+                value = typefunction.MemberCall(content, parent.value, functionName, _params, cache);
             }
             else
             {
