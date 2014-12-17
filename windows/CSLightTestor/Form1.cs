@@ -231,6 +231,12 @@ namespace CLScriptTestor
         {
             SafeLog(str, "E");
         }
+
+		public void Log_Internal( string str)
+		{
+			SafeLog(str, "I");
+		}
+
         delegate void Action();
         void SafeLog(string str, string type)
         {

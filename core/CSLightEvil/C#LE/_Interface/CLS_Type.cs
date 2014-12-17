@@ -65,7 +65,10 @@ namespace CSLE
 
         public static implicit operator CLType(Type type)
         {
-            if (types.ContainsKey(type)) return types[type];
+			CLType retT = null;
+			bool bRet = types.TryGetValue( type, out retT );
+			if (bRet)
+				return retT;
             else
             {
                 var ct = new CLType(type);
@@ -75,7 +78,10 @@ namespace CSLE
         }
         public static implicit operator CLType(SType type)
         {
-            if (stypes.ContainsKey(type)) return stypes[type];
+			CLType retST = null;
+			bool bRet = stypes.TryGetValue(type, out retST);
+			if (bRet)
+				return retST;
             else
             {
                 var ct = new CLType(type);

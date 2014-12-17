@@ -71,7 +71,10 @@ namespace CSEvilTestor
         {
             this.listDebug.Items.Add("<E>" + str);
         }
-
+		public void Log_Internal(string str)
+		{
+			this.listDebug.Items.Add(str);
+		}
 
         private void button2_Click(object sender, EventArgs e)
         {

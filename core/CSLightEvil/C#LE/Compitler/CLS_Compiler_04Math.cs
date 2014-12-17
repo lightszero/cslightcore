@@ -46,13 +46,14 @@ namespace CSLE
                     //}
                     return null;
                 }
-
+                return null;
             }
-            else if (tlist[oppos].text == "=>")
+            Token tkCur = tlist[oppos];
+            if (tkCur.text == "=>")
             {//lambda
                 return Compiler_Expression_Lambda(tlist, content, pos, posend);
             }
-            else if (tlist[oppos].text == "." && pos == oppos - 1 && tlist[pos].type == TokenType.TYPE)
+            else if (tkCur.text == "." && pos == oppos - 1 && tlist[pos].type == TokenType.TYPE)
             {
 
 
@@ -97,13 +98,13 @@ namespace CSLE
 
                     else
                     {
-                        throw new Exception("不可识别的表达式");
+						throw new Exception("不可识别的表达式:" + tkCur.ToString() + tkCur.SourcePos());
                     }
 
                 }
                 else
                 {
-                    throw new Exception("不可识别的表达式");
+					throw new Exception("不可识别的表达式:" + tkCur.ToString() + tkCur.SourcePos());
                 }
             }
             else
@@ -112,7 +113,7 @@ namespace CSLE
                 int leftend = oppos - 1;
                 int right = oppos + 1;
                 int rightend = posend;
-                if (tlist[oppos].text == "(")
+                if (tkCur.text == "(")
                 {
                     ICLS_Expression v;
                     bool succ = Compiler_Expression(tlist, content, oppos + 3, posend, out v);
@@ -126,7 +127,7 @@ namespace CSLE
                 ICLS_Expression valueleft;
                 bool succ1 = Compiler_Expression(tlist, content, left, leftend, out valueleft);
                 ICLS_Expression valueright;
-                if (tlist[oppos].text == "[")
+                if (tkCur.text == "[")
                 {
                     rightend--;
                     bool succs = Compiler_Expression(tlist, content, right, rightend, out valueright);
@@ -135,7 +136,7 @@ namespace CSLE
                     value.listParam.Add(valueright);
                     return value;
                 }
-                else if (tlist[oppos].text == "as")
+                else if (tkCur.text == "as")
                 {
                     CLS_Expression_TypeConvert convert = new CLS_Expression_TypeConvert(left, oppos + 1, tlist[left].line, tlist[oppos + 1].line);
                     convert.listParam.Add(valueleft);
@@ -144,7 +145,7 @@ namespace CSLE
 
                     return convert;
                 }
-                else if (tlist[oppos].text == "is")
+                else if (tkCur.text == "is")
                 {
                     CLS_Expression_TypeCheck check = new CLS_Expression_TypeCheck(left, oppos + 1, tlist[left].line, tlist[oppos + 1].line);
                     check.listParam.Add(valueleft);
@@ -156,7 +157,7 @@ namespace CSLE
                 bool succ2 = Compiler_Expression(tlist, content, right, rightend, out valueright);
                 if (succ1 && succ2 && valueright != null && valueleft != null)
                 {
-                    if (tlist[oppos].text == "=")
+                    if (tkCur.text == "=")
                     {
                         //member set
 
@@ -197,7 +198,7 @@ namespace CSLE
 
 
                     }
-                    else if (tlist[oppos].text == ".")
+                    else if (tkCur.text == ".")
                     {
                         //FindMember
 
@@ -239,7 +240,7 @@ namespace CSLE
 
 
                     }
-                    else if (tlist[oppos].text == "+=" || tlist[oppos].text == "-=" || tlist[oppos].text == "*=" || tlist[oppos].text == "/=" || tlist[oppos].text == "%=")
+                    else if (tkCur.text == "+=" || tkCur.text == "-=" || tkCur.text == "*=" || tkCur.text == "/=" || tkCur.text == "%=")
                     {
 
                         //if (valueleft is CLS_Expression_MemberFind)
@@ -268,45 +269,45 @@ namespace CSLE
                             //value.value_name = ((CLS_Expression_GetValue)valueleft).value_name;
                             value.listParam.Add(valueleft);
                             value.listParam.Add(valueright);
-                            value.mathop = tlist[oppos].text[0];
+                            value.mathop = tkCur.text[0];
                             return value;
                         }
                     }
-                    else if (tlist[oppos].text == "&&" || tlist[oppos].text == "||")
+                    else if (tkCur.text == "&&" || tkCur.text == "||")
                     {
                         CLS_Expression_Math2ValueAndOr value = new CLS_Expression_Math2ValueAndOr(left, rightend, tlist[left].line, tlist[rightend].line);
                         value.listParam.Add(valueleft);
                         value.listParam.Add(valueright);
-                        value.mathop = tlist[oppos].text[0];
+                        value.mathop = tkCur.text[0];
                         return value;
                     }
-                    else if (tlist[oppos].text == ">" || tlist[oppos].text == ">=" || tlist[oppos].text == "<" || tlist[oppos].text == "<=" || tlist[oppos].text == "==" || tlist[oppos].text == "!=")
+                    else if (tkCur.text == ">" || tkCur.text == ">=" || tkCur.text == "<" || tkCur.text == "<=" || tkCur.text == "==" || tkCur.text == "!=")
                     {
                         CLS_Expression_Math2ValueLogic value = new CLS_Expression_Math2ValueLogic(left, rightend, tlist[left].line, tlist[rightend].line);
                         value.listParam.Add(valueleft);
                         value.listParam.Add(valueright);
                         logictoken token = logictoken.not_equal;
-                        if (tlist[oppos].text == ">")
+                        if (tkCur.text == ">")
                         {
                             token = logictoken.more;
                         }
-                        else if (tlist[oppos].text == ">=")
+                        else if (tkCur.text == ">=")
                         {
                             token = logictoken.more_equal;
                         }
-                        else if (tlist[oppos].text == "<")
+                        else if (tkCur.text == "<")
                         {
                             token = logictoken.less;
                         }
-                        else if (tlist[oppos].text == "<=")
+                        else if (tkCur.text == "<=")
                         {
                             token = logictoken.less_equal;
                         }
-                        else if (tlist[oppos].text == "==")
+                        else if (tkCur.text == "==")
                         {
                             token = logictoken.equal;
                         }
-                        else if (tlist[oppos].text == "!=")
+                        else if (tkCur.text == "!=")
                         {
                             token = logictoken.not_equal;
                         }
@@ -315,7 +316,7 @@ namespace CSLE
                     }
                     else
                     {
-                        char mathop = tlist[oppos].text[0];
+                        char mathop = tkCur.text[0];
                         if (mathop == '?')
                         {
                             CLS_Expression_Math3Value value = new CLS_Expression_Math3Value(left, rightend, tlist[left].line, tlist[rightend].line);
@@ -323,7 +324,7 @@ namespace CSLE
 
                             CLS_Expression_Math2Value vvright = valueright as CLS_Expression_Math2Value;
                             if (vvright.mathop != ':')
-                                throw new Exception("三元表达式异常");
+								throw new Exception("三元表达式异常" + tkCur.ToString() + tkCur.SourcePos() );
                             value.listParam.Add(vvright.listParam[0]);
                             value.listParam.Add(vvright.listParam[1]);
                             return value;

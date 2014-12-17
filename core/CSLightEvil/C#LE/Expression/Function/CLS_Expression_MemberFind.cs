@@ -44,6 +44,10 @@ namespace CSLE
         {
             content.InStack(this);
             var parent = listParam[0].ComputeValue(content);
+			if (parent == null)
+			{
+				throw new Exception("调用空对象的方法:" + listParam[0].ToString() + ":" + ToString() );
+			}
             ICLS_TypeFunction typefunction = content.environment.GetType(parent.type).function;
             if(parent.type is object)
             {

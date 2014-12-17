@@ -188,6 +188,12 @@ namespace CSLE
 
         }
 
+		public string Dump()
+		{
+			string str = DumpValue();
+			str += DumpStack( null );
+			return str;
+		}
 		public string Dump(IList<Token> tokenlist=null)
 		{
 			string str = DumpValue();
@@ -273,13 +279,17 @@ namespace CSLE
         }
         public void Set(string name,object value)
         {
-            if (!values.ContainsKey(name))
+			Value retV = null;
+			bool bFind = values.TryGetValue( name, out retV );
+			if (!bFind)
             {
                 if (CallType != null)
                 {
-                    if (CallType.members.ContainsKey(name))
+					SType.Member retM = null;
+					bool bRet = CallType.members.TryGetValue( name, out retM );
+					if(bRet)
                     {
-                        if (CallType.members[name].bStatic)
+						if (retM.bStatic)
                         {
                             CallType.staticMemberInstance[name].value=value;
                         }
@@ -297,11 +307,10 @@ namespace CSLE
                     err += m.Key + ",";
                 }
                 throw new Exception("值没有定义过" + name + "," + err);
-
             }
-            if ((Type)values[name].type == typeof(CLS_Type_Var.var) && value != null)
-                values[name].type = value.GetType();
-            values[name].value = value;
+			if ((Type)retV.type == typeof(CLS_Type_Var.var) && value != null)
+				retV.type = value.GetType();
+			retV.value = value;
         }
 
         public void DefineAndSet(string name,CLType type,object value)
@@ -334,14 +343,18 @@ namespace CSLE
                 return v;
             }
 
-            if (values.ContainsKey(name))//优先上下文变量
-                return values[name];
+			Value retV = null;
+			bool bFind = values.TryGetValue( name, out retV );
+			if (bFind)//优先上下文变量
+				return retV;
 
             if (CallType != null)
             {
-                if (CallType.members.ContainsKey(name))
+				SType.Member retM = null;
+				bFind = CallType.members.TryGetValue( name, out retM );
+				if (bFind)
                 {
-                    if (CallType.members[name].bStatic)
+					if(retM.bStatic)
                     {
                         return CallType.staticMemberInstance[name];
                     }
