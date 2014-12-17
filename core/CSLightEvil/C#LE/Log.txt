@@ -1,4 +1,11 @@
-﻿2014-12-08 0.60.4Beta
+﻿2014-12-17 0.60.5Beta
+
+    委托注册很多人理解困难，增加一个不那么容易出错的注册工具
+	
+	    Action<int, string> reg2 = (i, j) => { };//定义一个指定类型的委托，函数是啥不重要，不执行，只抽取参数
+        CSLE.RegHelper_Dele_Util.RegWithDelegate(env, reg2, "Action<int,string>");//用这个委托注册
+
+2014-12-08 0.60.4Beta
 
     上一次修改出了一个bug，修复
 

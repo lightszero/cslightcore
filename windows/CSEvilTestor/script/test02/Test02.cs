@@ -38,6 +38,14 @@ class Test02
 
         //函数作为参数的用法
         TestDele.instance.AddDele(Test2);
+
+
+        TestDele.instance.AddDele(null);
+
+        TestDele.instance.AddDele((ii) =>
+        {
+            Debug.Log("Test lambda.");
+        });
         //TestDele.instance.AddDele(deleTest);
 
         Test02 ttt = new Test02();
