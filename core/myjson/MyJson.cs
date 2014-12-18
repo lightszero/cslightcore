@@ -7,6 +7,7 @@ using System.Text;
 
 public class MyJson
 {
+
     public static IJsonNode Parse(string json)
     {
         try
@@ -158,6 +159,16 @@ public class MyJson
         {
             get;
             private set;
+        }
+        public void SetNull()
+        {
+            this.isNull=true;
+            this.isBool = false;
+        }
+        public void SetBool(bool v)
+        {
+            this.value = v ? 1 : 0;
+            this.isBool = true;
         }
         public override string ToString()
         {
@@ -1337,4 +1348,8 @@ public class MyJson
             throw new NotImplementedException();
         }
     }
+
+
+
+
 }
