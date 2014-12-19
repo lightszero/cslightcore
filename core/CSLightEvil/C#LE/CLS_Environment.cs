@@ -294,7 +294,7 @@ namespace CSLE
         }
         public void File_CompilerToken(string filename, IList<Token> listToken, bool embDebugToken)
         {
-            logger.Log_Internal("File_CompilerToken:" + filename);
+            logger.Log("File_CompilerToken:" + filename);
             IList<ICLS_Type> types = compiler.FileCompiler(this, filename, listToken, embDebugToken);
             foreach (var type in types)
             {

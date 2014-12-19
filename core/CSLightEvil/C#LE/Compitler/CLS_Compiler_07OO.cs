@@ -270,7 +270,7 @@ namespace CSLE
                         string idname = tokens[i + 1].text;
                         if (tokens[i + 2].type == CSLE.TokenType.PUNCTUATION && tokens[i + 2].text == "(")//参数开始,这是函数
                         {
-                            logger.Log_Internal("发现函数:" + idname);
+                            logger.Log("发现函数:" + idname);
                             SType.Function func = new SType.Function();
                             func.bStatic = bStatic;
                             func.bPublic = bPublic;
@@ -363,7 +363,7 @@ namespace CSLE
                             member.bPublic = bPublic;
                             member.bReadOnly = !(haveset && setpublic);
                             member.type = idtype;
-                            logger.Log_Internal("发现Get/Set:" + idname);
+                            logger.Log("发现Get/Set:" + idname);
                             //ICLS_Expression expr = null;
 
                             if (tokens[i + 2].text == "=")
@@ -379,7 +379,7 @@ namespace CSLE
                         }
                         else if (tokens[i + 2].type == CSLE.TokenType.PUNCTUATION && (tokens[i + 2].text == "=" || tokens[i + 2].text == ";"))//这是成员定义
                         {
-                            logger.Log_Internal("发现成员定义:" + idname);
+                            logger.Log("发现成员定义:" + idname);
 
                             var member = new SType.Member();
                             member.bStatic = bStatic;
