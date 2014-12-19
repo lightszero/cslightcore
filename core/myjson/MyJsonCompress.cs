@@ -147,9 +147,9 @@ public class MyJsonBinary
     {
         int bytelen = 1;
         int c = pid;
-        while (c > 0xff)
+        while (c >= 0x100)
         {
-            c /= 0xff;
+            c /= 0x100;
             bytelen++;
         }
         byte tag = MakeStringTag(true, isPubDict, bytelen);
@@ -200,9 +200,9 @@ public class MyJsonBinary
     {
         int bytelen = 1;
         int c = number;
-        while (c > 0xff)
+        while (c >= 0x100)
         {
-            c /= 0xff;
+            c /= 0x100;
             bytelen++;
         }
         stream.WriteByte(MakeNumberTag(false, false, false, bytelen));
@@ -215,9 +215,9 @@ public class MyJsonBinary
     {
         int bytelen = 1;
         int c = number;
-        while (c > 0xff)
+        while (c >= 0x100)
         {
-            c /= 0xff;
+            c /= 0x100;
             bytelen++;
         }
         if (number < 128)
@@ -278,9 +278,9 @@ public class MyJsonBinary
     {
         int bytelen = 1;
         int c = arraycount;
-        while (c > 0xff)
+        while (c >= 0x100)
         {
-            c /= 0xff;
+            c /= 0x100;
             bytelen++;
         }
         stream.WriteByte(MakeArrayTag(arraycount, bytelen));
@@ -313,9 +313,9 @@ public class MyJsonBinary
     {
         int bytelen = 1;
         int c = arraycount;
-        while (c > 0xff)
+        while (c >= 0x100)
         {
-            c /= 0xff;
+            c /= 0x100;
             bytelen++;
         }
         stream.WriteByte(MakeObjectTag(arraycount, bytelen));
@@ -325,7 +325,7 @@ public class MyJsonBinary
             stream.Write(buf, 0, bytelen);
         }
     }
-    static void PackJsonString(System.IO.Stream stream, string str, IList<string> pubdict, IList<string> localdict)
+    static void PackJsonString(System.IO.Stream stream, string str, IList<string> pubdict, IList<string> localdict, bool riseDictByString)
     {
         if (str.Length < 2)
         {//直接写入
@@ -347,10 +347,7 @@ public class MyJsonBinary
                 pid = GetKey(localdict, str);
                 WriteStringDataDict(stream, false, pid);
             }
-
         }
-
-
     }
     static void PackJsonNumber(System.IO.Stream stream, MyJson.JsonNode_ValueNumber number)
     {
@@ -435,7 +432,7 @@ public class MyJsonBinary
             {
                 pubdict.Add(v);
             }
-            PackJsonString(stream, v, pubdict, localdict);
+            PackJsonString(stream, v, pubdict, localdict, riseDictByString);
         }
         else if (node is MyJson.JsonNode_ValueNumber)
         {
