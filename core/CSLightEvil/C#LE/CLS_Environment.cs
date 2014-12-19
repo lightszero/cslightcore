@@ -153,7 +153,7 @@ namespace CSLE
                             }
                         }
 
-                        if (keyword[inow] == ',' && dep == 0)
+                        if (keyword[inow] == ','&&dep==0)
                         {
                             _types.Add(keyword.Substring(istart, inow - istart));
                             istart = inow + 1;
@@ -175,7 +175,7 @@ namespace CSLE
                             {
                                 CLType t = GetTypeByKeyword(_types[i]).type;
                                 Type rt = t;
-                                if (rt == null && t != null)
+                                if(rt==null&&t!=null)
                                 {
                                     rt = typeof(object);
                                 }
@@ -270,9 +270,9 @@ namespace CSLE
                 {
                     if (f.Value[i].type == TokenType.IDENTIFIER && this.tokenParser.types.Contains(f.Value[i].text))
                     {//有可能预处理导致新的类型
-                        if (i > 0
+                        if(i>0
                             &&
-                            (f.Value[i - 1].type == TokenType.TYPE || f.Value[i - 1].text == "."))
+                            (f.Value[i-1].type== TokenType.TYPE||f.Value[i-1].text=="."))
                         {
                             continue;
                         }

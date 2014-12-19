@@ -8,11 +8,11 @@ namespace CSLE
     {
         public CLS_Expression_IndexSetValue(int tbegin, int tend, int lbegin, int lend)
         {
-            listParam = new List<ICLS_Expression>();
-            this.tokenBegin = tbegin;
-            this.tokenEnd = tend;
-            lineBegin = lbegin;
-            lineEnd = lend;
+           listParam= new List<ICLS_Expression>();
+           this.tokenBegin = tbegin;
+           this.tokenEnd = tend;
+           lineBegin = lbegin;
+           lineEnd = lend;
         }
         //Block的参数 一个就是一行，顺序执行，没有
         public List<ICLS_Expression> listParam
@@ -50,7 +50,7 @@ namespace CSLE
             }
             var key = listParam[1].ComputeValue(content);
             var value = listParam[2].ComputeValue(content);
-            object setv = value.value;
+            object setv=value.value;
             //if(value.type!=parent.type)
             //{
             //    var vtype = content.environment.GetType(value.type);

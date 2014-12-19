@@ -8,8 +8,8 @@ namespace CSLE
     {
         public CLS_Content Clone()
         {
-            CLS_Content con = new CLS_Content(environment, useDebug);
-            foreach (var c in this.values)
+            CLS_Content con = new CLS_Content(environment,useDebug);
+            foreach(var c in this.values)
             {
                 con.values.Add(c.Key, c.Value);
             }
@@ -24,11 +24,11 @@ namespace CSLE
             private set;
         }
 
-        public CLS_Content(ICLS_Environment environment, bool useDebug = true)
+        public CLS_Content(ICLS_Environment environment,bool useDebug=true)
         {
             this.environment = environment;
             this.useDebug = useDebug;
-            if (useDebug)
+            if(useDebug)
             {
                 stackExpr = new Stack<ICLS_Expression>();
                 stackContent = new Stack<CLS_Content>();
@@ -112,61 +112,61 @@ namespace CSLE
         }
         public void Restore(List<string> depth, ICLS_Expression expr)
         {
-            while (tvalues.Peek() != depth)
+            while(tvalues.Peek()!=depth)
             {
                 tvalues.Pop();
             }
-            while (stackExpr.Peek() != expr)
+            while(stackExpr.Peek()!=expr)
             {
                 stackExpr.Pop();
             }
         }
-        public string DumpValue()
-        {
-            string svalues = "";
+		public string DumpValue()
+		{
+			string svalues = "";
             foreach (var subc in this.stackContent)
             {
                 svalues += subc.DumpValue();
             }
             svalues += "DumpValue:" + this.CallName + "\n";
-            foreach (var v in this.values)
+            foreach(var v in this.values)
             {
-                svalues += "V:" + v.Key + "=" + v.Value.ToString() + "\n";
+                svalues += "V:" + v.Key + "=" + v.Value.ToString()+"\n";
             }
-            return svalues;
-        }
-        public string DumpStack(IList<Token> tokenlist)
+			return svalues;
+		}
+		public string DumpStack(IList<Token> tokenlist)
         {
-            string svalues = "";
+			string svalues = "";
             if (useDebug)
             {
-                if (this.CallType != null && this.CallType.tokenlist != null)
+                if(this.CallType!=null&&this.CallType.tokenlist!=null)
                 {
                     tokenlist = this.CallType.tokenlist;
                 }
-                foreach (var subc in this.stackContent)
+                foreach(var subc in this.stackContent)
                 {
                     svalues += subc.DumpStack(tokenlist);
                 }
                 svalues += "DumpStack:" + this.CallName + "\n";
-                foreach (var s in stackExpr)
+                foreach(var s in stackExpr)
                 {
-                    if ((s.tokenBegin == 0 && s.tokenEnd == 0) || tokenlist == null)
+                    if ((s.tokenBegin == 0 && s.tokenEnd == 0)||tokenlist==null)
                     {
                         svalues += "<C#LE>:line(" + s.lineBegin + "-" + s.lineEnd + ")\n";
                     }
                     else
                     {
                         svalues += "<C#LE>:line(" + s.lineBegin + "-" + s.lineEnd + ")";
-
+                        
                         if (s.tokenEnd - s.tokenBegin >= 20)
                         {
-                            for (int i = s.tokenBegin; i < s.tokenBegin + 8; i++)
+                            for(int i=s.tokenBegin;i<s.tokenBegin+8;i++)
                             {
                                 svalues += tokenlist[i].text + " ";
                             }
                             svalues += "...";
-                            for (int i = s.tokenEnd - 7; i <= s.tokenEnd; i++)
+                            for (int i = s.tokenEnd-7; i <= s.tokenEnd; i++)
                             {
                                 svalues += tokenlist[i].text + " ";
                             }
@@ -181,25 +181,19 @@ namespace CSLE
                         svalues += "\n";
 
                     }
-
+                   
                 }
             }
             return svalues;
 
         }
 
-        public string Dump()
-        {
-            string str = DumpValue();
-            str += DumpStack(null);
-            return str;
-        }
-        public string Dump(IList<Token> tokenlist = null)
-        {
-            string str = DumpValue();
-            str += DumpStack(tokenlist);
-            return str;
-        }
+		public string Dump(IList<Token> tokenlist=null)
+		{
+			string str = DumpValue();
+			str += DumpStack(tokenlist);
+			return str;
+		}
         public class Value
         {
             public CLType type;
@@ -216,7 +210,7 @@ namespace CSLE
             {
                 get
                 {
-                    if (g_one == null)
+                    if(g_one==null)
                     {
                         g_one = new Value();
                         g_one.type = typeof(int);
@@ -257,7 +251,7 @@ namespace CSLE
 
             public override string ToString()
             {
-                if (type == null)
+                if(type==null)
                 {
                     return "<null>" + value;
                 }
@@ -266,7 +260,7 @@ namespace CSLE
         }
 
         public Dictionary<string, Value> values = new Dictionary<string, Value>();
-        public void Define(string name, CLType type)
+        public void Define(string name,CLType type)
         {
             if (values.ContainsKey(name)) throw new Exception("已经定义过");
             Value v = new Value();
@@ -277,7 +271,7 @@ namespace CSLE
                 tvalues.Peek().Add(name);//暂存临时变量
             }
         }
-        public void Set(string name, object value)
+        public void Set(string name,object value)
         {
             Value retV = null;
             bool bFind = values.TryGetValue(name, out retV);
@@ -291,37 +285,38 @@ namespace CSLE
                     {
                         if (retM.bStatic)
                         {
-                            CallType.staticMemberInstance[name].value = value;
+                            CallType.staticMemberInstance[name].value=value;
                         }
                         else
                         {
-                            CallThis.member[name].value = value;
+                            CallThis.member[name].value=value;
                         }
                         return;
                     }
 
                 }
                 string err = CallType.Name + "\n";
-                foreach (var m in CallType.members)
+                foreach(var m in CallType.members)
                 {
                     err += m.Key + ",";
                 }
                 throw new Exception("值没有定义过" + name + "," + err);
+
             }
             if ((Type)retV.type == typeof(CLS_Type_Var.var) && value != null)
                 retV.type = value.GetType();
             retV.value = value;
         }
 
-        public void DefineAndSet(string name, CLType type, object value)
+        public void DefineAndSet(string name,CLType type,object value)
         {
-            if (values.ContainsKey(name))
-                throw new Exception(type.ToString() + ":" + name + "已经定义过");
+            if (values.ContainsKey(name)) 
+                throw new Exception(type.ToString()+":"+name+"已经定义过");
             Value v = new Value();
             v.type = type;
             v.value = value;
             values[name] = v;
-            if (tvalues.Count > 0)
+            if(tvalues.Count>0)
             {
                 tvalues.Peek().Add(name);//暂存临时变量
             }
@@ -329,8 +324,8 @@ namespace CSLE
         public Value Get(string name)
         {
             Value v = GetQuiet(name);
-            if (v == null)
-                throw new Exception("值" + name + "没有定义过");
+            if(v==null)
+                throw new Exception("值"+name+"没有定义过");
             return v;
         }
         public Value GetQuiet(string name)
@@ -367,7 +362,7 @@ namespace CSLE
                 {
                     Value v = new Value();
                     //如果直接得到代理实例，
-                    DeleFunction dele = new DeleFunction(CallType, this.CallThis, name);
+                    DeleFunction dele = new DeleFunction(CallType,this.CallThis,name);
 
 
                     //DeleScript dele =new DeleScript();
@@ -390,7 +385,7 @@ namespace CSLE
         public void DepthRemove()//控制变量作用域，退出一层，上一层的变量都清除
         {
             List<string> list = tvalues.Pop();
-            foreach (var v in list)
+            foreach(var v in list)
             {
                 values.Remove(v);
             }
@@ -398,6 +393,6 @@ namespace CSLE
 
         public SType CallType;
         public SInstance CallThis;
-
+           
     }
 }

@@ -5,14 +5,14 @@ namespace CSLE
 {
     public partial class CLS_Expression_Compiler : ICLS_Expression_Compiler
     {
-        public void LogError(IList<Token> tlist, string text, int pos, int posend)
+        public void LogError(IList<Token> tlist,string text,int pos,int posend)
         {
             string str = "";
-            for (int i = pos; i <= posend; i++)
+            for (int i = pos; i <= posend;i++ )
             {
                 str += tlist[i].text + " ";
             }
-            logger.Log_Error(text + ":" + str + "(" + pos + "-" + posend + ")");
+            logger.Log_Error(text+":" + str + "(" + pos + "-" + posend + ")");
         }
         //可以搞出Block
         public bool Compiler_Expression_Block(IList<Token> tlist, ICLS_Environment content, int pos, int posend, out ICLS_Expression value)
@@ -53,7 +53,7 @@ namespace CSLE
                     expbegin++;
                     expend--;
                     ICLS_Expression subvalue;
-                    bool bsucc = Compiler_Expression_Block(tlist, content, expbegin, expend, out subvalue);
+                    bool bsucc = Compiler_Expression_Block(tlist,content, expbegin, expend, out subvalue);
                     if (bsucc)
                     {
                         if (subvalue != null)
@@ -68,7 +68,7 @@ namespace CSLE
                 else
                 {
                     ICLS_Expression subvalue;
-                    bool bsucc = Compiler_Expression(tlist, content, expbegin, expend, out subvalue);
+                    bool bsucc = Compiler_Expression(tlist, content,expbegin, expend, out subvalue);
                     if (bsucc)
                     {
                         if (subvalue != null)
@@ -105,7 +105,7 @@ namespace CSLE
         //不出Block,必须一次解析完,括号为优先级
         public bool Compiler_Expression(IList<Token> tlist, ICLS_Environment content, int pos, int posend, out ICLS_Expression value)
         {
-            if (pos > posend)
+            if(pos>posend)
             {
                 value = null;
                 return false;
@@ -148,7 +148,7 @@ namespace CSLE
                     {
                         end = posend;
                         //如果表达式一次搞不完，那肯定是优先级问题
-                        value = Compiler_Expression_Math(tlist, content, begin, posend);
+                        value = Compiler_Expression_Math(tlist,content, begin, posend);
                         return true;
                     }
                 }
@@ -219,7 +219,7 @@ namespace CSLE
                     }
                     else
                     {
-                        ICLS_Expression subvalue = Compiler_Expression_Value(tlist[expbegin], expbegin);
+                        ICLS_Expression subvalue = Compiler_Expression_Value(tlist[expbegin],expbegin);
                         if (null == subvalue) return false;
                         else
                             values.Add(subvalue);
@@ -230,7 +230,7 @@ namespace CSLE
                     expbegin++;
                     expend--;
                     ICLS_Expression subvalue;
-                    bool bsucc = Compiler_Expression(tlist, content, expbegin, expend, out subvalue);
+                    bool bsucc = Compiler_Expression(tlist,content, expbegin, expend, out subvalue);
                     if (bsucc)
                     {
                         if (subvalue != null)
@@ -324,7 +324,7 @@ namespace CSLE
                             }
                             else
                             {
-                                LogError(tlist, "无法识别的表达式:", expbegin, expend);
+                                LogError(tlist,"无法识别的表达式:", expbegin ,expend);
                                 return false;
                             }
                         }
@@ -426,7 +426,7 @@ namespace CSLE
                     if (!bTest && (tlist[expbegin].type == TokenType.IDENTIFIER || tlist[expbegin].type == TokenType.VALUE || tlist[expbegin].type == TokenType.STRING))
                     {
                         //算数表达式
-                        ICLS_Expression subvalue = Compiler_Expression_Math(tlist, content, expbegin, expend);
+                        ICLS_Expression subvalue = Compiler_Expression_Math(tlist,content, expbegin, expend);
                         if (null != subvalue)
                         {
                             values.Add(subvalue);
@@ -488,9 +488,7 @@ namespace CSLE
                                 return false;
                             }
                             else
-                            {
                                 values.Add(subvalue);
-                            }
                             bTest = true;
                         }
                         else if (tlist[expbegin].text == "try")
@@ -503,7 +501,7 @@ namespace CSLE
                         }
                         else if (tlist[expbegin].text == "return")
                         {
-                            ICLS_Expression subvalue = Compiler_Expression_Loop_Return(tlist, content, expbegin, expend);
+                            ICLS_Expression subvalue = Compiler_Expression_Loop_Return(tlist, content,expbegin, expend);
                             if (null == subvalue)
                             {
                                 LogError(tlist, "不可识别的return:", expbegin, expend);
@@ -515,7 +513,7 @@ namespace CSLE
                         }
                         else if (tlist[expbegin].text == "trace")
                         {
-                            ICLS_Expression subvalue = Compiler_Expression_FunctionTrace(tlist, content, expbegin, expend);
+                            ICLS_Expression subvalue = Compiler_Expression_FunctionTrace(tlist,content, expbegin, expend);
                             if (null == subvalue) return false;
                             else
                                 values.Add(subvalue);
@@ -529,7 +527,7 @@ namespace CSLE
                                 values.Add(subvalue);
                             bTest = true;
                         }
-                        else if (tlist[expbegin].text == "true" || tlist[expbegin].text == "false" || tlist[expbegin].text == "null")
+                        else if(tlist[expbegin].text=="true"||tlist[expbegin].text=="false"||tlist[expbegin].text=="null")
                         {
                             //算数表达式
                             ICLS_Expression subvalue = Compiler_Expression_Math(tlist, content, expbegin, expend);
@@ -539,7 +537,7 @@ namespace CSLE
                                 bTest = true;
                             }
                         }
-                        else if (tlist[expbegin].text == "new")
+                        else if(tlist[expbegin].text=="new")
                         {
                             //new 表达式
                             if (tlist[expbegin + 1].type == TokenType.TYPE)

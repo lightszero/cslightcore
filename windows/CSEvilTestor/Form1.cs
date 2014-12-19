@@ -32,7 +32,7 @@ namespace CSEvilTestor
             //bool useNamespace = false;
             env = new CSLE.CLS_Environment(this);//如果要启用命名空间，第二个参数要打开
             TestReg.Reg(env);
-
+         
             //查找所有脚本文件
             string[] dirs = System.IO.Directory.GetDirectories("script");
 
@@ -75,6 +75,7 @@ namespace CSEvilTestor
         {
             this.listDebug.Items.Add(str);
         }
+
 
         private void button2_Click(object sender, EventArgs e)
         {

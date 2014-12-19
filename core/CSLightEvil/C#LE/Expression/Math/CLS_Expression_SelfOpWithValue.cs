@@ -57,7 +57,7 @@ namespace CSLE
                 left.value = value;
 
                 Type t = right.type;
-                if (t.IsSubclassOf(typeof(MulticastDelegate)) || t.IsSubclassOf(typeof(Delegate)))
+                if(t.IsSubclassOf(typeof(MulticastDelegate))||t.IsSubclassOf(typeof(Delegate)))
                 {
 
                 }

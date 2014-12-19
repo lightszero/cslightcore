@@ -50,7 +50,7 @@ namespace CLScriptTestor
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_ValueString), "MyJson.JsonNode_ValueString"));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_Object), "MyJson.JsonNode_Object"));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_Array), "MyJson.JsonNode_Array"));
-            Type t = Type.GetType("System.Collections.Generic.List`1");
+            Type t =Type.GetType("System.Collections.Generic.List`1");
             scriptService.RegType(new CSLE.RegHelper_Type(t, "List"));
 
             Type t2 = Type.GetType("System.Collections.Generic.Dictionary`2");
@@ -77,7 +77,7 @@ namespace CLScriptTestor
 
 
             scriptService.RegType(new CSLE.RegHelper_DeleAction<int>(typeof(Action<int>), "Action<int>"));
-            scriptService.RegType(new CSLE.RegHelper_DeleAction<object, EventArgs>(typeof(EventHandler), "EventHandler"));
+            scriptService.RegType(new CSLE.RegHelper_DeleAction<object,EventArgs>(typeof(EventHandler), "EventHandler"));
 
             //CLScriptExt.Type_Vector3());
             InitCodeFile();
@@ -274,19 +274,19 @@ namespace CLScriptTestor
             }
             //try
             //{
-            if (tokensResult != null && tokensResult.Count > 0)
-            {
-                compilerResult = scriptService.Expr_CompilerToken(tokensResult);
+                if (tokensResult != null && tokensResult.Count > 0)
+                {
+                    compilerResult = scriptService.Expr_CompilerToken(tokensResult);
 
 
-                //if (compilerResult == null)
-                //{
-                //    Log("尝试作为表达式编译");
-                //    compilerResult = scriptService.CompilerToken(tokens, true);
-                //}
-                //compilerResult = compiler.Optimize(compilerResult);
-                ShowExp(compilerResult);
-            }
+                    //if (compilerResult == null)
+                    //{
+                    //    Log("尝试作为表达式编译");
+                    //    compilerResult = scriptService.CompilerToken(tokens, true);
+                    //}
+                    //compilerResult = compiler.Optimize(compilerResult);
+                    ShowExp(compilerResult);
+                }
             //}
             //catch(Exception err)
             //{
@@ -348,16 +348,16 @@ namespace CLScriptTestor
                 {
                     string contentValue = content.DumpValue();
                     string contentStack = content.DumpStack(null);
-                    string systemError = "SystemError:\n" + err.ToString();
+                    string systemError = "SystemError:\n"+err.ToString();
 
-                    MessageBox.Show(contentValue + "\n" + contentStack + "\n" + systemError);
-                    Log_Error("执行错误" + err.ToString() + ":" + contentStack + "\n" + contentValue);
+                    MessageBox.Show(contentValue + "\n" + contentStack +"\n"+ systemError);
+                    Log_Error("执行错误" + err.ToString() + ":" + contentStack+"\n"+contentValue);
                 }
                 if (returnvalue == null)
                 {
                     Log("result=<none>");
                 }
-                else if (null != returnvalue.type)
+                else if (null!=returnvalue.type)
                 {
                     Log("result=<" + returnvalue.type.Name + ">" + returnvalue.value);
                 }
