@@ -294,6 +294,11 @@ namespace CSLE
                                         var type = env.GetTypeByKeyword(ptype);
                                         // _params[pid] = type;
                                         //func._params.Add(pid, type);
+                                        if (type == null)
+                                        {
+                                            throw new Exception(filename + ":不可识别的函数头参数:" + tokens[funcparambegin].ToString() + tokens[funcparambegin].SourcePos());
+                                            break;
+                                        }
                                         func._paramnames.Add(pid);
                                         func._paramtypes.Add(type);
                                         start = j + 1;
@@ -323,7 +328,7 @@ namespace CSLE
                             }
                             else
                             {
-                                throw new Exception("不可识别的函数表达式");
+                                throw new Exception(filename + ":不可识别的函数表达式:" + tokens[funcbegin].ToString() + tokens[funcbegin].SourcePos());
                             }
                         }
                         else if (tokens[i + 2].type == CSLE.TokenType.PUNCTUATION && tokens[i + 2].text == "{")//语句块开始，这是 getset属性
@@ -403,7 +408,7 @@ namespace CSLE
                     }
                     else
                     {
-                        throw new Exception("不可识别的表达式");
+                        throw new Exception(filename + ":不可识别的表达式:" + tokens[i].ToString() + tokens[i].SourcePos());
                     }
                 }
             }

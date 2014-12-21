@@ -99,13 +99,15 @@ namespace CSLE
         {
             if (type == null)
                 return typess["null"];
-            if (types.ContainsKey(type) == false)
+
+            ICLS_Type ret = null;
+            if (types.TryGetValue(type, out ret) == false)
             {
                 logger.Log_Warn("(CLScript)类型未注册,将自动注册一份匿名:" + type.ToString());
-                RegType(new RegHelper_Type(type, ""));
+                ret = new RegHelper_Type(type, "");
+                RegType(ret);
             }
-
-            return types[type];
+            return ret;
         }
         //public ICLS_Type_Dele GetDeleTypeBySign(string sign)
         //{
@@ -120,7 +122,12 @@ namespace CSLE
         //}
         public ICLS_Type GetTypeByKeyword(string keyword)
         {
-            if (typess.ContainsKey(keyword) == false)
+            ICLS_Type ret = null;
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return null;
+            }
+            if (typess.TryGetValue(keyword, out ret) == false)
             {
                 if (keyword[keyword.Length - 1] == '>')
                 {
@@ -185,15 +192,16 @@ namespace CSLE
 
             }
 
-            return typess[keyword];
+            return ret;
         }
         public ICLS_Type GetTypeByKeywordQuiet(string keyword)
         {
-            if (typess.ContainsKey(keyword) == false)
+            ICLS_Type ret = null;
+            if (typess.TryGetValue(keyword, out ret) == false)
             {
                 return null;
             }
-            return typess[keyword];
+            return ret;
         }
         public void RegFunction(ICLS_Function func)
         {
@@ -205,7 +213,13 @@ namespace CSLE
         }
         public ICLS_Function GetFunction(string name)
         {
-            return calls[name];
+            ICLS_Function func = null;
+            bool bFind = calls.TryGetValue(name, out func);
+            if (func == null)
+            {
+                throw new Exception("找不到函数:" + name);
+            }
+            return func;
         }
         public ICLS_Logger logger
         {

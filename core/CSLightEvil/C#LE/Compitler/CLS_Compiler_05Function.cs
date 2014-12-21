@@ -150,14 +150,13 @@ namespace CSLE
                     bool succ = Compiler_Expression(tlist, content, nbegin, end2, out count);
                     if (!succ)
                     {
-                        throw new Exception("数组数量无法识别");
+                        throw new Exception("数组数量无法识别:" + tlist[pos].ToString() + tlist[pos].SourcePos());
                     }
                     valuebegin = end2 + 2;
                 }
                 func.listParam.Add(count);
                 if (tlist[valuebegin].text == "{")//InitValue
                 {
-                    int[] v = new int[0];
                     int nbegin = valuebegin + 1;
                     do
                     {
