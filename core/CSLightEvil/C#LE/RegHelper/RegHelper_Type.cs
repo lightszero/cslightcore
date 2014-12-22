@@ -868,7 +868,73 @@ namespace CSLE
 
     public class RegHelper_Type : ICLS_Type
     {
+        public static RegHelper_Type MakeDelegate(Type type, string keyword)
+        {
+            if (!type.IsSubclassOf(typeof(Delegate)))
+            {
+                throw new Exception("Type不是一个Delegate");
+            }
+            var method = type.GetMethod("Invoke");
+            var pp = method.GetParameters();
+            if (method.ReturnType == typeof(void))
+            {
+                if (pp.Length == 0)
+                {
+                    return new RegHelper_DeleAction(type, keyword);
+                }
+                else if (pp.Length == 1)
+                {
+                    var gtype = typeof(RegHelper_DeleAction<>).MakeGenericType(new Type[] { pp[0].ParameterType });
+                    return gtype.GetConstructors()[0].Invoke(new object[] { type, keyword }) as RegHelper_Type;
+                }
+                else if (pp.Length == 2)
+                {
+                    var gtype = typeof(RegHelper_DeleAction<,>).MakeGenericType(new Type[] { pp[0].ParameterType, pp[1].ParameterType });
+                    return (gtype.GetConstructors()[0].Invoke(new object[] { type, keyword }) as RegHelper_Type);
+                }
+                else if (pp.Length == 3)
+                {
+                    var gtype = typeof(RegHelper_DeleAction<,,>).MakeGenericType(new Type[] { pp[0].ParameterType, pp[1].ParameterType, pp[2].ParameterType });
+                    return (gtype.GetConstructors()[0].Invoke(new object[] { type, keyword }) as RegHelper_Type);
+                }
+                else
+                {
+                    throw new Exception("还没有支持这么多参数的委托");
+                }
+            }
+            else
+            {
+                Type gtype = null;
+                if (pp.Length == 0)
+                {
+                    gtype = typeof(RegHelper_DeleNonVoidAction<>).MakeGenericType(new Type[] { method.ReturnType });
+                }
+                else if (pp.Length == 1)
+                {
+                    gtype = typeof(RegHelper_DeleNonVoidAction<,>).MakeGenericType(new Type[] { method.ReturnType, pp[0].ParameterType });
+                }
+                else if (pp.Length == 2)
+                {
+                    gtype = typeof(RegHelper_DeleNonVoidAction<,,>).MakeGenericType(new Type[] { method.ReturnType, pp[0].ParameterType, pp[1].ParameterType });
+                }
+                else if (pp.Length == 3)
+                {
+                    gtype = typeof(RegHelper_DeleNonVoidAction<,,,>).MakeGenericType(new Type[] { method.ReturnType, pp[0].ParameterType, pp[1].ParameterType, pp[2].ParameterType });
+                }
+                else
+                {
+                    throw new Exception("还没有支持这么多参数的委托");
+                }
+                return (gtype.GetConstructors()[0].Invoke(new object[] { type, keyword }) as RegHelper_Type);
 
+            }
+
+
+        }
+        public static RegHelper_Type MakeClass(Type type,string keyword)
+        {
+            return new RegHelper_Type(type, keyword);
+        }
         public RegHelper_Type(Type type, string setkeyword = null)
         {
             if (type.IsSubclassOf(typeof(Delegate)))

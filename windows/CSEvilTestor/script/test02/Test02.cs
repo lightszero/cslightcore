@@ -68,8 +68,7 @@ class Test02
     Action<int> deleTest3; 
     static void Test()
     {
-        Debug.Log("Testi=" + i);
-        i++;
+
     }
     static void Test2(int v)
     {

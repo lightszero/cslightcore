@@ -45,7 +45,7 @@ namespace CSLE
                 int expbegin = begin;
                 if (expbegin > expend)
                 {
-                    LogError(tlist, "括号块识别失败", expbegin, expend);
+                    //LogError(tlist, "括号块识别失败", expbegin, expend);
                     return true;
                 }
                 if (bdep == 2) //编译块表达式
@@ -99,7 +99,6 @@ namespace CSLE
                 value = block;
             }
             return true;
-
         }
 
         //不出Block,必须一次解析完,括号为优先级

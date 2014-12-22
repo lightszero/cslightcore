@@ -35,12 +35,14 @@ namespace CSEvilTestor
             //env.RegType(new CSLE.RegHelper_DeleAction(typeof(Action),"Action"));
             env.RegType(new CSLE.RegHelper_DeleAction(typeof(TestDele.myup), "TestDele.myup"));
 
-            Action<int> reg1 =(i)=>{};
-            CSLE.RegHelper_Dele_Util.RegWithDelegate(env, reg1,"Action<int>");
-            CSLE.RegHelper_Dele_Util.RegWithDelegate(env, (Action)(()=>{}), "Action");
 
-            Action<int, string> reg2 = (i, j) => { };
-            CSLE.RegHelper_Dele_Util.RegWithDelegate(env, reg2, "Action<int,string>");
+            env.RegType(CSLE.RegHelper_Type.MakeDelegate(typeof(TestDele.myup), "TestDele.myup"));
+            env.RegType(CSLE.RegHelper_Type.MakeDelegate(typeof(Action<int>), "Action<int>"));
+            env.RegType(CSLE.RegHelper_Type.MakeDelegate(typeof(Action<int,string>), "Action<int,string>"));
+
+            env.RegType(CSLE.RegHelper_Type.MakeDelegate(typeof(Action), "Action"));
+            env.RegType(CSLE.RegHelper_Type.MakeClass(typeof(Color), "Color"));
+
 
 
             env.RegType(new CSLE.RegHelper_Type(typeof(Color), "Color"));

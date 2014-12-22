@@ -5,58 +5,58 @@ using System.Text;
 namespace CSLE
 {
 
-    public class RegHelper_Dele_Util
-    {
-        public static void RegWithDelegate(ICLS_Environment env, Delegate _dele, string keyword)
-        {
-            var pp = _dele.Method.GetParameters();
-            if (_dele.Method.ReturnType == typeof(void))
-            {
-                if (pp.Length == 0)
-                {
-                    env.RegType(new RegHelper_DeleAction(_dele.GetType(), keyword));
-                }
-                else if (pp.Length == 1)
-                {
-                    var gtype = typeof(RegHelper_DeleAction<>).MakeGenericType(new Type[] { pp[0].ParameterType });
-                    env.RegType(gtype.GetConstructors()[0].Invoke(new object[] { _dele.GetType(), keyword }) as ICLS_Type);
-                }
-                else if (pp.Length == 2)
-                {
-                    var gtype = typeof(RegHelper_DeleAction<,>).MakeGenericType(new Type[] { pp[0].ParameterType, pp[1].ParameterType });
-                    env.RegType(gtype.GetConstructors()[0].Invoke(new object[] { _dele.GetType(), keyword }) as ICLS_Type);
-                }
-                else if (pp.Length == 3)
-                {
-                    var gtype = typeof(RegHelper_DeleAction<,,>).MakeGenericType(new Type[] { pp[0].ParameterType, pp[1].ParameterType, pp[2].ParameterType });
-                    env.RegType(gtype.GetConstructors()[0].Invoke(new object[] { _dele.GetType(), keyword }) as ICLS_Type);
-                }
-            }
-            else
-            {
-                Type gtype = null;
-                if (pp.Length == 0)
-                {
-                    gtype = typeof(RegHelper_DeleNonVoidAction<>).MakeGenericType(new Type[] { _dele.Method.ReturnType });
-                }
-                else if (pp.Length == 1)
-                {
-                    gtype = typeof(RegHelper_DeleNonVoidAction<,>).MakeGenericType(new Type[] { _dele.Method.ReturnType, pp[0].ParameterType });
-                }
-                else if (pp.Length == 2)
-                {
-                    gtype = typeof(RegHelper_DeleNonVoidAction<,,>).MakeGenericType(new Type[] { _dele.Method.ReturnType, pp[0].ParameterType, pp[1].ParameterType });
-                }
-                else if (pp.Length == 3)
-                {
-                    gtype = typeof(RegHelper_DeleNonVoidAction<,,,>).MakeGenericType(new Type[] { _dele.Method.ReturnType, pp[0].ParameterType, pp[1].ParameterType, pp[2].ParameterType });
-                }
-                env.RegType(gtype.GetConstructors()[0].Invoke(new object[] { _dele.GetType(), keyword }) as ICLS_Type);
+    //public class RegHelper_Dele_Util
+    //{
+    //    public static void RegWithDelegate(ICLS_Environment env, Delegate _dele, string keyword)
+    //    {
+    //        var pp = _dele.Method.GetParameters();
+    //        if (_dele.Method.ReturnType == typeof(void))
+    //        {
+    //            if (pp.Length == 0)
+    //            {
+    //                env.RegType(new RegHelper_DeleAction(_dele.GetType(), keyword));
+    //            }
+    //            else if (pp.Length == 1)
+    //            {
+    //                var gtype = typeof(RegHelper_DeleAction<>).MakeGenericType(new Type[] { pp[0].ParameterType });
+    //                env.RegType(gtype.GetConstructors()[0].Invoke(new object[] { _dele.GetType(), keyword }) as ICLS_Type);
+    //            }
+    //            else if (pp.Length == 2)
+    //            {
+    //                var gtype = typeof(RegHelper_DeleAction<,>).MakeGenericType(new Type[] { pp[0].ParameterType, pp[1].ParameterType });
+    //                env.RegType(gtype.GetConstructors()[0].Invoke(new object[] { _dele.GetType(), keyword }) as ICLS_Type);
+    //            }
+    //            else if (pp.Length == 3)
+    //            {
+    //                var gtype = typeof(RegHelper_DeleAction<,,>).MakeGenericType(new Type[] { pp[0].ParameterType, pp[1].ParameterType, pp[2].ParameterType });
+    //                env.RegType(gtype.GetConstructors()[0].Invoke(new object[] { _dele.GetType(), keyword }) as ICLS_Type);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Type gtype = null;
+    //            if (pp.Length == 0)
+    //            {
+    //                gtype = typeof(RegHelper_DeleNonVoidAction<>).MakeGenericType(new Type[] { _dele.Method.ReturnType });
+    //            }
+    //            else if (pp.Length == 1)
+    //            {
+    //                gtype = typeof(RegHelper_DeleNonVoidAction<,>).MakeGenericType(new Type[] { _dele.Method.ReturnType, pp[0].ParameterType });
+    //            }
+    //            else if (pp.Length == 2)
+    //            {
+    //                gtype = typeof(RegHelper_DeleNonVoidAction<,,>).MakeGenericType(new Type[] { _dele.Method.ReturnType, pp[0].ParameterType, pp[1].ParameterType });
+    //            }
+    //            else if (pp.Length == 3)
+    //            {
+    //                gtype = typeof(RegHelper_DeleNonVoidAction<,,,>).MakeGenericType(new Type[] { _dele.Method.ReturnType, pp[0].ParameterType, pp[1].ParameterType, pp[2].ParameterType });
+    //            }
+    //            env.RegType(gtype.GetConstructors()[0].Invoke(new object[] { _dele.GetType(), keyword }) as ICLS_Type);
 
-            }
+    //        }
 
-        }
-    }
+    //    }
+    //}
     public class RegHelper_DeleAction : RegHelper_Type, ICLS_Type_Dele
     {
 
