@@ -7,7 +7,20 @@ namespace CSLE
     public class RegHelper_Function : ICLS_Function
     {
         Delegate dele;
-        public RegHelper_Function(Delegate dele,string setkeyword=null)
+        public RegHelper_Function(Delegate dele)
+        {
+            this.dele = dele;
+
+                this.keyword = dele.Method.Name;
+
+            returntype = dele.Method.ReturnType;
+            foreach (System.Reflection.ParameterInfo p in dele.Method.GetParameters())
+            {
+                defvalues.Add(p.DefaultValue);
+                paramtype.Add(p.ParameterType);
+            }
+        }
+        public RegHelper_Function(Delegate dele,string setkeyword)
         {
             this.dele = dele;
             if (setkeyword != null)
@@ -19,7 +32,7 @@ namespace CSLE
                 this.keyword = dele.Method.Name;
             }
             returntype = dele.Method.ReturnType;
-            foreach (var p in dele.Method.GetParameters())
+            foreach (System.Reflection.ParameterInfo p in dele.Method.GetParameters())
             {
                 defvalues.Add(p.DefaultValue);
                 paramtype.Add(p.ParameterType);

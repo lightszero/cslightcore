@@ -34,13 +34,17 @@ namespace CSLE
             }
             return value;
         }
-        public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params, MethodCache cache = null)
+        public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params)
+        {
+            return StaticCall(environment, function, _params, null);
+        }
+        public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params, MethodCache cache)
         {
             bool needConvert = false;
             List<object> _oparams = new List<object>();
             List<Type> types = new List<Type>();
             bool bEm = false;
-            foreach (var p in _params)
+            foreach (CLS_Content.Value p in _params)
             {
                 _oparams.Add(p.value);
                 if ((SType)p.type != null)
@@ -315,13 +319,17 @@ namespace CSLE
             //targetop = targetop.MakeGenericMethod(gtypes);
             return null;
         }
-        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string function, IList<CLS_Content.Value> _params, MethodCache cache = null)
+        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string function, IList<CLS_Content.Value> _params)
+        {
+            return MemberCall(environment, object_this, function, _params, null);
+        }
+        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string function, IList<CLS_Content.Value> _params, MethodCache cache)
         {
             bool needConvert = false;
             List<Type> types = new List<Type>();
             List<object> _oparams = new List<object>();
             bool bEm = false;
-            foreach (var p in _params)
+            foreach (CLS_Content.Value p in _params)
             {
                 {
                     _oparams.Add(p.value);
@@ -931,7 +939,7 @@ namespace CSLE
 
 
         }
-        public static RegHelper_Type MakeClass(Type type,string keyword)
+        public static RegHelper_Type MakeClass(Type type, string keyword)
         {
             return Make(type, keyword);
         }
@@ -939,7 +947,14 @@ namespace CSLE
         {
             return Make(type, keyword);
         }
-        public RegHelper_Type(Type type, string setkeyword = null)
+        public RegHelper_Type(Type type)
+        {
+            function = new RegHelper_TypeFunction(type);
+            keyword = type.Name;
+            this.type = type;
+            this._type = type;
+        }
+        public RegHelper_Type(Type type, string setkeyword)
         {
             if (type.IsSubclassOf(typeof(Delegate)))
             {

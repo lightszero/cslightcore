@@ -10,7 +10,7 @@ namespace CSLE
     public partial class CLS_Expression_Compiler : ICLS_Expression_Compiler
     {
 
-        IList<ICLS_Type> _FileCompiler(string filename, IList<Token> tokens, bool embDeubgToken, ICLS_Environment env, bool onlyGotType = false)
+        IList<ICLS_Type> _FileCompiler(string filename, IList<Token> tokens, bool embDeubgToken, ICLS_Environment env, bool onlyGotType )
         {
             List<ICLS_Type> typelist = new List<ICLS_Type>();
 
@@ -31,7 +31,7 @@ namespace CSLE
                     int dep;
                     int pos = i;
                     int iend = FindCodeAny(tokens, ref pos, out dep);
-                    var list = Compiler_Using(tokens, env, pos, iend);
+                    List<string> list = Compiler_Using(tokens, env, pos, iend);
                     string useText = "";
                     for (int j = 0; j < list.Count; j++)
                     {
@@ -124,7 +124,7 @@ namespace CSLE
 
             return typelist;
         }
-        ICLS_Type Compiler_Class(ICLS_Environment env, string classname, bool bInterface, IList<string> basetype, string filename, IList<Token> tokens, int ibegin, int iend, bool EmbDebugToken, bool onlyGotType = false, IList<string> usinglist = null)
+        ICLS_Type Compiler_Class(ICLS_Environment env, string classname, bool bInterface, IList<string> basetype, string filename, IList<Token> tokens, int ibegin, int iend, bool EmbDebugToken, bool onlyGotType , IList<string> usinglist )
         {
 
             CLS_Type_Class stype = env.GetTypeByKeywordQuiet(classname) as CLS_Type_Class;
@@ -135,7 +135,7 @@ namespace CSLE
             if (basetype != null && basetype.Count != 0 && onlyGotType == false)
             {
                 List<ICLS_Type> basetypess = new List<ICLS_Type>();
-                foreach (var t in basetype)
+                foreach (string t in basetype)
                 {
                     ICLS_Type type = env.GetTypeByKeyword(t);
                     basetypess.Add(type);

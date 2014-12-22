@@ -23,11 +23,14 @@ namespace CSLE
     public interface ICLS_TypeFunction
     {
         CLS_Content.Value New(CLS_Content environment, IList<CLS_Content.Value> _params);
-        CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params, MethodCache cache = null);
+        CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params);
+        CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params, MethodCache cache);
         CLS_Content.Value StaticCallCache(CLS_Content environment, IList<CLS_Content.Value> _params, MethodCache cache);
         CLS_Content.Value StaticValueGet(CLS_Content environment, string valuename);
         bool StaticValueSet(CLS_Content environment, string valuename, object value);
-        CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string func, IList<CLS_Content.Value> _params, MethodCache cache = null);
+        CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string func, IList<CLS_Content.Value> _params);
+
+        CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string func, IList<CLS_Content.Value> _params, MethodCache cache);
         CLS_Content.Value MemberValueGet(CLS_Content environment, object object_this, string valuename);
         CLS_Content.Value MemberCallCache(CLS_Content environment, object object_this, IList<CLS_Content.Value> _params, MethodCache cache);
 

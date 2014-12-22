@@ -99,7 +99,7 @@ namespace CSLE
     {
         IList<Token> ParserToken(string code);
 
-        ICLS_Expression Expr_CompilerToken(IList<Token> listToken, bool SimpleExpression = false);
+        ICLS_Expression Expr_CompilerToken(IList<Token> listToken, bool SimpleExpression);
 
         //CLS_Content contentGloabl = null;
         ICLS_Expression Expr_Optimize(ICLS_Expression old);
@@ -107,7 +107,7 @@ namespace CSLE
         CLS_Content CreateContent();
 
 
-        CLS_Content.Value Expr_Execute(ICLS_Expression expr, CLS_Content content = null);
+        CLS_Content.Value Expr_Execute(ICLS_Expression expr, CLS_Content content);
 
 
         void Project_Compiler(Dictionary<string, IList<Token>> project, bool embDebugToken);

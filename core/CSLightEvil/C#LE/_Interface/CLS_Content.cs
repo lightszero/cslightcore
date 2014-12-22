@@ -23,8 +23,12 @@ namespace CSLE
             get;
             private set;
         }
-
-        public CLS_Content(ICLS_Environment environment,bool useDebug=true)
+        public CLS_Content(ICLS_Environment environment)
+        {
+            this.environment = environment;
+            this.useDebug = false;
+        }
+        public CLS_Content(ICLS_Environment environment,bool useDebug)
         {
             this.environment = environment;
             this.useDebug = useDebug;
@@ -187,8 +191,13 @@ namespace CSLE
             return svalues;
 
         }
-
-		public string Dump(IList<Token> tokenlist=null)
+        public string Dump()
+        {
+            string str = DumpValue();
+            str += DumpStack(null);
+            return str;
+        }
+		public string Dump(IList<Token> tokenlist)
 		{
 			string str = DumpValue();
 			str += DumpStack(tokenlist);

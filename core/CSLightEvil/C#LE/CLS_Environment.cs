@@ -18,7 +18,7 @@ namespace CSLE
         {
             get
             {
-                return "0.61Beta";
+                return "0.62Beta";
             }
         }
         public CLS_Environment(ICLS_Logger logger)
@@ -48,7 +48,7 @@ namespace CSLE
             RegType(new CLS_Type_Long());
             RegType(new CLS_Type_ULong());
 
-            RegType(new RegHelper_Type(typeof(object),"object"));
+            RegType(new RegHelper_Type(typeof(object), "object"));
             RegType(new RegHelper_Type(typeof(List<>), "List"));
             RegType(new RegHelper_Type(typeof(Dictionary<,>), "Dictionary"));
 
@@ -153,7 +153,7 @@ namespace CSLE
                             }
                         }
 
-                        if (keyword[inow] == ','&&dep==0)
+                        if (keyword[inow] == ',' && dep == 0)
                         {
                             _types.Add(keyword.Substring(istart, inow - istart));
                             istart = inow + 1;
@@ -175,7 +175,7 @@ namespace CSLE
                             {
                                 CLType t = GetTypeByKeyword(_types[i]).type;
                                 Type rt = t;
-                                if(rt==null&&t!=null)
+                                if (rt == null && t != null)
                                 {
                                     rt = typeof(object);
                                 }
@@ -237,7 +237,11 @@ namespace CSLE
         {
             return tokenParser.Parse(code);
         }
-        public ICLS_Expression Expr_CompilerToken(IList<Token> listToken, bool SimpleExpression = false)
+        public ICLS_Expression Expr_CompilerToken(IList<Token> listToken)
+        {
+            return compiler.Compiler(listToken, this);
+        }
+        public ICLS_Expression Expr_CompilerToken(IList<Token> listToken, bool SimpleExpression)
         {
             return SimpleExpression ? compiler.Compiler_NoBlock(listToken, this) : compiler.Compiler(listToken, this);
         }
@@ -251,7 +255,12 @@ namespace CSLE
             return new CLS_Content(this, true);
         }
 
-        public CLS_Content.Value Expr_Execute(ICLS_Expression expr, CLS_Content content = null)
+        public CLS_Content.Value Expr_Execute(ICLS_Expression expr)
+        {
+            CLS_Content content = CreateContent();
+            return expr.ComputeValue(content);
+        }
+        public CLS_Content.Value Expr_Execute(ICLS_Expression expr, CLS_Content content)
         {
             if (content == null) content = CreateContent();
             return expr.ComputeValue(content);
@@ -259,20 +268,20 @@ namespace CSLE
 
         public void Project_Compiler(Dictionary<string, IList<Token>> project, bool embDebugToken)
         {
-            foreach (var f in project)
+            foreach (KeyValuePair<string, IList<Token>> f in project)
             {
                 File_PreCompilerToken(f.Key, f.Value);
             }
-            foreach (var f in project)
+            foreach (KeyValuePair<string, IList<Token>> f in project)
             {
                 //预处理符号
                 for (int i = 0; i < f.Value.Count; i++)
                 {
                     if (f.Value[i].type == TokenType.IDENTIFIER && this.tokenParser.types.Contains(f.Value[i].text))
                     {//有可能预处理导致新的类型
-                        if(i>0
+                        if (i > 0
                             &&
-                            (f.Value[i-1].type== TokenType.TYPE||f.Value[i-1].text=="."))
+                            (f.Value[i - 1].type == TokenType.TYPE || f.Value[i - 1].text == "."))
                         {
                             continue;
                         }
