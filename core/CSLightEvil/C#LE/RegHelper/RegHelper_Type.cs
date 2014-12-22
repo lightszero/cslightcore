@@ -868,11 +868,11 @@ namespace CSLE
 
     public class RegHelper_Type : ICLS_Type
     {
-        public static RegHelper_Type MakeDelegate(Type type, string keyword)
+        public static RegHelper_Type Make(Type type, string keyword)
         {
             if (!type.IsSubclassOf(typeof(Delegate)))
             {
-                throw new Exception("Type不是一个Delegate");
+                return new RegHelper_Type(type, keyword);
             }
             var method = type.GetMethod("Invoke");
             var pp = method.GetParameters();
@@ -933,7 +933,11 @@ namespace CSLE
         }
         public static RegHelper_Type MakeClass(Type type,string keyword)
         {
-            return new RegHelper_Type(type, keyword);
+            return Make(type, keyword);
+        }
+        public static RegHelper_Type MakeDelegate(Type type, string keyword)
+        {
+            return Make(type, keyword);
         }
         public RegHelper_Type(Type type, string setkeyword = null)
         {
