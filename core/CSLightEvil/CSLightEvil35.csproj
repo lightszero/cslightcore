@@ -125,6 +125,7 @@
     <Compile Include="C#LE\_Interface\CLS_Type.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="C#LE\Bug.txt" />
     <Content Include="C#LE\Log.txt" />
   </ItemGroup>
   <ItemGroup>
