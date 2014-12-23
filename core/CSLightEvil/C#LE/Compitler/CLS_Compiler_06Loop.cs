@@ -67,7 +67,7 @@ namespace CSLE
             int fs1 = pos + 1;
             int fe1 = FindCodeAny(tlist, ref fs1, out b1);
             CLS_Expression_LoopForEach value = new CLS_Expression_LoopForEach(pos, fe1, tlist[pos].line, tlist[fe1].line);
-            int testbegin = fs1 + 1;
+            //int testbegin = fs1 + 1;
             if (b1 != 1)
             {
                 return null;
@@ -256,7 +256,7 @@ namespace CSLE
 
             int nelse = fe2 + 1;
             if (b2 == 0) nelse++;
-            int feelse = FindCodeAny(tlist, ref nelse, out b2);
+            FindCodeAny(tlist, ref nelse, out b2);
             if (tlist.Count > nelse)
             {
                 if (tlist[nelse].type == TokenType.KEYWORD && tlist[nelse].text == "else")

@@ -866,7 +866,7 @@ namespace CSLE
 
             int nelse = fe2 + 1;
             if (b2 == 0) nelse++;
-            int feelse = FindCodeAny(tokens, ref nelse, out b2);
+            FindCodeAny(tokens, ref nelse, out b2);
             if (tokens.Count > nelse)
             {
                 if (tokens[nelse].type == TokenType.KEYWORD && tokens[nelse].text == "else")

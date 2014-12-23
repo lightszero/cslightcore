@@ -214,7 +214,7 @@ namespace CSLE
         public ICLS_Function GetFunction(string name)
         {
             ICLS_Function func = null;
-            bool bFind = calls.TryGetValue(name, out func);
+            calls.TryGetValue(name, out func);
             if (func == null)
             {
                 throw new Exception("找不到函数:" + name);

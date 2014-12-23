@@ -64,7 +64,7 @@ namespace CSLE
             vout.value = mtype.Math2Value(content, mathop, getvalue.value, vright, out vout.type);
 
             type.function.MemberValueSet(content, parent.value, membername, vout.value);
-            CLS_Content.Value v = new CLS_Content.Value();
+            //CLS_Content.Value v = new CLS_Content.Value();
 
             content.OutStack(this);
             return vout;

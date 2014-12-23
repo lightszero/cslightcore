@@ -136,7 +136,7 @@ namespace CSLE
 
         public Delegate CreateDelegate(ICLS_Environment env, DeleLambda lambda)
         {
-            var pnames = lambda.paramNames;
+            //var pnames = lambda.paramNames;
             var expr = lambda.expr_func;
             Action dele = () =>
             {

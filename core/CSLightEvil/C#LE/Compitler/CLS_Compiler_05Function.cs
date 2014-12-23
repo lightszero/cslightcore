@@ -222,7 +222,10 @@ namespace CSLE
             CLS_Expression_IndexFind func = new CLS_Expression_IndexFind(pos, posend, tlist[pos].line, tlist[posend].line);
             ICLS_Expression lefv;
             bool b = Compiler_Expression(tlist, content, pos, pos, out lefv);
-            func.listParam.Add(lefv);
+            if (b) 
+            {
+                func.listParam.Add(lefv);
+            }
             //func.funcname = tlist[pos].text;
             int begin = pos + 2;
             int dep;
