@@ -18,7 +18,7 @@ namespace CSLE
         {
             get
             {
-                return "0.62Beta";
+                return "0.62.1Beta";
             }
         }
         public CLS_Environment(ICLS_Logger logger)

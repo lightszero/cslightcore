@@ -82,7 +82,7 @@ namespace CSLE
         public Delegate CreateDelegate(ICLS_Environment env, DeleFunction delefunc)
         {
             DeleFunction _func = delefunc;
-            Delegate _dele = delefunc.cacheFunction(null);
+            Delegate _dele = delefunc.cacheFunction(this._type,null);
             if (_dele != null) return _dele;
             Action<T> dele = (T param0) =>
             {
@@ -111,7 +111,7 @@ namespace CSLE
             {
                 _dele = dele;
             }
-            return delefunc.cacheFunction(_dele);
+            return delefunc.cacheFunction(this._type, _dele);
         }
 
 

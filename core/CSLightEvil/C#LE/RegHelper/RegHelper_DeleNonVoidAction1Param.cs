@@ -96,7 +96,7 @@ namespace CSLE
         public Delegate CreateDelegate(ICLS_Environment env, DeleFunction delefunc)
         {
             DeleFunction _func = delefunc;
-            Delegate _dele = delefunc.cacheFunction(null);
+            Delegate _dele = delefunc.cacheFunction(this._type, null);
             if (_dele != null) return _dele;
             NonVoidDelegate dele = delegate(T param) {
                 var func = _func.calltype.functions[_func.function];
@@ -117,7 +117,7 @@ namespace CSLE
                 return default(ReturnType);
             };
             _dele = Delegate.CreateDelegate(this.type, dele.Target, dele.Method);
-            return delefunc.cacheFunction(_dele);
+            return delefunc.cacheFunction(this._type, _dele);
         }
 
         public Delegate CreateDelegate(ICLS_Environment env, DeleLambda lambda)

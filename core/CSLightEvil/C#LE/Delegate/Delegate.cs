@@ -76,31 +76,51 @@ namespace CSLE
         public SType calltype;
         public SInstance callthis;
         public string function;
-        public Delegate cacheFunction(Delegate dele)
+        public Delegate cacheFunction(Type deletype, Delegate dele)
         {
-            if(dele==null)
+            if (dele == null)
             {
                 Delegate v = null;
-                if(callthis!=null)
+                Dictionary<Type, Delegate> caches = null;
+                if (callthis != null)
                 {
-                    callthis.dele.TryGetValue(function, out v);
-
+                    if (callthis.deles.TryGetValue(function, out caches))
+                    {
+                        caches.TryGetValue(deletype, out v);
+                    }
                 }
                 else
                 {
-                    calltype.deles.TryGetValue(function, out v);
+                    if (calltype.deles.TryGetValue(function, out caches))
+                    {
+                        caches.TryGetValue(deletype, out v);
+                    }
                 }
                 return v;
             }
             else
             {
+                Dictionary<Type, Delegate> caches = null;
                 if (callthis != null)
                 {
-                    callthis.dele[function] = dele;
+                    if (!callthis.deles.TryGetValue(function, out caches))
+                    {
+                        caches = new Dictionary<Type, Delegate>();
+                        callthis.deles[function] = caches;
+                    }
+
+                    caches[deletype] = dele;
                 }
                 else
                 {
-                    calltype.deles[function] = dele;
+                    if (!calltype.deles.TryGetValue(function, out caches))
+                    {
+                        caches = new Dictionary<Type, Delegate>();
+                        calltype.deles[function] = caches;
+                    }
+
+                    caches[deletype] = dele;
+
                 }
                 return dele;
             }
@@ -110,11 +130,11 @@ namespace CSLE
 
     public class DeleLambda// : IDeleBase //指向Lambda表达式
     {
-        public DeleLambda(CLS_Content content,IList<ICLS_Expression> param,ICLS_Expression func)
+        public DeleLambda(CLS_Content content, IList<ICLS_Expression> param, ICLS_Expression func)
         {
             this.content = content.Clone();
             this.expr_func = func;
-            foreach(var p in param)
+            foreach (var p in param)
             {
                 CLS_Expression_GetValue v1 = p as CLS_Expression_GetValue;
                 CLS_Expression_Define v2 = p as CLS_Expression_Define;
@@ -135,9 +155,11 @@ namespace CSLE
             }
         }
 
-        public string GetKey() {
+        public string GetKey()
+        {
             string key = "";
-            foreach (string item in paramNames) {
+            foreach (string item in paramNames)
+            {
                 key += item + "_";
             }
             key += expr_func.tokenBegin + "_" + expr_func.tokenEnd + "_" + expr_func.lineBegin + "_" + expr_func.lineEnd;
@@ -146,7 +168,7 @@ namespace CSLE
         }
 
         public List<Type> paramTypes = new List<Type>();
-        public List<string> paramNames = new List<string>(); 
+        public List<string> paramNames = new List<string>();
         public CLS_Content content;
         public ICLS_Expression expr_func;
     }
