@@ -53,9 +53,14 @@ namespace CSLE
             }
             CLS_Content.Value v = null;
 
-            if (content.CallType != null && content.CallType.functions.ContainsKey(funcname))
+            SType.Function retFunc = null;
+            bool bFind = false;
+            if (content.CallType != null)
+                bFind = content.CallType.functions.TryGetValue(funcname, out retFunc);
+
+            if (bFind)
             {
-                if (content.CallType.functions[funcname].bStatic)
+                if (retFunc.bStatic)
                 {
                     v = content.CallType.StaticCall(content, funcname, list);
 

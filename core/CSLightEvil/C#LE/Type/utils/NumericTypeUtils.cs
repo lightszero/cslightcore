@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CSLE {
+namespace CSLE
+{
     /// <summary>
     /// 数值类型系列类的公用工具函数.
     /// 因为这些函数逻辑都是固定的，不存在多态行为，不适合放在现有的继承结构中去实现，故而独立出来。
     /// </summary>
-    public class NumericTypeUtils {
+    public class NumericTypeUtils
+    {
 
         /// <summary>
         /// 类型转换.
@@ -17,14 +19,18 @@ namespace CSLE {
         /// <param name="src"></param>
         /// <param name="targetType"></param>
         /// <returns></returns>
-        public static object TryConvertTo<OriginalType>(object src, CLType targetType, out bool convertSuccess) where OriginalType : struct {
-            
+        public static object TryConvertTo<OriginalType>(object src, CLType targetType, out bool convertSuccess) where OriginalType : struct
+        {
+
             convertSuccess = true;
 
-            try {
+            try
+            {
                 decimal srcValue = GetDecimalValue(typeof(OriginalType), src);
                 return Decimal2TargetType(targetType, srcValue);
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 convertSuccess = false;
                 return null;
             }
@@ -40,16 +46,19 @@ namespace CSLE {
         /// <param name="returntype"></param>
         /// <param name="math2ValueSuccess"></param>
         /// <returns></returns>
-        public static object Math2Value<LeftType>(char opCode, object left, CLS_Content.Value right, out CLType returntype, out bool math2ValueSuccess) where LeftType : struct {
+        public static object Math2Value<LeftType>(char opCode, object left, CLS_Content.Value right, out CLType returntype, out bool math2ValueSuccess) where LeftType : struct
+        {
 
             math2ValueSuccess = true;
 
-            try {
+            try
+            {
                 decimal leftValue = GetDecimalValue(typeof(LeftType), left);
                 decimal rightValue = GetDecimalValue(right.type, right.value);
                 decimal finalValue = 0;
 
-                switch (opCode) {
+                switch (opCode)
+                {
                     case '+':
                         finalValue = leftValue + rightValue;
                         break;
@@ -72,22 +81,27 @@ namespace CSLE {
                 returntype = GetReturnType_Math2Value(typeof(LeftType), right.type);
                 return Decimal2TargetType(returntype, finalValue);
 
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 math2ValueSuccess = false;
                 returntype = null;
                 return null;
             }
         }
 
-        public static bool MathLogic<LeftType>(logictoken logicCode, object left, CLS_Content.Value right, out bool mathLogicSuccess) {
+        public static bool MathLogic<LeftType>(logictoken logicCode, object left, CLS_Content.Value right, out bool mathLogicSuccess)
+        {
 
             mathLogicSuccess = true;
 
-            try {
+            try
+            {
                 decimal leftValue = GetDecimalValue(typeof(LeftType), left);
                 decimal rightValue = GetDecimalValue(right.type, right.value);
 
-                switch (logicCode) {
+                switch (logicCode)
+                {
                     case logictoken.equal:
                         return leftValue == rightValue;
                     case logictoken.less:
@@ -103,13 +117,16 @@ namespace CSLE {
                     default:
                         throw new Exception("Invalid logic operation::logicCode = " + logicCode.ToString());
                 }
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 mathLogicSuccess = false;
                 return false;
             }
         }
 
-        private static decimal GetDecimalValue(Type type, object value) {
+        private static decimal GetDecimalValue(Type type, object value)
+        {
 
             if (type == typeof(double))
                 return (decimal)Convert.ToDouble(value);
@@ -137,7 +154,8 @@ namespace CSLE {
             throw new Exception("unknown decimal type...");
         }
 
-        private static object Decimal2TargetType(Type type, decimal value) {
+        private static object Decimal2TargetType(Type type, decimal value)
+        {
             if (type == typeof(double))
                 return (double)value;
             if (type == typeof(float))
@@ -168,36 +186,43 @@ namespace CSLE {
         /// 获取Math2Value的返回类型.
         /// 这里并没有严格仿照C#的类型系统进行数学计算时的返回类型。
         /// </summary>
-        private static Type GetReturnType_Math2Value(Type leftType, Type rightType) {
+        private static Type GetReturnType_Math2Value(Type leftType, Type rightType)
+        {
 
             int ltIndex = _TypeList.IndexOf(leftType);
             int rtIndex = _TypeList.IndexOf(rightType);
 
             //0. double 和 float 类型优先级最高.
-            if (ltIndex == T_Double || rtIndex == T_Double ) {
+            if (ltIndex == T_Double || rtIndex == T_Double)
+            {
                 return typeof(double);
             }
-            if (ltIndex == T_Float || rtIndex == T_Float) {
+            if (ltIndex == T_Float || rtIndex == T_Float)
+            {
                 return typeof(float);
             }
 
             //1. 整数运算中，ulong 类型优先级最高.
-            if (ltIndex == T_ULong || rtIndex == T_ULong) {
+            if (ltIndex == T_ULong || rtIndex == T_ULong)
+            {
                 return typeof(ulong);
             }
 
             //2. 整数运算中，除了ulong外，就属 long 类型优先级最高了.
-            if (ltIndex == T_Long || rtIndex == T_Long) {
+            if (ltIndex == T_Long || rtIndex == T_Long)
+            {
                 return typeof(long);
             }
 
             //3. 注意：int 和 uint 结合会返回 long.
-            if ((ltIndex == T_Int && rtIndex == T_UInt) || (ltIndex == T_UInt && rtIndex == T_Int)) { 
+            if ((ltIndex == T_Int && rtIndex == T_UInt) || (ltIndex == T_UInt && rtIndex == T_Int))
+            {
                 return typeof(long);
             }
 
             //4. uint 和 非int结合会返回 uint.
-            if ((ltIndex == T_UInt && rtIndex != T_Int) || (rtIndex == T_UInt && ltIndex != T_Int)) {
+            if ((ltIndex == T_UInt && rtIndex != T_Int) || (rtIndex == T_UInt && ltIndex != T_Int))
+            {
                 return typeof(uint);
             }
 
@@ -206,19 +231,19 @@ namespace CSLE {
             return typeof(int);
         }
 
-        private static List<Type> _TypeList = new List<Type> { 
-            typeof(double),
-            typeof(float),
-            typeof(long),
-            typeof(ulong),
-            typeof(int),
-            typeof(uint),
-            typeof(short),
-            typeof(ushort),
-            typeof(sbyte),
-            typeof(byte),
-            typeof(char)
-        };
+        private static List<Type> _TypeList = new List<Type>(new Type[]{ 
+                        typeof(double),
+                        typeof(float),
+                        typeof(long),
+                        typeof(ulong),
+                        typeof(int),
+                        typeof(uint),
+                        typeof(short),
+                        typeof(ushort),
+                        typeof(sbyte),
+                        typeof(byte),
+                        typeof(char)
+                    });
 
         private const int T_Double = 0;
         private const int T_Float = 1;

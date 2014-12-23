@@ -30,14 +30,17 @@ class Test09
 
     public static void Test()
     {
-        MyJson.JsonNode_Object objst =MyJson.Parse
+        MyJson.JsonNode_Object objst = MyJson.Parse
             ("{\"love\":{\"id\":12345}\"name\":\"aname\",\"age\":123,\"like\":[{\"name\":\"aaa\",\"desc\":\"aaaaaa\"},{\"name\":\"bbb\",\"desc\":\"bbbbbb\"}],\"strs\":[\"aa\",\"bb\"]}")
                 as MyJson.JsonNode_Object;
 
         TSave read = CSLEConvert.FromJson("TSave", objst) as TSave;
-            
+
         Debug.Log("read.name=" + read.name);
         Debug.Log("read.like[0].name=" + read.like[0].name);
+        Like l = read.like[0];
+        Debug.Log(l.name);
+
         Debug.Log("read.strs[1]=" + read.strs[1]);
         Debug.Log("read.love.id=" + read.love.id);
         Debug.Log("write" + CSLEConvert.ToJson(read).ToString());

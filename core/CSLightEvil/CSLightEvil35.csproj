@@ -11,7 +11,8 @@
     <AssemblyName>CSLightEvil35</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -125,6 +126,7 @@
     <Compile Include="C#LE\_Interface\CLS_Type.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="C#LE\Bug.txt" />
     <Content Include="C#LE\Log.txt" />
   </ItemGroup>
   <ItemGroup>

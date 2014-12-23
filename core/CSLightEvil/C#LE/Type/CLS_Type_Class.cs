@@ -18,7 +18,7 @@ namespace CSLE
         ////    //this._GUID = Guid.Empty;
 
         //}
-        public SType(string keyword, string _namespace = "", string filename = null, bool bInterface = false, IList<string> basetype = null)
+        public SType(string keyword, string _namespace , string filename , bool bInterface)
         {
             this.Name = keyword;
             this.Namespace = _namespace;
@@ -78,7 +78,7 @@ namespace CSLE
             sv.value_type = this;
             sv.value_value = new SInstance();
             sv.value_value.type = this;
-            foreach (var i in this.members)
+            foreach (KeyValuePair<string,Member> i in this.members)
             {
                 if (i.Value.bStatic == false)
                 {
@@ -149,7 +149,11 @@ namespace CSLE
                 }
             }
         }
-        public CLS_Content.Value StaticCall(CLS_Content contentParent, string function, IList<CLS_Content.Value> _params, MethodCache cache = null)
+        public CLS_Content.Value StaticCall(CLS_Content contentParent, string function, IList<CLS_Content.Value> _params)
+        {
+            return StaticCall(contentParent, function, _params, null);
+        }
+        public CLS_Content.Value StaticCall(CLS_Content contentParent, string function, IList<CLS_Content.Value> _params, MethodCache cache)
         {
             if(cache!=null)
             {
@@ -258,8 +262,11 @@ namespace CSLE
             }
             throw new NotImplementedException();
         }
-
-        public CLS_Content.Value MemberCall(CLS_Content contentParent, object object_this, string func, IList<CLS_Content.Value> _params,MethodCache cache=null)
+        public CLS_Content.Value MemberCall(CLS_Content contentParent, object object_this, string func, IList<CLS_Content.Value> _params)
+        {
+            return MemberCall(contentParent, object_this, func, _params, null);
+        }
+        public CLS_Content.Value MemberCall(CLS_Content contentParent, object object_this, string func, IList<CLS_Content.Value> _params,MethodCache cache)
         {
             if (cache != null)
             {
@@ -438,7 +445,7 @@ namespace CSLE
     }
     public class CLS_Type_Class : ICLS_Type_WithBase
     {
-        public CLS_Type_Class(string keyword, bool bInterface, string filename = null)
+        public CLS_Type_Class(string keyword, bool bInterface, string filename)
         {
             this.keyword = keyword;
             this._namespace = "";

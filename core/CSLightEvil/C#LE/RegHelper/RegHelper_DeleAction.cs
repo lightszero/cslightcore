@@ -4,8 +4,6 @@ using System.Text;
 
 namespace CSLE
 {
-
-
     public class RegHelper_DeleAction : RegHelper_Type, ICLS_Type_Dele
     {
 

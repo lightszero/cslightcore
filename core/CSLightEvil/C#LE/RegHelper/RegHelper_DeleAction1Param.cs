@@ -11,7 +11,8 @@ namespace CSLE
         public RegHelper_DeleAction(Type type, string setkeyword)
             : base(type, setkeyword, true)
         {
-
+            var ms = type.GetMethods();
+                 
         }
 
         public override object Math2Value(CLS_Content env, char code, object left, CLS_Content.Value right, out CLType returntype)

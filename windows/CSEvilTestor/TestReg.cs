@@ -7,58 +7,66 @@ namespace CSEvilTestor
 {
     class TestReg
     {
-        delegate void ma(int a,string b);
+        delegate void ma(int a, string b);
 
         public static void Reg(CSLE.ICLS_Environment env)
         {
             CSEvilTestor.testfunc.CSLEConvert.env = env;
+            ////传统的注册方法,只适用于class,不支持注册委托
+            //env.RegType(new CSLE.RegHelper_Type(typeof(Debug)));
+            //env.RegType(new CSLE.RegHelper_Type(typeof(testfunc.CSLEConvert)));
 
-            env.RegType(new CSLE.RegHelper_Type(typeof(Debug)));
-            env.RegType(new CSLE.RegHelper_Type(typeof(testfunc.CSLEConvert)));
+            //env.RegType(new CSLE.RegHelper_Type(typeof(TestDele)));
+            //env.RegType(new CSLE.RegHelper_Type(typeof(Program)));
 
-            env.RegType(new CSLE.RegHelper_Type(typeof(TestDele)));
-            env.RegType(new CSLE.RegHelper_Type(typeof(Program)));
+            //新的注册方法,只适用于class,不支持注册委托
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(Debug), null));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(testfunc.CSLEConvert), null));
 
-            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson), "MyJson"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_ValueNumber), "MyJson.JsonNode_ValueNumber"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.IJsonNode), "MyJson.IJsonNode"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_ValueString), "MyJson.JsonNode_ValueString"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_Object), "MyJson.JsonNode_Object"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(MyJson.JsonNode_Array), "MyJson.JsonNode_Array"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(TestDele), null));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(Program), null));
+            //新的注册方法,参数一样的，
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson), "MyJson"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.JsonNode_ValueNumber), "MyJson.JsonNode_ValueNumber"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.IJsonNode), "MyJson.IJsonNode"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.JsonNode_ValueString), "MyJson.JsonNode_ValueString"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.JsonNode_Object), "MyJson.JsonNode_Object"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.JsonNode_Array), "MyJson.JsonNode_Array"));
 
 
-            env.RegType(new CSLE.RegHelper_DeleAction<int,string>(typeof(Action<int,string>),"Action<int,string>"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(MyClass2)));
-            env.RegType(new CSLE.RegHelper_DeleAction<MyClass2>(typeof(Action<MyClass2>), "Action<MyClass2>"));
+            //显式区分注册class 和delegate，其实是一码事
+            env.RegType(CSLE.RegHelper_Type.MakeClass(typeof(MyClass2), "MyClass2"));
+            env.RegType(CSLE.RegHelper_Type.MakeDelegate(typeof(Action<MyClass2>), "Action<MyClass2>"));
 
-            env.RegType(new CSLE.RegHelper_DeleAction<int>(typeof(Action<int>), "Action<int>"));
-            env.RegType(new CSLE.RegHelper_DeleAction(typeof(Action),"Action"));
-            env.RegType(new CSLE.RegHelper_DeleAction(typeof(TestDele.myup), "TestDele.myup"));
+            env.RegType(CSLE.RegHelper_Type.MakeDelegate(typeof(TestDele.myup), "TestDele.myup"));
+            env.RegType(CSLE.RegHelper_Type.MakeDelegate(typeof(TestDele.myup), "TestDele.myup"));
+            env.RegType(CSLE.RegHelper_Type.MakeDelegate(typeof(Action<int>), "Action<int>"));
+            env.RegType(CSLE.RegHelper_Type.MakeDelegate(typeof(Action<int, string>), "Action<int,string>"));
 
-            env.RegType(new CSLE.RegHelper_Type(typeof(Color), "Color"));
+            //统一用make,不管是什么东西
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(Action), "Action"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(Color), "Color"));
 
-            env.RegType(new CSLE.RegHelper_Type(typeof(KeyValuePair<,>), "KeyValuePair"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(HashSet<object>), "HashSet<object>"));
 
-            //env.RegType(new CSLE.RegHelper_Type(typeof(List<string>), "List<string>"));
-            env.RegType(new CSLE.RegHelper_Type(typeof(int[]), "int[]"));
 
-            //env.RegType(new CSLE.RegHelper_Type(typeof(List<int>), "List < int>"));
-            //env.RegType(new CSLE.RegHelper_Type(typeof(List<List<int>>), "List<List<int>>"));
-            //env.RegType(new CSLE.RegHelper_Type(typeof(List<List<List<double>>>), "List<List<List<double>>>"));
-            //env.RegType(new CSLE.RegHelper_Type(typeof(List<List<List<int>>>), "List<List<List<int>>>"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(Color), "Color"));
 
-            env.RegType(new CSLE.RegHelper_Type(typeof(config)));
-            env.RegType(new CSLE.RegHelper_Type(typeof(Math)));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(KeyValuePair<,>), "KeyValuePair"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(HashSet<object>), "HashSet<object>"));
 
-            env.RegType(new CSLE.RegHelper_Type(typeof(Exception)));
-            env.RegType(new CSLE.RegHelper_Type(typeof(NotSupportedException)));
-            env.RegType(new CSLE.RegHelper_Type(typeof(NotImplementedException)));
-            env.RegType(new CSLE.RegHelper_Type(typeof(TestClass)));
-            env.RegType(new CSLE.RegHelper_Type(typeof(StateMgr)));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(int[]), "int[]"));
+
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(config), "config"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(Math), "Math"));
+
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(Exception), "Exception"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(NotSupportedException), "NotSupportedException"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(NotImplementedException), "NotImplementedException"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(TestClass), "TestClass"));
+            env.RegType(CSLE.RegHelper_Type.Make(typeof(StateMgr), "StateMgr"));
 
         }
-        
+
     }
     public class StateMgr
     {

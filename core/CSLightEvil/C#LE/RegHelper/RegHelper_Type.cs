@@ -34,13 +34,17 @@ namespace CSLE
             }
             return value;
         }
-        public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params, MethodCache cache = null)
+        public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params)
+        {
+            return StaticCall(environment, function, _params, null);
+        }
+        public virtual CLS_Content.Value StaticCall(CLS_Content environment, string function, IList<CLS_Content.Value> _params, MethodCache cache)
         {
             bool needConvert = false;
             List<object> _oparams = new List<object>();
             List<Type> types = new List<Type>();
             bool bEm = false;
-            foreach (var p in _params)
+            foreach (CLS_Content.Value p in _params)
             {
                 _oparams.Add(p.value);
                 if ((SType)p.type != null)
@@ -315,13 +319,17 @@ namespace CSLE
             //targetop = targetop.MakeGenericMethod(gtypes);
             return null;
         }
-        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string function, IList<CLS_Content.Value> _params, MethodCache cache = null)
+        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string function, IList<CLS_Content.Value> _params)
+        {
+            return MemberCall(environment, object_this, function, _params, null);
+        }
+        public virtual CLS_Content.Value MemberCall(CLS_Content environment, object object_this, string function, IList<CLS_Content.Value> _params, MethodCache cache)
         {
             bool needConvert = false;
             List<Type> types = new List<Type>();
             List<object> _oparams = new List<object>();
             bool bEm = false;
-            foreach (var p in _params)
+            foreach (CLS_Content.Value p in _params)
             {
                 {
                     _oparams.Add(p.value);
@@ -868,8 +876,85 @@ namespace CSLE
 
     public class RegHelper_Type : ICLS_Type
     {
+        public static RegHelper_Type Make(Type type, string keyword)
+        {
+            if (!type.IsSubclassOf(typeof(Delegate)))
+            {
+                return new RegHelper_Type(type, keyword);
+            }
+            var method = type.GetMethod("Invoke");
+            var pp = method.GetParameters();
+            if (method.ReturnType == typeof(void))
+            {
+                if (pp.Length == 0)
+                {
+                    return new RegHelper_DeleAction(type, keyword);
+                }
+                else if (pp.Length == 1)
+                {
+                    var gtype = typeof(RegHelper_DeleAction<>).MakeGenericType(new Type[] { pp[0].ParameterType });
+                    return gtype.GetConstructors()[0].Invoke(new object[] { type, keyword }) as RegHelper_Type;
+                }
+                else if (pp.Length == 2)
+                {
+                    var gtype = typeof(RegHelper_DeleAction<,>).MakeGenericType(new Type[] { pp[0].ParameterType, pp[1].ParameterType });
+                    return (gtype.GetConstructors()[0].Invoke(new object[] { type, keyword }) as RegHelper_Type);
+                }
+                else if (pp.Length == 3)
+                {
+                    var gtype = typeof(RegHelper_DeleAction<,,>).MakeGenericType(new Type[] { pp[0].ParameterType, pp[1].ParameterType, pp[2].ParameterType });
+                    return (gtype.GetConstructors()[0].Invoke(new object[] { type, keyword }) as RegHelper_Type);
+                }
+                else
+                {
+                    throw new Exception("还没有支持这么多参数的委托");
+                }
+            }
+            else
+            {
+                Type gtype = null;
+                if (pp.Length == 0)
+                {
+                    gtype = typeof(RegHelper_DeleNonVoidAction<>).MakeGenericType(new Type[] { method.ReturnType });
+                }
+                else if (pp.Length == 1)
+                {
+                    gtype = typeof(RegHelper_DeleNonVoidAction<,>).MakeGenericType(new Type[] { method.ReturnType, pp[0].ParameterType });
+                }
+                else if (pp.Length == 2)
+                {
+                    gtype = typeof(RegHelper_DeleNonVoidAction<,,>).MakeGenericType(new Type[] { method.ReturnType, pp[0].ParameterType, pp[1].ParameterType });
+                }
+                else if (pp.Length == 3)
+                {
+                    gtype = typeof(RegHelper_DeleNonVoidAction<,,,>).MakeGenericType(new Type[] { method.ReturnType, pp[0].ParameterType, pp[1].ParameterType, pp[2].ParameterType });
+                }
+                else
+                {
+                    throw new Exception("还没有支持这么多参数的委托");
+                }
+                return (gtype.GetConstructors()[0].Invoke(new object[] { type, keyword }) as RegHelper_Type);
 
-        public RegHelper_Type(Type type, string setkeyword = null)
+            }
+
+
+        }
+        public static RegHelper_Type MakeClass(Type type, string keyword)
+        {
+            return Make(type, keyword);
+        }
+        public static RegHelper_Type MakeDelegate(Type type, string keyword)
+        {
+            return Make(type, keyword);
+        }
+        public RegHelper_Type(Type type)
+        {
+            function = new RegHelper_TypeFunction(type);
+            keyword = type.Name;
+            this.type = type;
+            this._type = type;
+        }
+        public RegHelper_Type(Type type, string setkeyword)
         {
             if (type.IsSubclassOf(typeof(Delegate)))
             {
