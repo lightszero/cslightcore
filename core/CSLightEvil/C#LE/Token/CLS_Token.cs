@@ -812,7 +812,7 @@ namespace CSLE
                     linetoken[i] = BitConverter.ToUInt16(bufu, 0);
 
                 }
-                int token = 0;
+                //int token = 0;
                 for (int i = 0; i < linecount; i++)
                 {
                     if ((i + 1) < linecount && linetoken[i + 1] == linetoken[i]) continue;
@@ -836,7 +836,7 @@ namespace CSLE
                         }
                     }
 
-                    token = linetoken[i];
+                    //token = linetoken[i];
                 }
             }
             return tokens;

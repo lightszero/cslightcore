@@ -11,7 +11,7 @@ namespace CSLE
         public RegHelper_DeleAction(Type type, string setkeyword)
             : base(type, setkeyword, true)
         {
-            var ms = type.GetMethods();
+            //var ms = type.GetMethods();
                  
         }
 

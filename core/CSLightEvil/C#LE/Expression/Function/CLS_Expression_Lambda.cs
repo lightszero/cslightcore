@@ -44,7 +44,7 @@ namespace CSLE
         public CLS_Content.Value ComputeValue(CLS_Content content)
         {
             content.InStack(this);
-            List<CLS_Content.Value> list = new List<CLS_Content.Value>();
+            //List<CLS_Content.Value> list = new List<CLS_Content.Value>();
             CLS_Content.Value value = new CLS_Content.Value();
             value.type = typeof(DeleLambda);
             value.value = new DeleLambda(content,(this.listParam[0] as CLS_Expression_Block).listParam,this.listParam[1]);

@@ -819,7 +819,7 @@ namespace CSLE
                 v.value = indexGetCache.Invoke(object_this, new object[] { key });
                 return v;
             }
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
 
         }
 
@@ -1070,7 +1070,7 @@ namespace CSLE
         {
             returntype = type;
             System.Reflection.MethodInfo call = null;
-            var m = ((Type)type).GetMembers();
+            //var m = ((Type)type).GetMembers();
             if (code == '+')
             {
                 if ((Type)right.type == typeof(string))

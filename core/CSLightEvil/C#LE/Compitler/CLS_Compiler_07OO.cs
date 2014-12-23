@@ -297,7 +297,6 @@ namespace CSLE
                                         if (type == null)
                                         {
                                             throw new Exception(filename + ":不可识别的函数头参数:" + tokens[funcparambegin].ToString() + tokens[funcparambegin].SourcePos());
-                                            break;
                                         }
                                         func._paramnames.Add(pid);
                                         func._paramtypes.Add(type);
@@ -372,7 +371,10 @@ namespace CSLE
                                 int jdep;
                                 int jend = FindCodeAny(tokens, ref jbegin, out jdep);
 
-                                bool b = Compiler_Expression(tokens, env, jbegin, jend, out  member.expr_defvalue);
+                                if (!Compiler_Expression(tokens, env, jbegin, jend, out member.expr_defvalue))
+                                {
+                                    logger.Log_Error("Get/Set定义错误");
+                                }
                                 i = jend;
                             }
                             (stype.function as SType).members.Add(idname, member);
@@ -395,7 +397,10 @@ namespace CSLE
                                 int jdep;
                                 int jend = FindCodeAny(tokens, ref jbegin, out jdep);
 
-                                bool b = Compiler_Expression(tokens, env, jbegin, jend, out  member.expr_defvalue);
+                                if (!Compiler_Expression(tokens, env, jbegin, jend, out member.expr_defvalue))
+                                {
+                                    logger.Log_Error("成员定义错误");
+                                }
                                 i = jend;
                             }
                             (stype.function as SType).members.Add(idname, member);

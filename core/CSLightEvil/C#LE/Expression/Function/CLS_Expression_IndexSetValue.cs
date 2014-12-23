@@ -50,7 +50,7 @@ namespace CSLE
             }
             var key = listParam[1].ComputeValue(content);
             var value = listParam[2].ComputeValue(content);
-            object setv=value.value;
+            //object setv=value.value;
             //if(value.type!=parent.type)
             //{
             //    var vtype = content.environment.GetType(value.type);

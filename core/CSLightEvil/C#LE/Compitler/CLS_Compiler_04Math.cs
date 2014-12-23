@@ -44,7 +44,6 @@ namespace CSLE
                     //        values.Add(subvalue);
                     //    bTest = true;
                     //}
-                    return null;
                 }
                 return null;
             }
@@ -116,7 +115,11 @@ namespace CSLE
                 if (tkCur.text == "(")
                 {
                     ICLS_Expression v;
-                    bool succ = Compiler_Expression(tlist, content, oppos + 3, posend, out v);
+                    if (!Compiler_Expression(tlist, content, oppos + 3, posend, out v))
+                    {
+                        LogError(tlist, "编译表达式失败", right, rightend);
+                        return null;
+                    }
                     CLS_Expression_TypeConvert convert = new CLS_Expression_TypeConvert(pos, posend, tlist[pos].line, tlist[posend].line);
                     convert.listParam.Add(v);
                     convert.targettype = content.GetTypeByKeyword(tlist[oppos + 1].text).type;
@@ -130,7 +133,11 @@ namespace CSLE
                 if (tkCur.text == "[")
                 {
                     rightend--;
-                    bool succs = Compiler_Expression(tlist, content, right, rightend, out valueright);
+                    if (!Compiler_Expression(tlist, content, right, rightend, out valueright))
+                    {
+                        LogError(tlist, "编译表达式失败", right, rightend);
+                        return null;
+                    }
                     CLS_Expression_IndexFind value = new CLS_Expression_IndexFind(left, rightend, tlist[left].line, tlist[rightend].line);
                     value.listParam.Add(valueleft);
                     value.listParam.Add(valueright);
