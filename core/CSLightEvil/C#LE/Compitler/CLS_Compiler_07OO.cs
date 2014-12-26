@@ -10,7 +10,7 @@ namespace CSLE
     public partial class CLS_Expression_Compiler : ICLS_Expression_Compiler
     {
 
-        IList<ICLS_Type> _FileCompiler(string filename, IList<Token> tokens, bool embDeubgToken, ICLS_Environment env, bool onlyGotType )
+        IList<ICLS_Type> _FileCompiler(string filename, IList<Token> tokens, bool embDeubgToken, ICLS_Environment env, bool onlyGotType)
         {
             List<ICLS_Type> typelist = new List<ICLS_Type>();
 
@@ -85,7 +85,7 @@ namespace CSLE
                         }
                     }
                     int iend = FindBlock(env, tokens, ibegin);
-                    if(iend==-1)
+                    if (iend == -1)
                     {
                         env.logger.Log_Error("查找文件尾失败。");
                         return null;
@@ -124,7 +124,7 @@ namespace CSLE
 
             return typelist;
         }
-        ICLS_Type Compiler_Class(ICLS_Environment env, string classname, bool bInterface, IList<string> basetype, string filename, IList<Token> tokens, int ibegin, int iend, bool EmbDebugToken, bool onlyGotType , IList<string> usinglist )
+        ICLS_Type Compiler_Class(ICLS_Environment env, string classname, bool bInterface, IList<string> basetype, string filename, IList<Token> tokens, int ibegin, int iend, bool EmbDebugToken, bool onlyGotType, IList<string> usinglist)
         {
 
             CLS_Type_Class stype = env.GetTypeByKeywordQuiet(classname) as CLS_Type_Class;
@@ -250,7 +250,7 @@ namespace CSLE
                             bctor = true;
                             i--;
                         }
-                            else if(tokens[i + 1].text == "["&&tokens[i+2].text=="]")
+                        else if (tokens[i + 1].text == "[" && tokens[i + 2].text == "]")
                         {
                             idtype = env.GetTypeByKeyword(tokens[i].text + "[]");
                             i += 2;
@@ -283,13 +283,13 @@ namespace CSLE
 
                                 int start = funcparambegin + 1;
                                 //Dictionary<string, ICLS_Type> _params = new Dictionary<string, ICLS_Type>();
-                                for (int j = funcparambegin +1; j <= funcparamend; j++)
+                                for (int j = funcparambegin + 1; j <= funcparamend; j++)
                                 {
                                     if (tokens[j].text == "," || tokens[j].text == ")")
                                     {
                                         string ptype = "";
-                                        for(int k=start;k<=j-2;k++)
-                                            ptype+=tokens[k].text;
+                                        for (int k = start; k <= j - 2; k++)
+                                            ptype += tokens[k].text;
                                         var pid = tokens[j - 1].text;
                                         var type = env.GetTypeByKeyword(ptype);
                                         // _params[pid] = type;
@@ -310,7 +310,7 @@ namespace CSLE
                             {
                                 int funcend = FindBlock(env, tokens, funcbegin);
                                 this.Compiler_Expression_Block(tokens, env, funcbegin, funcend, out func.expr_runtime);
-                                if(func.expr_runtime==null)
+                                if (func.expr_runtime == null)
                                 {
                                     logger.Log_Warn("警告，该函数编译为null，请检查");
                                 }
@@ -389,14 +389,28 @@ namespace CSLE
                             member.bReadOnly = false;
                             member.type = idtype;
 
+
                             //ICLS_Expression expr = null;
 
                             if (tokens[i + 2].text == "=")
                             {
+                                int posend = 0;
+                                for (int j = i; j < iend; j++)
+                                {
+                                    if (tokens[j].text == ";")
+                                    {
+                                        posend = j - 1;
+                                        break;
+                                    }
+                                }
+
                                 int jbegin = i + 3;
                                 int jdep;
                                 int jend = FindCodeAny(tokens, ref jbegin, out jdep);
-
+                                if (jend < posend)
+                                {
+                                    jend = posend;
+                                }
                                 if (!Compiler_Expression(tokens, env, jbegin, jend, out member.expr_defvalue))
                                 {
                                     logger.Log_Error("成员定义错误");
