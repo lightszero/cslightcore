@@ -26,7 +26,7 @@ namespace CSLE
 
                 ICLS_Expression subvalue;
                 bool succ = Compiler_Expression(tlist, content, testbegin, fe2, out subvalue);
-                if (!succ) return null;
+                //if (!succ) return null;
                 if (subvalue != null)
                 {
                     value.listParam.Add(subvalue);

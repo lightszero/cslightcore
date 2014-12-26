@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class Script_TestConstructor
 {
-    int abc = (int)2;
+    string abc = ("dd" as string).ToString();
     private int[] a = new int[] { 1, 3, 4 };
     public static int[] b = new int[234];
     public static Dictionary<string, object> objs = new Dictionary<string, object>();

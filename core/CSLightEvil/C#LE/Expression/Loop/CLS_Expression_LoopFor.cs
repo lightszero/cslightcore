@@ -46,15 +46,17 @@ namespace CSLE
             content.InStack(this);
             content.DepthAdd();
             ICLS_Expression expr_init = listParam[0] as ICLS_Expression;
-            if (expr_init != null) expr_init.ComputeValue(content);
+            if (expr_init != null) expr_init.ComputeValue(content);//expr1
 
             ICLS_Expression expr_continue = listParam[1] as ICLS_Expression;
             ICLS_Expression expr_step = listParam[2] as ICLS_Expression;
 
             ICLS_Expression expr_block = listParam[3] as ICLS_Expression;
             CLS_Content.Value vrt = null;
-            for (; (bool)expr_continue.ComputeValue(content).value; expr_step.ComputeValue(content))
+            for (; ; )
             {
+                if (expr_continue != null && !(bool)expr_continue.ComputeValue(content).value) break;//expr2
+
                 if (expr_block != null)
                 {
                     if (expr_block is CLS_Expression_Block)
@@ -63,7 +65,7 @@ namespace CSLE
                         if (v != null)
                         {
                             if (v.breakBlock > 2) vrt = v;
-                            if (v.breakBlock > 1) break ;
+                            if (v.breakBlock > 1) break;
                         }
                     }
                     else
@@ -81,6 +83,9 @@ namespace CSLE
                     //if (v.breakBlock == 2) break;
                     //if (v.breakBlock == 10) return v;
                 }
+
+                if (expr_step != null)
+                    expr_step.ComputeValue(content);//expr3
             }
             content.DepthRemove();
             content.OutStack(this);
