@@ -77,7 +77,7 @@ namespace CSLE
                     //if (!(rightValue is Delegate)) {
                     //    Dele_Map_Delegate.Map(rightValue as IDeleBase, calldele);
                     //}
-                    return null;
+                    return info;
                 }
                 else if (code == '-')
                 {
@@ -85,11 +85,11 @@ namespace CSLE
                     //if (!(rightValue is Delegate)) {
                     //    Dele_Map_Delegate.Destroy(rightValue as IDeleBase);
                     //}
-                    return null;
+                    return info;
                 }
 
             }
-            else if (left is Delegate)
+            else if (left is Delegate || left == null)
             {
                 Delegate info = left as Delegate;
                 Delegate calldele = null;
@@ -101,17 +101,15 @@ namespace CSLE
                     calldele = right.value as Delegate;
                 if (code == '+')
                 {
-                    Delegate.Combine(info, calldele);
-                    return null;
+                    return Delegate.Combine(info, calldele); ;
                 }
                 else if (code == '-')
                 {
-                    Delegate.Remove(info, calldele);
+                    return Delegate.Remove(info, calldele);
                 }
             }
             return new NotSupportedException();
         }
-
         public Delegate CreateDelegate(ICLS_Environment env, DeleFunction delefunc)
         {
             DeleFunction _func = delefunc;
