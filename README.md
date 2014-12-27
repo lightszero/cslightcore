@@ -1,6 +1,6 @@
 cslightcore
 ===========
-2014-12-23 0.62.3Beta
+2014-12-27 0.62.3Beta
 
 	发现一些定义delegate的+= -=方面的问题，修正
 	以及delegate为null时+=的问题，修正
