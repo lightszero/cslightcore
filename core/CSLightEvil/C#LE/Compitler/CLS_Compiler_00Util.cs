@@ -1020,7 +1020,7 @@ namespace CSLE
                         max = 10;
                         break;
                     case "(":
-                        max = 9;
+                        max = 11;//体高括弧的处理顺序
                         break;
                     case "as":
                         max = 9;
