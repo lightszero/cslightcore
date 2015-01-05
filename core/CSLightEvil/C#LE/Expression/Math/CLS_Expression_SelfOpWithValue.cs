@@ -57,16 +57,16 @@ namespace CSLE
                 left.value = value;
 
                 Type t = right.type;
-                if(t.IsSubclassOf(typeof(MulticastDelegate))||t.IsSubclassOf(typeof(Delegate)))
-                {
+                //if(t.IsSubclassOf(typeof(MulticastDelegate))||t.IsSubclassOf(typeof(Delegate)))
+                //{
 
-                }
-                //content.Set(value_name, value);
-                else if (t == typeof(CSLE.DeleLambda) || t == typeof(CSLE.DeleFunction) || t == typeof(CSLE.DeleEvent))
-                {
+                //}
+                ////content.Set(value_name, value);
+                //else if (t == typeof(CSLE.DeleLambda) || t == typeof(CSLE.DeleFunction) || t == typeof(CSLE.DeleEvent))
+                //{
 
-                }
-                else
+                //}
+                //else
                 {
                     if (listParam[0] is CLS_Expression_MemberFind)
                     {

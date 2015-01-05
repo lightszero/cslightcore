@@ -7,7 +7,7 @@ namespace CSLE
     class CLS_Type_UInt : RegHelper_Type
     {
         public CLS_Type_UInt()
-            : base(typeof(uint), "uint")
+            : base(typeof(uint), "uint",false)
         {
             //function = new RegHelper_TypeFunction(typeof(uint));
         }

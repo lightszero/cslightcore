@@ -10,7 +10,7 @@ namespace CSLE
         {
             this.logger = logger;
         }
-        public ICLS_Expression Compiler(IList<Token> tlist, ICLS_Environment content)
+        public ICLS_Expression Compile(IList<Token> tlist, ICLS_Environment content)
         {
             ICLS_Expression value;
 
@@ -41,7 +41,7 @@ namespace CSLE
 
         }
 
-        public ICLS_Expression Compiler_NoBlock(IList<Token> tlist, ICLS_Environment content)
+        public ICLS_Expression Compile_NoBlock(IList<Token> tlist, ICLS_Environment content)
         {
             ICLS_Expression value;
             int expbegin = 0;
@@ -140,11 +140,11 @@ namespace CSLE
         }
 
 
-        public IList<ICLS_Type> FileCompiler(ICLS_Environment env,string filename,IList<Token> tlist, bool embDebugToken)
+        public IList<ICLS_Type> FileCompile(ICLS_Environment env,string filename,IList<Token> tlist, bool embDebugToken)
         {
             return _FileCompiler(filename, tlist, embDebugToken, env, false);
         }
-        public IList<ICLS_Type> FilePreCompiler(ICLS_Environment env, string filename, IList<Token> tlist)
+        public IList<ICLS_Type> FilePreCompile(ICLS_Environment env, string filename, IList<Token> tlist)
         {
             return _FileCompiler(filename, tlist, false, env, true);
         }

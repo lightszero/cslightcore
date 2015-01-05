@@ -7,7 +7,7 @@ namespace CSLE
     class CLS_Type_Byte : RegHelper_Type
     {
         public CLS_Type_Byte()
-            : base(typeof(byte), "byte")
+            : base(typeof(byte), "byte",false)
         {
             //function = new RegHelper_TypeFunction(typeof(uint));
         }

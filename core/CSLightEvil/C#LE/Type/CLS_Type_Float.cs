@@ -7,7 +7,7 @@ namespace CSLE
     class CLS_Type_Float : RegHelper_Type
     {
         public CLS_Type_Float()
-            : base(typeof(float), "float")
+            : base(typeof(float), "float",false)
         {
             //function = new RegHelper_TypeFunction(typeof(float));
         }

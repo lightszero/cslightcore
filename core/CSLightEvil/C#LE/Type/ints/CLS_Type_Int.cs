@@ -7,7 +7,7 @@ namespace CSLE
     class CLS_Type_Int : RegHelper_Type
     {
         public CLS_Type_Int()
-            : base(typeof(int), "int")
+            : base(typeof(int), "int", false)
         {
 
         }

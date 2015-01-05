@@ -18,7 +18,7 @@ namespace CSLE
         {
             get
             {
-                return "0.62.3Beta";
+                return "0.63Beta";
             }
         }
         public CLS_Environment(ICLS_Logger logger)
@@ -48,9 +48,9 @@ namespace CSLE
             RegType(new CLS_Type_Long());
             RegType(new CLS_Type_ULong());
 
-            RegType(new RegHelper_Type(typeof(object), "object"));
-            RegType(new RegHelper_Type(typeof(List<>), "List"));
-            RegType(new RegHelper_Type(typeof(Dictionary<,>), "Dictionary"));
+            RegType(RegHelper_Type.MakeType(typeof(object), "object"));
+            RegType(RegHelper_Type.MakeType(typeof(List<>), "List"));
+            RegType(RegHelper_Type.MakeType(typeof(Dictionary<,>), "Dictionary"));
 
             typess["null"] = new CLS_Type_NULL();
             //contentGloabl = CreateContent();
@@ -104,7 +104,7 @@ namespace CSLE
             if (types.TryGetValue(type, out ret) == false)
             {
                 logger.Log_Warn("(CLScript)类型未注册,将自动注册一份匿名:" + type.ToString());
-                ret = new RegHelper_Type(type, "");
+                ret = RegHelper_Type.MakeType(type, "");
                 RegType(ret);
             }
             return ret;
@@ -182,7 +182,7 @@ namespace CSLE
                                 types[i] = rt;
                             }
                             Type IType = gentype.MakeGenericType(types);
-                            RegType(new RegHelper_Type(IType, keyword));
+                            RegType(CSLE.RegHelper_Type.MakeType(IType, keyword));
                             return GetTypeByKeyword(keyword);
                         }
 
@@ -237,13 +237,21 @@ namespace CSLE
         {
             return tokenParser.Parse(code);
         }
+        public ICLS_Expression Expr_CompileToken(IList<Token> listToken)
+        {
+            return compiler.Compile(listToken, this);
+        }
         public ICLS_Expression Expr_CompilerToken(IList<Token> listToken)
         {
-            return compiler.Compiler(listToken, this);
+            return compiler.Compile(listToken, this);
+        }
+        public ICLS_Expression Expr_CompileToken(IList<Token> listToken, bool SimpleExpression)
+        {
+            return SimpleExpression ? compiler.Compile_NoBlock(listToken, this) : compiler.Compile(listToken, this);
         }
         public ICLS_Expression Expr_CompilerToken(IList<Token> listToken, bool SimpleExpression)
         {
-            return SimpleExpression ? compiler.Compiler_NoBlock(listToken, this) : compiler.Compiler(listToken, this);
+            return SimpleExpression ? compiler.Compile_NoBlock(listToken, this) : compiler.Compile(listToken, this);
         }
         //CLS_Content contentGloabl = null;
         public ICLS_Expression Expr_Optimize(ICLS_Expression old)
@@ -266,11 +274,11 @@ namespace CSLE
             return expr.ComputeValue(content);
         }
 
-        public void Project_Compiler(Dictionary<string, IList<Token>> project, bool embDebugToken)
+        public void Project_Compile(Dictionary<string, IList<Token>> project, bool embDebugToken)
         {
             foreach (KeyValuePair<string, IList<Token>> f in project)
             {
-                File_PreCompilerToken(f.Key, f.Value);
+                File_PreCompileToken(f.Key, f.Value);
             }
             foreach (KeyValuePair<string, IList<Token>> f in project)
             {
@@ -290,21 +298,21 @@ namespace CSLE
                         f.Value[i] = rp;
                     }
                 }
-                File_CompilerToken(f.Key, f.Value, embDebugToken);
+                File_CompileToken(f.Key, f.Value, embDebugToken);
             }
         }
-        public void File_PreCompilerToken(string filename, IList<Token> listToken)
+        public void File_PreCompileToken(string filename, IList<Token> listToken)
         {
-            IList<ICLS_Type> types = compiler.FilePreCompiler(this, filename, listToken);
+            IList<ICLS_Type> types = compiler.FilePreCompile(this, filename, listToken);
             foreach (var type in types)
             {
                 this.RegType(type);
             }
         }
-        public void File_CompilerToken(string filename, IList<Token> listToken, bool embDebugToken)
+        public void File_CompileToken(string filename, IList<Token> listToken, bool embDebugToken)
         {
             logger.Log("File_CompilerToken:" + filename);
-            IList<ICLS_Type> types = compiler.FileCompiler(this, filename, listToken, embDebugToken);
+            IList<ICLS_Type> types = compiler.FileCompile(this, filename, listToken, embDebugToken);
             foreach (var type in types)
             {
                 if (this.GetTypeByKeywordQuiet(type.keyword) == null)

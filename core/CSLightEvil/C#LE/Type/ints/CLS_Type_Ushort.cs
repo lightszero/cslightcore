@@ -7,7 +7,7 @@ namespace CSLE
     class CLS_Type_UShort : RegHelper_Type
     {
         public CLS_Type_UShort()
-            : base(typeof(ushort), "ushort")
+            : base(typeof(ushort), "ushort",false)
         {
             //function = new RegHelper_TypeFunction(typeof(uint));
         }

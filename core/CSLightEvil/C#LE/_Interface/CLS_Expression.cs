@@ -97,8 +97,13 @@ namespace CSLE
     }
     public interface ICLS_Environment_Compiler
     {
+
+        [Obsolete("use tokenParser.Parse instead.")]
         IList<Token> ParserToken(string code);
 
+        ICLS_Expression Expr_CompileToken(IList<Token> listToken, bool SimpleExpression);
+
+        [Obsolete("use Expr_CompileToken instead.")]
         ICLS_Expression Expr_CompilerToken(IList<Token> listToken, bool SimpleExpression);
 
         //CLS_Content contentGloabl = null;
@@ -110,11 +115,11 @@ namespace CSLE
         CLS_Content.Value Expr_Execute(ICLS_Expression expr, CLS_Content content);
 
 
-        void Project_Compiler(Dictionary<string, IList<Token>> project, bool embDebugToken);
+        void Project_Compile(Dictionary<string, IList<Token>> project, bool embDebugToken);
 
-        void File_PreCompilerToken(string filename, IList<Token> listToken);
+        void File_PreCompileToken(string filename, IList<Token> listToken);
 
-        void File_CompilerToken(string filename, IList<Token> listToken, bool embDebugToken);
+        void File_CompileToken(string filename, IList<Token> listToken, bool embDebugToken);
 
         void Project_PacketToStream(Dictionary<string, IList<Token>> project, System.IO.Stream outstream);
 
@@ -123,12 +128,12 @@ namespace CSLE
 
     public interface ICLS_Expression_Compiler
     {
-        ICLS_Expression Compiler(IList<Token> tlist, ICLS_Environment content);//语句
-        ICLS_Expression Compiler_NoBlock(IList<Token> tlist, ICLS_Environment content);//表达式，一条语句
+        ICLS_Expression Compile(IList<Token> tlist, ICLS_Environment content);//语句
+        ICLS_Expression Compile_NoBlock(IList<Token> tlist, ICLS_Environment content);//表达式，一条语句
         ICLS_Expression Optimize(ICLS_Expression value, ICLS_Environment content);
 
-        IList<ICLS_Type> FileCompiler(ICLS_Environment env, string filename, IList<Token> tlist, bool embDebugToken);
-        IList<ICLS_Type> FilePreCompiler(ICLS_Environment env, string filename, IList<Token> tlist);
+        IList<ICLS_Type> FileCompile(ICLS_Environment env, string filename, IList<Token> tlist, bool embDebugToken);
+        IList<ICLS_Type> FilePreCompile(ICLS_Environment env, string filename, IList<Token> tlist);
 
     }
 

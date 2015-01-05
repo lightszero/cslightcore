@@ -146,7 +146,7 @@ namespace CSEvilTestor
                 {
                     try
                     {
-                        env.Project_Compiler(project, true);
+                        env.Project_Compile(project, true);
                     }
                     catch (Exception err)
                     {
@@ -156,7 +156,7 @@ namespace CSEvilTestor
                 }
                 else
                 {
-                    env.Project_Compiler(project, true);
+                    env.Project_Compile(project, true);
                 }
             }
             builded = true;

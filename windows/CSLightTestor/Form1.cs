@@ -43,41 +43,41 @@ namespace CLScriptTestor
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Student)));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.P1)));
             scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.Color32)));
-            //上面的注册方法只适用于class，不适用于delegate，下面的注册方法都行
-            //scriptService.RegType(new CSLE.RegHelper_Type(typeof(CLScriptExt.P2)));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(CLScriptExt.Student.StudentAss), "Student.StudentAss"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson), "MyJson"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.JsonNode_ValueNumber), "MyJson.JsonNode_ValueNumber"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.IJsonNode), "MyJson.IJsonNode"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.JsonNode_ValueString), "MyJson.JsonNode_ValueString"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.JsonNode_Object), "MyJson.JsonNode_Object"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(MyJson.JsonNode_Array), "MyJson.JsonNode_Array"));
-
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(List<>), "List"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(Dictionary<,>), "Dictionary"));
-
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(List<CLScriptExt.Student>), "List<Student>"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(List<CLScriptExt.Vector3>), "List<Vector3>"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(List<int>), "List<int>"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(List<List<int>>), "List<List<int>>"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(int[]), "int[]"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(char[]), "char[]"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(int[][]), "int[][]"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(string[]), "string[]"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(object), "object"));
-
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(CLScriptExt.MyClass2), "MyClass2"));
-
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(Dictionary<string, string>), "Dictionary<string,string>"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(CLScriptExt.Student.S1), "Student.S1"));
-
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(DateTime), "DateTime"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(TimeSpan), "TimeSpan"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(Form1), "Form1"));
 
 
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(Action<int>), "Action<int>"));
-            scriptService.RegType(CSLE.RegHelper_Type.Make(typeof(EventHandler), "EventHandler"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(CLScriptExt.Student.StudentAss), "Student.StudentAss"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(MyJson), "MyJson"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(MyJson.JsonNode_ValueNumber), "MyJson.JsonNode_ValueNumber"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(MyJson.IJsonNode), "MyJson.IJsonNode"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(MyJson.JsonNode_ValueString), "MyJson.JsonNode_ValueString"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(MyJson.JsonNode_Object), "MyJson.JsonNode_Object"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(MyJson.JsonNode_Array), "MyJson.JsonNode_Array"));
+
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(List<>), "List"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(Dictionary<,>), "Dictionary"));
+
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(List<CLScriptExt.Student>), "List<Student>"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(List<CLScriptExt.Vector3>), "List<Vector3>"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(List<int>), "List<int>"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(List<List<int>>), "List<List<int>>"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(int[]), "int[]"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(char[]), "char[]"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(int[][]), "int[][]"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(string[]), "string[]"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(object), "object"));
+
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(CLScriptExt.MyClass2), "MyClass2"));
+
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(Dictionary<string, string>), "Dictionary<string,string>"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(CLScriptExt.Student.S1), "Student.S1"));
+
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(DateTime), "DateTime"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(TimeSpan), "TimeSpan"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(Form1), "Form1"));
+
+
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(Action<int>), "Action<int>"));
+            scriptService.RegType(CSLE.RegHelper_Type.MakeType(typeof(EventHandler), "EventHandler"));
 
             //CLScriptExt.Type_Vector3());
             InitCodeFile();

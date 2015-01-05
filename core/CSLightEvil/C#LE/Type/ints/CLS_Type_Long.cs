@@ -7,7 +7,7 @@ namespace CSLE
     class CLS_Type_Long : RegHelper_Type
     {
         public CLS_Type_Long()
-            : base(typeof(long), "long")
+            : base(typeof(long), "long", false)
         {
 
         }

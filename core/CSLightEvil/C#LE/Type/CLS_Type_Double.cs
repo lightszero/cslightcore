@@ -7,7 +7,7 @@ namespace CSLE
     class CLS_Type_Double : RegHelper_Type
     {
         public CLS_Type_Double()
-            : base(typeof(double), "double")
+            : base(typeof(double), "double", false)
         {
                     
             //function = new RegHelper_TypeFunction(typeof(double));

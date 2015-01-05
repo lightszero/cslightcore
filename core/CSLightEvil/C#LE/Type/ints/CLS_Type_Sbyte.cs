@@ -7,7 +7,7 @@ namespace CSLE
     class CLS_Type_Sbyte : RegHelper_Type
     {
         public CLS_Type_Sbyte()
-            : base(typeof(sbyte), "sbyte")
+            : base(typeof(sbyte), "sbyte",false)
         {
 
         }

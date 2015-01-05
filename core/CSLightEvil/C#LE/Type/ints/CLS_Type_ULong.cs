@@ -7,7 +7,7 @@ namespace CSLE
     class CLS_Type_ULong : RegHelper_Type
     {
         public CLS_Type_ULong()
-            : base(typeof(ulong), "ulong")
+            : base(typeof(ulong), "ulong",false)
         {
 
         }
