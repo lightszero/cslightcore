@@ -687,11 +687,20 @@ namespace CSLE
                 if (c.finfo == null)
                 {
                     c.minfo = type.GetMethod("set_" + valuename);
+                    var mss = type.GetMethods();
                     if (c.minfo == null)
                     {
-                        c.type = -1;
-                        return false;
+                        if (type.GetMethod("add_" + valuename) != null)
+                        {
+                            c.type = 3;//event;
+                        }
+                        else
+                        {
+                            c.type = -1;
+                            return false;
+                        }
                     }
+
                     else
                     {
                         c.type = 2;
