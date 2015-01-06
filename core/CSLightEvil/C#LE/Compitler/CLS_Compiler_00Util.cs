@@ -1020,7 +1020,8 @@ namespace CSLE
                         max = 10;
                         break;
                     case "(":
-                        max = 11;//体高括弧的处理顺序
+                        max = 9;//提高括弧的处理顺序到11，已回滚此修改
+                        //表达式识别存在缺陷，并非单纯的改动可以解决，可能造成其他的不明显bug
                         break;
                     case "as":
                         max = 9;

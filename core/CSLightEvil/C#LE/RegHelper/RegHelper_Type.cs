@@ -724,7 +724,7 @@ namespace CSLE
                 }
                 c.finfo.SetValue(object_this, value);
             }
-            else
+            else if(c.type==2)
             {
                 var ptype = c.minfo.GetParameters()[0].ParameterType;
                 if (value != null && value.GetType() != ptype)
