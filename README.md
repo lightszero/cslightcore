@@ -1,5 +1,8 @@
 cslightcore
 ===========
+2015-01-08 0.63.1Beta
+
+
 2015-01-05 0.63Beta
     
 	修复几处delegate的+=Bug

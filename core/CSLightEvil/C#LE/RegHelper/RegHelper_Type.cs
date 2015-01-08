@@ -297,6 +297,7 @@ namespace CSLE
                     bool match = true;
                     for (int i = 0; i < pp.Length; i++)
                     {
+                        if (pp[i].ParameterType.IsGenericType) continue;
                         if (pp[i].ParameterType.IsGenericParameter) continue;
                         if (pp[i].ParameterType != (Type)_params[i].type)
                         {
@@ -307,6 +308,8 @@ namespace CSLE
                     if (match)
                     {
                         var targetop = t.MakeGenericMethod(gtypes);
+
+
                         if (cacheT == null)
                             cacheT = new Dictionary<int, System.Reflection.MethodInfo>();
                         cacheT[hashcode] = targetop;
@@ -369,7 +372,15 @@ namespace CSLE
                         gtypes[i] = environment.environment.GetTypeByKeyword(sf[i]).type;
                     }
                     targetop = FindTMethod(type, tfunc, _params, gtypes);
+                    var ps = targetop.GetParameters();
+                    for(int i=0;i<Math.Min(ps.Length,_oparams.Count);i++)
+                    {
+                        if(ps[i].ParameterType!=(Type)_params[i].type)
+                        {
 
+                            _oparams[i] = environment.environment.GetType(_params[i].type).ConvertTo(environment, _oparams[i], ps[i].ParameterType);
+                        }
+                    }
                 }
                 else
                 {

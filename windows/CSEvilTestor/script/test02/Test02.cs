@@ -38,6 +38,8 @@ class Test02
 
         //函数作为参数的用法
         TestDele.instance.AddDele(Test2);
+        //Action<int> abc = Test2;
+        TestDele.instance.AddDeleT<int>(Test2);
 
 
         TestDele.instance.AddDele(null);
