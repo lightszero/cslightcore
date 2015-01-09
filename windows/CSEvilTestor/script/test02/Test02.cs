@@ -39,7 +39,7 @@ class Test02
         //函数作为参数的用法
         TestDele.instance.AddDele(Test2);
         //Action<int> abc = Test2;
-        TestDele.instance.AddDeleT<int>(Test2);
+        TestDele.instance.AddDeleT3<int,string>(Test4);
 
 
         TestDele.instance.AddDele(null);
@@ -75,6 +75,11 @@ class Test02
     static void Test2(int v)
     {
         Debug.Log("Test2 i=" + v);
+        i--;
+    }
+    static void Test4(int v,string str)
+    {
+        Debug.Log("Test4 i=" + v+", s="+str);
         i--;
     }
 

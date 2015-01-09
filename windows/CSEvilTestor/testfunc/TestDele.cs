@@ -48,6 +48,13 @@ using System.Text;
                 onUpdate2 += dele as Action<int>;
             }
         }
+        public void AddDeleT3<T,K>(Action<T,K> dele)
+        {
+            if (dele is Action<int,string>)
+            {
+                onUpdate3 += dele as Action<int,string>;
+            }
+        }
         public void ClearDele()
         {
             onUpdate = null;
