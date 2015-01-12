@@ -7,7 +7,15 @@ hip[6]="ffff";
 
 foreach(var i in hip)
 {
-  trace("key="+i.Key+",v="+i.Value);
+  Dictionary<int,string> dic2 =new Dictionary<int,string>();
+    dic2[3]="ff";
+    dic2[5]="fff";
+    dic2[6]="ffff";
+  foreach(var j in dic2)
+    {
+        break;
+    }
 }
 
-return 0;
+return 1;
+
