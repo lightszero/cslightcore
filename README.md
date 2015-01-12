@@ -1,5 +1,9 @@
 cslightcore
 ===========
+2015-01-12 0.63Beta
+	所有的循环体在处理break的时候都会有个作用域bug，双层foreach内层break就会出现。
+	已修复
+	
 2015-01-08 0.63.1Beta
 
 

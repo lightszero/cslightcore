@@ -71,13 +71,15 @@ namespace CSLE
                     else
                     {
                         content.DepthAdd();
+                        bool bbreak = false;
                         var v = expr_block.ComputeValue(content);
                         if (v != null)
                         {
                             if (v.breakBlock > 2) vrt = v;
-                            if (v.breakBlock > 1) break;
+                            if (v.breakBlock > 1) bbreak = true;
                         }
                         content.DepthRemove();
+                        if (bbreak) break;
                     }
                     //if (v.breakBlock == 1) continue;
                     //if (v.breakBlock == 2) break;

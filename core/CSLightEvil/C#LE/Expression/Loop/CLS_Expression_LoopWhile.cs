@@ -48,7 +48,7 @@ namespace CSLE
             ICLS_Expression expr_while = listParam[0] as ICLS_Expression;
             ICLS_Expression expr_block = listParam[1] as ICLS_Expression;
             CLS_Content.Value vrt = null;
-            while((bool)expr_while.ComputeValue(content).value)
+            while ((bool)expr_while.ComputeValue(content).value)
             {
                 if (expr_block != null)
                 {
@@ -64,13 +64,15 @@ namespace CSLE
                     else
                     {
                         content.DepthAdd();
+                        bool bbreak = false;
                         var v = expr_block.ComputeValue(content);
                         if (v != null)
                         {
                             if (v.breakBlock > 2) vrt = v;
-                            if (v.breakBlock > 1) break;
+                            if (v.breakBlock > 1) bbreak = true;
                         }
                         content.DepthRemove();
+                        if (bbreak) break;
                     }
                     //if (v.breakBlock == 1) continue;
                     //if (v.breakBlock == 2) break;
