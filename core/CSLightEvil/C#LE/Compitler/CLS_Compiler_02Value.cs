@@ -33,10 +33,21 @@ namespace CSLE
 
                     else
                     {
-                        CLS_Value_Value<int> number = new CLS_Value_Value<int>();
+                        ulong lv = ulong.Parse(value.text);
+                        if (lv > uint.MaxValue)
+                        {
+                            CLS_Value_Value<long> number = new CLS_Value_Value<long>();
+                            number.value_value = (long)lv;
+                            return number;
+                        }
+                        else
+                        {
 
-                        number.value_value = int.Parse(value.text);
-                        return number;
+                            CLS_Value_Value<int> number = new CLS_Value_Value<int>();
+                            number.value_value = (int)lv;
+                            return number;
+
+                        }
                     }
 
                 }
@@ -90,9 +101,21 @@ namespace CSLE
                 }
                 else
                 {
-                    CLS_Value_Value<int> number = new CLS_Value_Value<int>();
-                    number.value_value = -int.Parse(value.text);
-                    return number;
+                    ulong lv = ulong.Parse(value.text);
+                    if (lv > uint.MaxValue)
+                    {
+                        CLS_Value_Value<long> number = new CLS_Value_Value<long>();
+                        number.value_value = -(long)lv;
+                        return number;
+                    }
+                    else
+                    {
+
+                        CLS_Value_Value<int> number = new CLS_Value_Value<int>();
+                        number.value_value = -(int)lv;
+                        return number;
+
+                    }
                 }
             }
             else
