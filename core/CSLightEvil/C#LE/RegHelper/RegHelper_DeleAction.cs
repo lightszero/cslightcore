@@ -108,16 +108,28 @@ namespace CSLE
                 var func = _func.calltype.functions[_func.function];
                 if (func.expr_runtime != null)
                 {
-                    CLS_Content content = new CLS_Content(env);
-                    content.DepthAdd();
-                    content.CallThis = _func.callthis;
-                    content.CallType = _func.calltype;
-                    content.function = _func.function;
+                    CLS_Content content = new CLS_Content(env, true);
+                    try
+                    {
+                        content.DepthAdd();
+                        content.CallThis = _func.callthis;
+                        content.CallType = _func.calltype;
+                        content.function = _func.function;
 
-                    //content.DefineAndSet(function._paramnames[0], function._paramtypes[0].type, param0);
+                        //content.DefineAndSet(function._paramnames[0], function._paramtypes[0].type, param0);
 
-                    func.expr_runtime.ComputeValue(content);
-                    content.DepthRemove();
+                        func.expr_runtime.ComputeValue(content);
+                        content.DepthRemove();
+                    }
+                    catch (Exception err)
+                    {
+                        string errinfo = "Dump Call in:";
+                        if (_func.calltype != null) errinfo += _func.calltype.Name + "::";
+                        if (_func.function != null) errinfo += _func.function;
+                        errinfo += "\n";
+                        env.logger.Log(errinfo + content.Dump());
+                        throw err;
+                    }
                 }
             };
             Delegate d = dele as Delegate;
@@ -135,21 +147,32 @@ namespace CSLE
 
         public Delegate CreateDelegate(ICLS_Environment env, DeleLambda lambda)
         {
+            CLS_Content content = lambda.content.Clone();
             //var pnames = lambda.paramNames;
             var expr = lambda.expr_func;
             Action dele = () =>
             {
                 if (expr != null)
                 {
-                    CLS_Content content = lambda.content.Clone();
-                    content.DepthAdd();
+                    try
+                    {
+                        content.DepthAdd();
 
 
-                    //content.DefineAndSet(pnames[0], typeof(T), param0);
+                        //content.DefineAndSet(pnames[0], typeof(T), param0);
 
-                    expr.ComputeValue(content);
+                        expr.ComputeValue(content);
 
-                    content.DepthRemove();
+                        content.DepthRemove();
+                    }
+                    catch (Exception err)
+                    {
+                        string errinfo = "Dump Call lambda in:";
+                        if (content.CallType != null) errinfo += content.CallType.Name + "::";
+                        if (content.function != null) errinfo += content.function;
+                        errinfo += "\n";
+                        env.logger.Log(errinfo + content.Dump());
+                    }
                 }
             };
             Delegate d = dele as Delegate;

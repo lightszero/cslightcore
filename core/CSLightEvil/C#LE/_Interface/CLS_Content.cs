@@ -128,9 +128,12 @@ namespace CSLE
 		public string DumpValue()
 		{
 			string svalues = "";
-            foreach (var subc in this.stackContent)
+            if (this.stackContent != null)
             {
-                svalues += subc.DumpValue();
+                foreach (var subc in this.stackContent)
+                {
+                    svalues += subc.DumpValue();
+                }
             }
             svalues += "DumpValue:" + this.CallName + "\n";
             foreach(var v in this.values)

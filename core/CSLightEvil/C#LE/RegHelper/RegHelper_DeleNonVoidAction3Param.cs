@@ -120,7 +120,7 @@ namespace CSLE
                 var func = _func.calltype.functions[_func.function];
                 if (func.expr_runtime != null)
                 {
-                    CLS_Content content = new CLS_Content(env);
+                    CLS_Content content = new CLS_Content(env, true);
                     try
                     {
                         content.DepthAdd();
@@ -139,7 +139,11 @@ namespace CSLE
                     }
                     catch (Exception err)
                     {
-                        env.logger.Log(content.Dump());
+                        string errinfo = "Dump Call in:";
+                        if (_func.calltype != null) errinfo += _func.calltype.Name + "::";
+                        if (_func.function != null) errinfo += _func.function;
+                        errinfo += "\n";
+                        env.logger.Log(errinfo + content.Dump()); 
                         throw err;
                     }
                 }
@@ -175,7 +179,11 @@ namespace CSLE
                     }
                     catch (Exception err)
                     {
-                        env.logger.Log(content.Dump());
+                        string errinfo = "Dump Call lambda in:";
+                        if (content.CallType != null) errinfo += content.CallType.Name + "::";
+                        if (content.function != null) errinfo += content.function;
+                        errinfo += "\n";
+                        env.logger.Log(errinfo + content.Dump());
                         throw err;
                     }
                 }
