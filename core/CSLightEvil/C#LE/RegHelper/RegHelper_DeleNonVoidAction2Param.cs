@@ -115,49 +115,67 @@ namespace CSLE
             DeleFunction _func = delefunc;
             Delegate _dele = delefunc.cacheFunction(this._type, null);
             if (_dele != null) return _dele;
-            NonVoidDelegate dele = delegate(T param,T1 param1) {
+            NonVoidDelegate dele = delegate(T param, T1 param1)
+            {
                 var func = _func.calltype.functions[_func.function];
-                if (func.expr_runtime != null) {
+                if (func.expr_runtime != null)
+                {
                     CLS_Content content = new CLS_Content(env);
+                    try
+                    {
+                        content.DepthAdd();
+                        content.CallThis = _func.callthis;
+                        content.CallType = _func.calltype;
+                        content.function = _func.function;
 
-                    content.DepthAdd();
-                    content.CallThis = _func.callthis;
-                    content.CallType = _func.calltype;
-                    content.function = _func.function;
+                        content.DefineAndSet(func._paramnames[0], func._paramtypes[0].type, param);
+                        content.DefineAndSet(func._paramnames[1], func._paramtypes[1].type, param1);
+                        CLS_Content.Value retValue = func.expr_runtime.ComputeValue(content);
+                        content.DepthRemove();
 
-                    content.DefineAndSet(func._paramnames[0], func._paramtypes[0].type, param);
-                    content.DefineAndSet(func._paramnames[1], func._paramtypes[1].type, param1);
-                    CLS_Content.Value retValue = func.expr_runtime.ComputeValue(content);
-                    content.DepthRemove();
-
-                    return (ReturnType)retValue.value;
+                        return (ReturnType)retValue.value;
+                    }
+                    catch (Exception err)
+                    {
+                        env.logger.Log(content.Dump());
+                        throw err;
+                    }
                 }
                 return default(ReturnType);
             };
             _dele = Delegate.CreateDelegate(this.type, dele.Target, dele.Method);
             return delefunc.cacheFunction(this._type, _dele);
-         
+
         }
 
         public Delegate CreateDelegate(ICLS_Environment env, DeleLambda lambda)
         {
+                    CLS_Content content = lambda.content.Clone();
             var pnames = lambda.paramNames;
             var expr = lambda.expr_func;
 
-            NonVoidDelegate dele = delegate(T param0, T1 param1) {
-                if (expr != null) {
-                    CLS_Content content = lambda.content.Clone();
+            NonVoidDelegate dele = delegate(T param0, T1 param1)
+            {
+                if (expr != null)
+                {
+                    try
+                    {
+                        content.DepthAdd();
 
-                    content.DepthAdd();
+                        content.DefineAndSet(pnames[0], typeof(T), param0);
+                        content.DefineAndSet(pnames[1], typeof(T1), param1);
 
-                    content.DefineAndSet(pnames[0], typeof(T), param0);
-                    content.DefineAndSet(pnames[1], typeof(T1), param1);
+                        CLS_Content.Value retValue = expr.ComputeValue(content);
 
-                    CLS_Content.Value retValue = expr.ComputeValue(content);
+                        content.DepthRemove();
 
-                    content.DepthRemove();
-
-                    return (ReturnType)retValue.value;
+                        return (ReturnType)retValue.value;
+                    }
+                    catch (Exception err)
+                    {
+                        env.logger.Log(content.Dump());
+                        throw err;
+                    }
                 }
                 return default(ReturnType);
             };

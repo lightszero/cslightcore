@@ -108,19 +108,26 @@ namespace CSLE
                 if (func.expr_runtime != null)
                 {
                     CLS_Content content = new CLS_Content(env);
+                    try
+                    {
+                        content.DepthAdd();
+                        content.CallThis = _func.callthis;
+                        content.CallType = _func.calltype;
+                        content.function = _func.function;
 
-                    content.DepthAdd();
-                    content.CallThis = _func.callthis;
-                    content.CallType = _func.calltype;
-                    content.function = _func.function;
 
+                        content.DefineAndSet(func._paramnames[0], func._paramtypes[0].type, param0);
+                        content.DefineAndSet(func._paramnames[1], func._paramtypes[1].type, param1);
+                        content.DefineAndSet(func._paramnames[2], func._paramtypes[2].type, param2);
 
-                    content.DefineAndSet(func._paramnames[0], func._paramtypes[0].type, param0);
-                    content.DefineAndSet(func._paramnames[1], func._paramtypes[1].type, param1);
-                    content.DefineAndSet(func._paramnames[2], func._paramtypes[2].type, param2);
-
-                    func.expr_runtime.ComputeValue(content);
-                    content.DepthRemove();
+                        func.expr_runtime.ComputeValue(content);
+                        content.DepthRemove();
+                    }
+                    catch (Exception err)
+                    {
+                        env.logger.Log(content.Dump());
+                        throw err;
+                    }
                 }
             };
             Delegate d = dele as Delegate;
@@ -138,22 +145,29 @@ namespace CSLE
 
         public Delegate CreateDelegate(ICLS_Environment env, DeleLambda lambda)
         {
+            CLS_Content content = lambda.content.Clone();
             var pnames = lambda.paramNames;
             var expr = lambda.expr_func;
             Action<T, T1, T2> dele = (T param0, T1 param1, T2 param2) =>
             {
                 if (expr != null)
                 {
-                    CLS_Content content = lambda.content.Clone();
+                    try
+                    {
+                        content.DepthAdd();
 
-                    content.DepthAdd();
+                        content.DefineAndSet(pnames[0], typeof(T), param0);
+                        content.DefineAndSet(pnames[1], typeof(T1), param1);
+                        content.DefineAndSet(pnames[2], typeof(T2), param2);
+                        expr.ComputeValue(content);
 
-                    content.DefineAndSet(pnames[0], typeof(T), param0);
-                    content.DefineAndSet(pnames[1], typeof(T1), param1);
-                    content.DefineAndSet(pnames[2], typeof(T2), param2);
-                    expr.ComputeValue(content);
-
-                    content.DepthRemove();
+                        content.DepthRemove();
+                    }
+                    catch (Exception err)
+                    {
+                        env.logger.Log(content.Dump());
+                        throw err;
+                    }
                 }
             };
             Delegate d = dele as Delegate;
